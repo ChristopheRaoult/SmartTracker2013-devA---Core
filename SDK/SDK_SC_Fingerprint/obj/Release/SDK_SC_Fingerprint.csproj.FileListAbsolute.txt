@@ -1,0 +1,17 @@
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\SDK_SC_Fingerprint.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\SDK_SC_Fingerprint.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DPFPDevNET.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DPFPEngNET.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DPFPGuiNET.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DPFPShrNET.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DPFPVerNET.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\bin\Release\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.csprojResolveAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.DebugFP.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.EnrollmentProcess.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.csproj.GenerateResource.Cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Fingerprint\obj\Release\SDK_SC_Fingerprint.pdb

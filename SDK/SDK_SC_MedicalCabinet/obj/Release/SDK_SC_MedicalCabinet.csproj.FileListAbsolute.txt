@@ -1,0 +1,11 @@
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\SDK_SC_MedicalCabinet.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\SDK_SC_MedicalCabinet.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\SDK_SC_RfidReader.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\bin\Release\SDK_SC_RfidReader.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\obj\Release\SDK_SC_MedicalCabinet.csprojResolveAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\obj\Release\SDK_SC_MedicalCabinet.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_MedicalCabinet\obj\Release\SDK_SC_MedicalCabinet.pdb

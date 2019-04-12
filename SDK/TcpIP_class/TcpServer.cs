@@ -22,8 +22,10 @@ using SDK_SC_RFID_Devices;
 using SDK_SC_Fingerprint;
 using SDK_SC_MedicalCabinet;
 namespace TcpIP_class
-{  
+{
 
+    public delegate void NotifyHandlerDelegate(string log);
+ 
     public class TcpIpServer
     {
 
@@ -37,6 +39,9 @@ namespace TcpIP_class
             public string ClientName;
             public string Command;
         }
+
+        public event NotifyHandlerDelegate NotifyLog;
+
 
         private string _cryptedAuthorization;
         public string CryptedAuthorization {get { return _cryptedAuthorization; } set { _cryptedAuthorization = value; }}
@@ -157,10 +162,16 @@ namespace TcpIP_class
             myListener.ExclusiveAddressUse = true; 
             myListener.Start();
             //TextBoxRefresh("Server Started on port " + Port.ToString(), false, ">");
+            if (NotifyLog != null)
+            {
+                NotifyLog("Server Started on port " + Port.ToString());
+            }
+
             while (!stop)
             {
                 try
                 {
+                   
                     if (!myListener.Pending())
                     {
                         Thread.Sleep(500); // choose a number (in milliseconds) that makes sense
@@ -419,10 +430,13 @@ namespace TcpIP_class
                                 nbArg = 1;
                             }
                         }
-
+                        if (NotifyLog != null)
+                        {
+                            NotifyLog("Command: "  + myClient.Command);
+                        }
                         switch (myClient.Command)
                         {
-
+                           
                             #region Door
                                 case "UNLOCK_DOOR?":
 
@@ -1775,6 +1789,12 @@ namespace TcpIP_class
                                                 bf.Serialize(mem, siv);
                                                 string idStream = Convert.ToBase64String(mem.ToArray());
                                                 SendReturnCode(mySocket, myClient, idStream, false);
+                                                if (NotifyLog != null)
+                                                {
+                                                    string user = string.Format("{0} {1}", localDeviceArray[0].currentInventory.userFirstName, localDeviceArray[0].currentInventory.userLastName);
+                                                    string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", localDeviceArray[0].currentInventory.nbTagAll, localDeviceArray[0].currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, localDeviceArray[0].currentInventory.nbTagRemoved,localDeviceArray[0].currentInventory.IdScanEvent, localDeviceArray[0].currentInventory.eventDate.ToLocalTime().ToString("G"), user);
+                                                    NotifyLog("Sent Inventory: " + info);
+                                                }
                                             }
                                             else
                                             {
@@ -1816,6 +1836,12 @@ namespace TcpIP_class
                                                         bf.Serialize(mem, siv);
                                                         string idStream = Convert.ToBase64String(mem.ToArray());
                                                         SendReturnCode(mySocket, myClient, idStream, false);
+                                                        if (NotifyLog != null)
+                                                        {
+                                                            string user = string.Format("{0} {1}", dc.currentInventory.userFirstName, dc.currentInventory.userLastName);
+                                                            string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", dc.currentInventory.nbTagAll, dc.currentInventory.nbTagPresent, dc.currentInventory.nbTagAdded, dc.currentInventory.nbTagRemoved, dc.currentInventory.IdScanEvent, dc.currentInventory.eventDate.ToLocalTime().ToString("G"), user);
+                                                            NotifyLog("Sent Inventory: " + info);
+                                                        }
                                                     }
 
                                                     else
@@ -1862,6 +1888,12 @@ namespace TcpIP_class
                                                 bf.Serialize(mem, siv);
                                                 string idStream = Convert.ToBase64String(mem.ToArray());
                                                 SendReturnCode(mySocket, myClient, idStream, false);
+                                                if (NotifyLog != null )
+                                                {
+                                                    string user =  string.Format("{0} {1}", tmpInv.userFirstName, tmpInv.userLastName);
+                                                    string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", tmpInv.nbTagAll, tmpInv.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, tmpInv.nbTagRemoved,tmpInv.IdScanEvent, tmpInv.eventDate.ToLocalTime().ToString("G") , user);
+                                                    NotifyLog("Sent Inventory: " + info);
+                                                }
                                             }
                                             else
                                             {
@@ -1905,6 +1937,11 @@ namespace TcpIP_class
                                                         bf.Serialize(mem, siv);
                                                         string idStream = Convert.ToBase64String(mem.ToArray());
                                                         SendReturnCode(mySocket, myClient, idStream, false);
+                                                        if (NotifyLog != null)
+                                                        {
+                                                            string user = string.Format("{0} {1}", tmpInv.userFirstName, tmpInv.userLastName);
+                                                            string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", tmpInv.nbTagAll, tmpInv.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, tmpInv.nbTagRemoved, tmpInv.IdScanEvent, tmpInv.eventDate.ToLocalTime().ToString("G"), user); NotifyLog("Sent Inventory: " + info);
+                                                        }
                                                     }
 
                                                     else
@@ -3509,6 +3546,11 @@ namespace TcpIP_class
         {
             try
             {
+                if (NotifyLog != null && str.Length < 128)
+                {
+                    NotifyLog("Sent :" + str);
+                }
+
                 for (int i = 0; i < ListeClients.Count; i++)
                 {
                     Client c = (Client) ListeClients[i];

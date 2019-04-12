@@ -892,18 +892,7 @@ namespace TcpIP_class
                 InventoryData inv = SerializationHelper.DeserializeInventory(serializedInventory);
                 inv.serialNumberDevice = _serialNumber;
 
-                String[]  packets2 = _tcpClient.SendSynchronousRequest(RequestCode.TAG_TO_DRAWER_BY_ID, inv.IdScanEvent.ToString());
-
-                if (packets2 == null || packets2.Length < 2 || RequestCode.TAG_TO_DRAWER_BY_ID != packets2[0])
-                {
-                    return null;
-                }
-
-                Hashtable tagToDrawer = new Hashtable();
-                int size = packets2.Length - 1;
-                for (int loop = 1; loop < size; loop += 2)
-                    tagToDrawer.Add(packets2[loop], packets2[loop + 1]);
-                inv.ListTagWithChannel = tagToDrawer;
+                inv.ListTagWithChannel = getTagByDrawer();               
 
                 if (inv != null)
                 {

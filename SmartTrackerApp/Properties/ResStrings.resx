@@ -1,0 +1,1504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="strAppAlarm" xml:space="preserve">
+    <value>Boolean to enable the alarm feature</value>
+  </data>
+  <data name="strAppAlert" xml:space="preserve">
+    <value>Boolean to show a message box for each alert in case of no smtp</value>
+  </data>
+  <data name="strAppbInterupt" xml:space="preserve">
+    <value>If true, user stop the current scan if well authentified on the fingerprint</value>
+  </data>
+  <data name="strAppGmt" xml:space="preserve">
+    <value>Double value to set the offset hour from GMT</value>
+  </data>
+  <data name="strAppGrp" xml:space="preserve">
+    <value>Boolean to enable the live Data with the group mode feature</value>
+  </data>
+  <data name="strAppHistory" xml:space="preserve">
+    <value>Boolean to enable of storing tag history</value>
+  </data>
+  <data name="strAppImg" xml:space="preserve">
+    <value>Boolean to enable the image association for each item</value>
+  </data>
+  <data name="strAppInv" xml:space="preserve">
+    <value>Integer of amount of full scan stored</value>
+  </data>
+  <data name="strApplication" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="strAppLotID" xml:space="preserve">
+    <value>Boolean to enable the comparison on LotID</value>
+  </data>
+  <data name="strAppMacro" xml:space="preserve">
+    <value>Full path to the xlsm document containing the macro</value>
+  </data>
+  <data name="strAppMacroName" xml:space="preserve">
+    <value>Name of the macro contain in the document excel</value>
+  </data>
+  <data name="strAppName" xml:space="preserve">
+    <value>Application Name</value>
+  </data>
+  <data name="strAppTcp" xml:space="preserve">
+    <value>Integer in ms to refresh the TCP device</value>
+  </data>
+  <data name="strAppTcpPort" xml:space="preserve">
+    <value>Integer value for server TCP port - default : 6901</value>
+  </data>
+  <data name="strAppUpdate" xml:space="preserve">
+    <value>Enable Disable Auto Update Mode - With True the update will be checked at each startup</value>
+  </data>
+  <data name="strAppViewer" xml:space="preserve">
+    <value>Enable Disable Viewer Mode - To display the inventory from a shared database with no action on reader</value>
+  </data>
+  <data name="strEnvInfo" xml:space="preserve">
+    <value>Environment Information</value>
+  </data>
+  <data name="strErrorDb" xml:space="preserve">
+    <value>No database found or unable to connect to it - smartTracker will be stopped !!</value>
+  </data>
+  <data name="strInfo" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="strOSEdition" xml:space="preserve">
+    <value>Operating System Edition</value>
+  </data>
+  <data name="strOSName" xml:space="preserve">
+    <value>Operating System Name</value>
+  </data>
+  <data name="strPackEdition" xml:space="preserve">
+    <value>Operating System Service Pack</value>
+  </data>
+  <data name="strSoftBit" xml:space="preserve">
+    <value>Operating System Bits</value>
+  </data>
+  <data name="strSoftDevBy" xml:space="preserve">
+    <value>Developed By</value>
+  </data>
+  <data name="strSoftName" xml:space="preserve">
+    <value>Spacecode - smartTracker 2014</value>
+  </data>
+  <data name="strSoftVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="strSpacecode" xml:space="preserve">
+    <value>Spacecode</value>
+  </data>
+  <data name="strSysVer" xml:space="preserve">
+    <value>Operating System Version</value>
+  </data>
+  <data name="strUpdate" xml:space="preserve">
+    <value>SmartTracker is in Update - Please Wait!</value>
+  </data>
+  <data name="tcpAppScreenSaver" xml:space="preserve">
+    <value>Boolean to enable the screen saver</value>
+  </data>
+  <data name="tcpAppServer" xml:space="preserve">
+    <value>Boolean to enable the server window at startup</value>
+  </data>
+  <data name="strAlertBlood" xml:space="preserve">
+    <value>Bad Blood Bag(s) For Patient!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertDetected" xml:space="preserve">
+    <value>Alert Detected</value>
+  </data>
+  <data name="strAlertDoor" xml:space="preserve">
+    <value>Door open too long alert detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertError" xml:space="preserve">
+    <value>The SMTP connection test failed
+error :</value>
+  </data>
+  <data name="strAlertFailed" xml:space="preserve">
+    <value>The SMTP connection test failed</value>
+  </data>
+  <data name="strAlertFinger" xml:space="preserve">
+    <value>Finger alert detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertItems" xml:space="preserve">
+    <value>Number of items removed exceed user defined value detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertLblStock" xml:space="preserve">
+    <value>Stock Low Limit</value>
+  </data>
+  <data name="strAlertLblTemp" xml:space="preserve">
+    <value>Max t° (c°)</value>
+  </data>
+  <data name="strAlertLblTime" xml:space="preserve">
+    <value>Time door open (s)</value>
+  </data>
+  <data name="strAlertLblTime2" xml:space="preserve">
+    <value>Time in (mins)</value>
+  </data>
+  <data name="strAlertMailBody" xml:space="preserve">
+    <value>Mail for testing SMTP</value>
+  </data>
+  <data name="strAlertMailSubject" xml:space="preserve">
+    <value>Test Mail</value>
+  </data>
+  <data name="strAlertOk" xml:space="preserve">
+    <value>SMTP Server Ok</value>
+  </data>
+  <data name="strAlertPower" xml:space="preserve">
+    <value>Power cut alert detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertProduct" xml:space="preserve">
+    <value>Date Product Expired Alert!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertSensor" xml:space="preserve">
+    <value>Move sensor detected
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertSmtpInfo" xml:space="preserve">
+    <value>SMTP Information</value>
+  </data>
+  <data name="strAlertSmtpSaved" xml:space="preserve">
+    <value>SMTP SAVED</value>
+  </data>
+  <data name="strAlertStock" xml:space="preserve">
+    <value>Stock limit achieved!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertTemp" xml:space="preserve">
+    <value>Max Temperature on fridge detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="stralertTestInfo" xml:space="preserve">
+    <value>Test mail Information</value>
+  </data>
+  <data name="strAlertTestOk" xml:space="preserve">
+    <value>TEST MAIL SENT!</value>
+  </data>
+  <data name="strAlertTime" xml:space="preserve">
+    <value>Time for Tags Removed elapsed!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertUsb" xml:space="preserve">
+    <value>Usb unplug alert detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertValue" xml:space="preserve">
+    <value>Number of values removed exceed user defined limit detected!
+An Email Alert will be sent!</value>
+  </data>
+  <data name="strAlertSaved" xml:space="preserve">
+    <value>ALERT SAVED</value>
+  </data>
+  <data name="strAlertManagmentInfo" xml:space="preserve">
+    <value>Alert Management Info</value>
+  </data>
+  <data name="str_device_not_ready" xml:space="preserve">
+    <value>RFID device not ready</value>
+  </data>
+  <data name="strWriteStatusUnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred. Operation failed !</value>
+  </data>
+  <data name="strWriteStatusOperation_failed" xml:space="preserve">
+    <value>Tag not detected. Operation failed !</value>
+  </data>
+  <data name="strWriteStatus_Tag_not_confirmed" xml:space="preserve">
+    <value>Tag not confirmed. Operation failed !</value>
+  </data>
+  <data name="strWriteStatus_Tag_blocked_or_not_well_supplied" xml:space="preserve">
+    <value>Tag blocked or not well supplied. Operation failed !</value>
+  </data>
+  <data name="strWriteStatus_Tag_blocked" xml:space="preserve">
+    <value>Tag blocked. Operation failed !</value>
+  </data>
+  <data name="strWriteStatus_Tag_not_well_supplied" xml:space="preserve">
+    <value>Tag not well supplied. Operation failed !</value>
+  </data>
+  <data name="strWriteStatus_Updated_tag_confirmation_has_failed" xml:space="preserve">
+    <value>Updated tag confirmation has failed.</value>
+  </data>
+  <data name="strErrorDevice" xml:space="preserve">
+    <value>Unable to get device status. Is is connected and ready ?</value>
+  </data>
+  <data name="strDeviceEthernet_device_is_not_ready" xml:space="preserve">
+    <value>Ethernet device is not ready.</value>
+  </data>
+  <data name="strdevice_Unable_to_start_scan" xml:space="preserve">
+    <value>Unable to start scan.</value>
+  </data>
+  <data name="strDevice_Scan_unexpectedly_long__please_retry" xml:space="preserve">
+    <value>Scan unexpectedly long, please retry.</value>
+  </data>
+  <data name="strDevice_Unable_to_get_last_scan_result" xml:space="preserve">
+    <value>Unable to get last scan result, please retry.</value>
+  </data>
+  <data name="strScan_Completed_Tag_Scanned" xml:space="preserve">
+    <value>Info : Scan Completed - Tag Scanned : </value>
+    <comment>Info : Scan Completed - Tag Scanned : + TagUID</comment>
+  </data>
+  <data name="ErrorWriting_new_tag_UID_failed" xml:space="preserve">
+    <value>Info : Writing new tag UID failed</value>
+  </data>
+  <data name="StrDeviceNotReadyOrNotConnected" xml:space="preserve">
+    <value>Device not ready or not connected</value>
+  </data>
+  <data name="StrClick_Live_Data_will_be_closed_to_use_device" xml:space="preserve">
+    <value>Live Data will be closed to use device</value>
+  </data>
+  <data name="str_Click_Close_Live_Data_and_release_reader" xml:space="preserve">
+    <value>Close Live Data and release reader</value>
+  </data>
+  <data name="str_Search_connected_device" xml:space="preserve">
+    <value>Info : Search connected device</value>
+  </data>
+  <data name="str_devicenotexist" xml:space="preserve">
+    <value>You can't connect to a local reader. You have to CREATE it.</value>
+  </data>
+  <data name="strDeviceNetworkError" xml:space="preserve">
+    <value>Info : Network connection established with {0}</value>
+    <comment>String.Format("Info : Network connection established with {0}", deviceInfo.SerialRFID)</comment>
+  </data>
+  <data name="strDeviceNotKnown" xml:space="preserve">
+    <value>Device {0} not known in Ethernet devices list</value>
+    <comment>String.Format("Device {0} not known in Ethernet devices list", selectedEthernetDeviceName)</comment>
+  </data>
+  <data name="strDeviceNotResponding" xml:space="preserve">
+    <value>Device {0} is not responding ({1}:{2})...</value>
+    <comment>String.Format("Device {0} is not responding ({1}:{2})...", deviceInfo.SerialRFID, deviceInfo.IP_Server, deviceInfo.Port_Server)</comment>
+  </data>
+  <data name="str_No_Device_found" xml:space="preserve">
+    <value>No Device found</value>
+  </data>
+  <data name="str_Quit_Live_Data" xml:space="preserve">
+    <value>Info : No Device Detected - Quit Live Data</value>
+  </data>
+  <data name="strEnter" xml:space="preserve">
+    <value>Enter </value>
+    <comment>"Enter " + _columnInfo[1];</comment>
+  </data>
+  <data name="str_Reference_not_found_in_the_grid_" xml:space="preserve">
+    <value>Info : Reference not found in the grid!</value>
+  </data>
+  <data name="str_Tag_Empty_input" xml:space="preserve">
+    <value>Empty input</value>
+  </data>
+  <data name="str_Tag_Invalid_Tag_ID" xml:space="preserve">
+    <value>Invalid Tag ID</value>
+  </data>
+  <data name="str_Tag_ID_already_in_the_datagrid" xml:space="preserve">
+    <value>Tag ID already in the datagrid</value>
+  </data>
+  <data name="str_No_line_has_been_selected" xml:space="preserve">
+    <value>No line has been selected</value>
+  </data>
+  <data name="str_create_Ethernet_devices" xml:space="preserve">
+    <value>You can't create Ethernet devices.</value>
+  </data>
+  <data name="str_In_Connection_" xml:space="preserve">
+    <value>Info : In Connection </value>
+  </data>
+  <data name="str_OnlySBR_STR" xml:space="preserve">
+    <value>Device not created - Only SmartBoard (SBR) and SmartStation (STR) allowed</value>
+  </data>
+  <data name="str_Failed_to_Connect" xml:space="preserve">
+    <value>Info : Failed to Connect</value>
+  </data>
+  <data name="str_Device_Disconnected" xml:space="preserve">
+    <value>Info : Device Disconnected</value>
+  </data>
+  <data name="str_Device_Connected" xml:space="preserve">
+    <value>Info : Device Connected</value>
+  </data>
+  <data name="str_Scan_Started" xml:space="preserve">
+    <value>Info : Scan Started</value>
+  </data>
+  <data name="str_Failed_to_start_scan" xml:space="preserve">
+    <value>Info : Failed to start scan</value>
+  </data>
+  <data name="str_No_Tag_Found" xml:space="preserve">
+    <value>Info : No Tag Found</value>
+  </data>
+  <data name="str_More_than_one_tag_scanned" xml:space="preserve">
+    <value>Info : More than one tag scanned - Check the number on the reader</value>
+  </data>
+  <data name="str__Scan_Completed___Tag_Scanned___" xml:space="preserve">
+    <value>Info : Scan Completed - Tag Scanned : </value>
+    <comment>"Info : Scan Completed - Tag Scanned : " + _device.currentInventory.listTagAll[0];</comment>
+  </data>
+  <data name="str_Writing_new_tag_UID_failed" xml:space="preserve">
+    <value>Info : Writing new tag UID failed</value>
+  </data>
+  <data name="str__Scan_has_error" xml:space="preserve">
+    <value>Info : Scan has error</value>
+  </data>
+  <data name="str__Scan_cancel_by_host" xml:space="preserve">
+    <value>Info : Scan cancel by host</value>
+  </data>
+  <data name="str_Tag_not_compatible_for_writing" xml:space="preserve">
+    <value>Tag not compatible for writing </value>
+  </data>
+  <data name="BoxModeConfig_UpdateGroup_TagUID" xml:space="preserve">
+    <value>TagUID</value>
+  </data>
+  <data name="str_Group_Reference" xml:space="preserve">
+    <value>Group Reference</value>
+  </data>
+  <data name="str_Group_Description" xml:space="preserve">
+    <value>Group Description</value>
+  </data>
+  <data name="str_Criteria" xml:space="preserve">
+    <value>Criteria</value>
+  </data>
+  <data name="BoxModeConfig_UpdateGroup_Nb_Item_s__in_Group" xml:space="preserve">
+    <value>Nb Item(s) in Group</value>
+  </data>
+  <data name="BoxModeConfig_UpdateDataList_Box" xml:space="preserve">
+    <value>Box</value>
+  </data>
+  <data name="str_Unreferenced" xml:space="preserve">
+    <value>Unreferenced</value>
+  </data>
+  <data name="BoxModeConfig_dataListView_BeforeCreatingGroups_Box_Present" xml:space="preserve">
+    <value>Box Present</value>
+  </data>
+  <data name="BoxModeConfig_dataListView_BeforeCreatingGroups_Tag_s__present_in_selected_box" xml:space="preserve">
+    <value>Tag(s) present in selected box</value>
+  </data>
+  <data name="BoxModeConfig_ProcessData_Search_process_find_nothing" xml:space="preserve">
+    <value>Search process find nothing</value>
+  </data>
+  <data name="BoxModeConfig_ProcessData__Box_Mode_Info" xml:space="preserve">
+    <value> Box Mode Info</value>
+  </data>
+  <data name="BoxModeCreateUpdate_button1_Click_TagUID_not_Valid_" xml:space="preserve">
+    <value>TagUID not Valid!</value>
+  </data>
+  <data name="BoxModeCreateUpdate_button1_Click_Box_Mode_Info" xml:space="preserve">
+    <value>Box Mode Information</value>
+  </data>
+  <data name="BoxModeCreateUpdate_listBoxOperator_Click__Enter_value_here_" xml:space="preserve">
+    <value>'Enter value here'</value>
+  </data>
+  <data name="BoxModeCreateUpdate_listBoxOperator_Click_Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="CompareInventoryForm_CompareInventoryForm_Display_All" xml:space="preserve">
+    <value>Display All</value>
+  </data>
+  <data name="CompareInventoryForm_CompareInventoryForm_Compare_LotID_and_TagID" xml:space="preserve">
+    <value>Compare LotID and TagID</value>
+  </data>
+  <data name="CompareInventoryForm_Import_" xml:space="preserve">
+    <value>The File is already opened by another application 
+Please close this application before try to use it!</value>
+  </data>
+  <data name="CompareInventoryForm_ProcessData__0__has_no_related_column_in_XLS" xml:space="preserve">
+    <value>{0} has no related column in XLS</value>
+    <comment>string.Format("{0} has no related column in XLS", _columnInfo[i]);</comment>
+  </data>
+  <data name="CompareInventoryForm_ProcessData_" xml:space="preserve">
+    <value>
+ The process is stopped , Check your excel file!</value>
+    <comment>First carrier return mandatory</comment>
+  </data>
+  <data name="CompareInventoryForm_ProcessData_CompareStatus" xml:space="preserve">
+    <value>CompareStatus</value>
+  </data>
+  <data name="CompareInventoryForm_ProcessData_Missing" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="str_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="CompareInventoryForm_UpdateGrid_Not_Expected" xml:space="preserve">
+    <value>Not Expected</value>
+  </data>
+  <data name="CompareInventoryForm_UpdateGrid_" xml:space="preserve">
+    <value>Info : Nb Total = {0}</value>
+    <comment>string.Format("Info : Nb Total = {0}", nbTot);</comment>
+  </data>
+  <data name="CompareInventoryForm_UpdateGrid_NbPresent" xml:space="preserve">
+    <value> - Nb Present = {0}</value>
+    <comment>string.Format(" - Nb Present = {0}", nbOk);</comment>
+  </data>
+  <data name="CompareInventoryForm_UpdateGrid_Missing" xml:space="preserve">
+    <value> - Nb Missing = {0}</value>
+    <comment>string.Format(" - Nb Missing = {0}", nbMissing);</comment>
+  </data>
+  <data name="CompareInventoryForm_UpdateGrid_Notexpected" xml:space="preserve">
+    <value> - Nb Not Expected = {0}</value>
+    <comment>string.Format(" - Nb Not Expected = {0}", nbNotExpexted);</comment>
+  </data>
+  <data name="CompareInventoryForm_ProcessData_Not_Same_TagUID_in_DB___0_" xml:space="preserve">
+    <value>Not Same TagUID in DB :{0}</value>
+    <comment>string.Format("Not Same TagUID in DB :{0}", tagUidFromDb);</comment>
+  </data>
+  <data name="CompareInventoryForm_ProcessData_Not_In_Database" xml:space="preserve">
+    <value>Not In Database</value>
+  </data>
+  <data name="CompareInventoryForm_ExportToExcel_Comparison" xml:space="preserve">
+    <value>Comparison</value>
+  </data>
+  <data name="CompareInventoryReportForm_ProcessData_Error_in_date_selection_" xml:space="preserve">
+    <value>Error in date selection </value>
+  </data>
+  <data name="CompareInventoryReportForm_ProcessData_Compare_Inventory_Info" xml:space="preserve">
+    <value>Compare Inventory Information</value>
+  </data>
+  <data name="CompareInventoryReportForm_ProcessData_No_inventory_found_after_Date_to_" xml:space="preserve">
+    <value>No inventory found after Date to </value>
+  </data>
+  <data name="CompareInventoryReportForm_ProcessData_No_inventory_found_after_Date_from_" xml:space="preserve">
+    <value>No inventory found after Date from </value>
+  </data>
+  <data name="CompareInventoryReportForm_UpdateTabControl_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="CompareInventoryReportForm_UpdateTabControl_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="str_Added" xml:space="preserve">
+    <value>Added</value>
+  </data>
+  <data name="str_Removed" xml:space="preserve">
+    <value>Removed</value>
+  </data>
+  <data name="DbColumnForm_toolStripButtonSubmit_Click" xml:space="preserve">
+    <value>By submiting, all the previous scans and products association will be deleted 
+Would you like to continue ?</value>
+  </data>
+  <data name="DbColumnForm_toolStripButtonSubmit_Click_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="DbColumnForm_toolStripButtonSubmit_Click_Update_failed" xml:space="preserve">
+    <value>Update failed : {0}</value>
+    <comment>string.Format("Update failed : {0}", ex.Message)</comment>
+  </data>
+  <data name="DbColumnForm_toolStripButtonSubmit_Click_Updtate_Column_Info" xml:space="preserve">
+    <value>Updtate Column Information</value>
+  </data>
+  <data name="str_Application_will_restart_to_take_into_account_column_change" xml:space="preserve">
+    <value>Application will restart to take into account column change</value>
+  </data>
+  <data name="DbColumnForm_Import" xml:space="preserve">
+    <value>Unable to get column without a first row of data
+Please add dummy value on first row!</value>
+  </data>
+  <data name="DbColumnForm_Importerror" xml:space="preserve">
+    <value>Column(s) header not match allowed character (a-z,A-Z,0-9,.,-,_,%,/,') 
+Importation stopped</value>
+  </data>
+  <data name="DbColumnForm_Import_fileopen" xml:space="preserve">
+    <value>The File is already opened by another application 
+Please close this application before try to import it!</value>
+  </data>
+  <data name="DbColumnForm_addAlertValueToolStripMenuItem_Click_Select_a_full_row_to_add_the_alert" xml:space="preserve">
+    <value>Select a full row to add the alert</value>
+  </data>
+  <data name="DbColumnForm_addAlertValueToolStripMenuItem_Click_AlertLink" xml:space="preserve">
+    <value>AlertLink</value>
+  </data>
+  <data name="DbColumnForm_resetAlertToolStripMenuItem_Click_NONE" xml:space="preserve">
+    <value>NONE</value>
+  </data>
+  <data name="DbColumnForm_Import2_STRING" xml:space="preserve">
+    <value>STRING</value>
+  </data>
+  <data name="DbColumnForm_changeInUINT64ToolStripMenuItem_Click_Select_a_full_row_to_change_variable_type" xml:space="preserve">
+    <value>Select a full row to change variable type</value>
+  </data>
+  <data name="DbSqlForm_toolStripButtonQuit_Click__Database_Info" xml:space="preserve">
+    <value> Database Information</value>
+  </data>
+  <data name="Str_Key_Not_Found" xml:space="preserve">
+    <value>Key Not Found</value>
+  </data>
+  <data name="Str_Enter_the_Server_Name" xml:space="preserve">
+    <value>Enter the Server Name</value>
+  </data>
+  <data name="str_Connect_Server" xml:space="preserve">
+    <value>Connect Server</value>
+  </data>
+  <data name="str_Enter_the_Database_Name" xml:space="preserve">
+    <value>Enter the Database Name</value>
+  </data>
+  <data name="DbSqlForm_btnTest_Click_Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="DbSqlForm_btnTest_Click_" xml:space="preserve">
+    <value>Unable to Connect! 
+Check your server info</value>
+  </data>
+  <data name="str_Sql_Connection_Info_Saved" xml:space="preserve">
+    <value>Sql Connection Info Saved</value>
+  </data>
+  <data name="str_Info_SQL_Server" xml:space="preserve">
+    <value>Info SQL Server</value>
+  </data>
+  <data name="str_Error_While_Saving_Sql_Connection_Info_Saved" xml:space="preserve">
+    <value>Error While Saving Sql Connection Info Saved</value>
+  </data>
+  <data name="ExportFrm_toolStripButtonQuit_Click__Exportation_Info" xml:space="preserve">
+    <value> Exportation Information</value>
+  </data>
+  <data name="ExportFrm_btnTest_Click_Connected_and_Table_Exist" xml:space="preserve">
+    <value>Connected and Table Exist</value>
+  </data>
+  <data name="ExportFrm_btnTest_Click_Connected_and_Table_not_Exist" xml:space="preserve">
+    <value>Connected and Table not Exist</value>
+  </data>
+  <data name="ExportFrm_btnTest_Click_" xml:space="preserve">
+    <value>Unable to Connect! 
+Check your server info</value>
+  </data>
+  <data name="str_Enter_the_Table_Name" xml:space="preserve">
+    <value>Enter the Table Name</value>
+  </data>
+  <data name="str_EventDate" xml:space="preserve">
+    <value>EventDate</value>
+  </data>
+  <data name="Formule_UpdateList_Sum_of" xml:space="preserve">
+    <value>{0} : Sum of {1}</value>
+    <comment>string.Format("{0} : Sum of {1}", Convert.ToChar(letter), _colInfo[i].colName);</comment>
+  </data>
+  <data name="Formule_button1_Click_Formulae_saved" xml:space="preserve">
+    <value>Formulae saved !</value>
+  </data>
+  <data name="FridgeTempFrm_UpdateChart_currenttemp" xml:space="preserve">
+    <value>{0} : {1} - Current Temp = {2}</value>
+    <comment>string.Format("{0} : {1} - Current Temp = {2}", DateTime.Now.ToLongTimeString(), Lvd.selectedNetworkDevice.infoDev.DeviceName, currentTemp.Value.ToString("0.00°"));</comment>
+  </data>
+  <data name="ImageListForm_RefreshImage_" xml:space="preserve">
+    <value>{0}
+ ({1} used )</value>
+    <comment>string.Format("{0}\r\n ({1} used )", imgName, nbUse)</comment>
+  </data>
+  <data name="ImageListForm_RefreshImage_Double_Click_to_associate_with_the_image" xml:space="preserve">
+    <value>Double Click to associate with the image</value>
+  </data>
+  <data name="str_Reader_Name" xml:space="preserve">
+    <value>Reader Name</value>
+  </data>
+  <data name="str_First_Name" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="str_Last_Name" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="str_Event_Type" xml:space="preserve">
+    <value>Event Type</value>
+  </data>
+  <data name="str_Present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="ItemListForm_ItemListForm_Load_Only_New" xml:space="preserve">
+    <value>Only New</value>
+  </data>
+  <data name="ItemListForm_ItemListForm_Load_Load_image" xml:space="preserve">
+    <value>Load image from {0}</value>
+  </data>
+  <data name="str_ImportStatus" xml:space="preserve">
+    <value>ImportStatus</value>
+  </data>
+  <data name="str_ImageImport" xml:space="preserve">
+    <value>ImageImport</value>
+  </data>
+  <data name="ItemListForm_Import_Read_and_Check_Item" xml:space="preserve">
+    <value>Read and Check Item(s) {0}/{1}</value>
+    <comment>String.Format("Read and Check Item(s) {0}/{1}", ++nIndex, nbItemsToImport);</comment>
+  </data>
+  <data name="str_Missing_TagUID" xml:space="preserve">
+    <value>Missing TagUID</value>
+  </data>
+  <data name="str_Missing_LotID" xml:space="preserve">
+    <value>Missing LotID</value>
+  </data>
+  <data name="str_TagUID_already_associated" xml:space="preserve">
+    <value>TagUID already associated with {0}  {1}</value>
+    <comment> string.Format("TagUID already associated with {0}  {1}", _columnInfo[1], pi[1]);</comment>
+  </data>
+  <data name="str_Product_already_in_database" xml:space="preserve">
+    <value>Product already in database</value>
+  </data>
+  <data name="str_LotID_already_associated" xml:space="preserve">
+    <value>LotID already associated with {0}  {1}</value>
+    <comment>string.Format("LotID already associated with {0}  {1}", _columnInfo[0], tagwithLotInDb);</comment>
+  </data>
+  <data name="ItemListForm_Import_Imported_Item" xml:space="preserve">
+    <value>Imported Item(s) {0}/{1} </value>
+    <comment>String.Format("Imported Item(s) {0}/{1} ", nbItemsToImport, nbItemsToImport);</comment>
+  </data>
+  <data name="ItemListForm_Import" xml:space="preserve">
+    <value>The File is already opened by another application.
+Please close this application before try to import it!</value>
+  </data>
+  <data name="ItemListForm_CheckDuplicate_Duplicate" xml:space="preserve">
+    <value>Duplicate {0} in importation file</value>
+    <comment>string.Format("Duplicate {0} in importation file", _columnInfo[0]);</comment>
+  </data>
+  <data name="ItemListForm_UpdateDg_Checked" xml:space="preserve">
+    <value> - Checked OK {0}/{1} </value>
+    <comment>String.Format(" - Checked OK {0}/{1} ", checkedGood++, dataGridViewImport.Rows.Count);</comment>
+  </data>
+  <data name="ItemListForm_CheckDg_Check_Item" xml:space="preserve">
+    <value>Check Item(s) {0}/{1}</value>
+    <comment>String.Format("Check Item(s) {0}/{1}", ++nIndex, nbItemsToCheck);          </comment>
+  </data>
+  <data name="ItemListForm_CheckDg_Checked_Item" xml:space="preserve">
+    <value>Checked Item(s) {0}/{1} </value>
+    <comment>String.Format("Checked Item(s) {0}/{1} ", nbItemsToCheck, nbItemsToCheck);</comment>
+  </data>
+  <data name="ItemListForm_toolStripButtonApply_Click_Apply_Items" xml:space="preserve">
+    <value>Apply Item(s) {0}/{1}</value>
+    <comment> String.Format("Apply Item(s) {0}/{1}", ++nIndex, nbItemsToApply);</comment>
+  </data>
+  <data name="ItemListForm_toolStripButtonApply_Product_s__saved" xml:space="preserve">
+    <value>{0}/{1} Product(s) saved</value>
+    <comment>string.Format("{0}/{1} Product(s) saved", nRowSaved, nRowIndex)</comment>
+  </data>
+  <data name="ItemListForm_addImageToolStripMenuItem_Click_Select_the_full_row_to_add_an_image" xml:space="preserve">
+    <value>Select the full row to add an image</value>
+  </data>
+  <data name="ItemListForm_removeImageToolStripMenuItem_Click_Select_the_full_row_to_remove_an_image" xml:space="preserve">
+    <value>Select the full row to remove an image</value>
+  </data>
+  <data name="ItemListForm_textBoxTagUID_TextChangedItemfound" xml:space="preserve">
+    <value>{0} Item(s) found</value>
+    <comment>String.Format("{0} Item(s) found", Dv.Count);</comment>
+  </data>
+  <data name="str_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="str_TagUID" xml:space="preserve">
+    <value>TagUID</value>
+  </data>
+  <data name="LiveDataForm_button1_Click_All_Tag_in_box_fit_criteria" xml:space="preserve">
+    <value>All Tag in box {0} fit criteria {1}</value>
+    <comment>string.Format("All Tag in box {0} fit criteria {1}", _bti.BoxRef, _bti.Criteria)</comment>
+  </data>
+  <data name="str_Serial_RFID" xml:space="preserve">
+    <value>Serial RFID</value>
+  </data>
+  <data name="str_Door_Used" xml:space="preserve">
+    <value>Door Used</value>
+  </data>
+  <data name="str_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="str_SlaveDoor" xml:space="preserve">
+    <value>
+Slave Door</value>
+    <comment>Manadatory to add carrier return</comment>
+  </data>
+  <data name="str_MasterDoor" xml:space="preserve">
+    <value>
+Master Door</value>
+    <comment>Mandatory to add carrier return</comment>
+  </data>
+  <data name="LiveDataForm_LiveDataForm_Keep_Last_Scan" xml:space="preserve">
+    <value>Keep Last Scan</value>
+  </data>
+  <data name="str_Copy_to_ClipBoard" xml:space="preserve">
+    <value>Copy  {0} to ClipBoard</value>
+    <comment>string.Format("Copy  {0} to ClipBoard", _columnInfo[1]);</comment>
+  </data>
+  <data name="str_Emergency" xml:space="preserve">
+    <value>Emergency</value>
+  </data>
+  <data name="str_Opening" xml:space="preserve">
+    <value>Opening</value>
+  </data>
+  <data name="str_Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="str_Scan" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="str_Device_disabled" xml:space="preserve">
+    <value>Device disabled</value>
+  </data>
+  <data name="str_Tags" xml:space="preserve">
+    <value>Tag(s): {0}</value>
+    <comment>string.Format("Tag(s): {0}",0);</comment>
+  </data>
+  <data name="str_PRESENT_format" xml:space="preserve">
+    <value>PRESENT : {0}</value>
+    <comment>string.Format("PRESENT : {0}",0)</comment>
+  </data>
+  <data name="str_ADDED_format" xml:space="preserve">
+    <value>ADDED : {0}</value>
+    <comment>string.Format("ADDED : {0}",0)</comment>
+  </data>
+  <data name="str_REMOVED_format" xml:space="preserve">
+    <value>REMOVED : {0}</value>
+    <comment>string.Format("REMOVED : {0}", 0)</comment>
+  </data>
+  <data name="str_Unable_to_Export_Device_In_Scan" xml:space="preserve">
+    <value>Unable to Export - Device In Scan</value>
+  </data>
+  <data name="str_Unable_to_Compare_Device_in_Scan" xml:space="preserve">
+    <value>Unable to Compare - Device in Scan</value>
+  </data>
+  <data name="strk_Are_You_sure_you_want_to_remove_the_association" xml:space="preserve">
+    <value>Are You sure you want to remove the association of {0} product(s)</value>
+    <comment>string.Format("Are You sure you want to remove the association of {0} product(s)", nbToDelete)</comment>
+  </data>
+  <data name="str_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="str_product_deleted" xml:space="preserve">
+    <value>{0} / {1} product(s) deleted!</value>
+    <comment>string.Format("{0} / {1} product(s) deleted!", nbDelete, nbToDelete)</comment>
+  </data>
+  <data name="str_SerialSN" xml:space="preserve">
+    <value>Serial S/N : {0}</value>
+    <comment>string.Format("Serial S/N : {0}"</comment>
+  </data>
+  <data name="str_Type" xml:space="preserve">
+    <value>Type : {0}</value>
+    <comment>string.Format("Type : {0}", dc.infoDev.deviceType))</comment>
+  </data>
+  <data name="str_Connection_Status_" xml:space="preserve">
+    <value>Connection Status : {0}</value>
+    <comment>string.Format("Connection Status : {0}"</comment>
+  </data>
+  <data name="str_Statut_" xml:space="preserve">
+    <value>RFID Statut : {0}</value>
+    <comment>string.Format("RFID Statut : {0}"</comment>
+  </data>
+  <data name="str_Tacq" xml:space="preserve">
+    <value>T° Acq Date : {0}</value>
+    <comment>string.Format("T° Acq Date : {0}", dtAcq.ToLocalTime().ToString("dd/MM/yy HH:mm:ss"))</comment>
+  </data>
+  <data name="str_Temp" xml:space="preserve">
+    <value>T°(C°) : {0}</value>
+    <comment>string.Format("T°(C°) : {0}", fridgeTmpInfo.lastTempValue.ToString("0.00"))</comment>
+  </data>
+  <data name="str_TempAverage" xml:space="preserve">
+    <value>Average T°(C°) : {0} - nbPoints : {1}</value>
+    <comment>string.Format("Average T°(C°) : {0} - nbPoints : {1}", fridgeTmpInfo.mean.ToString("0.00"), fridgeTmpInfo.nbValueTemp)</comment>
+  </data>
+  <data name="str_TempMax" xml:space="preserve">
+    <value>Max T°(C°) : {0}</value>
+    <comment>string.Format("Max T°(C°) : {0}", fridgeTmpInfo.max.ToString("0.00"))</comment>
+  </data>
+  <data name="str_TempMin" xml:space="preserve">
+    <value>Min T°(C°) : {0}</value>
+    <comment>string.Format("Min T°(C°) : {0}", fridgeTmpInfo.min.ToString("0.00"))</comment>
+  </data>
+  <data name="strTempDate" xml:space="preserve">
+    <value>T° Creation Date : {0}</value>
+    <comment>string.Format("T° Creation Date : {0}", dtCeation.ToLocalTime().ToString("dd/MM/yy HH:mm:ss"))</comment>
+  </data>
+  <data name="strFP_Master_Statut_" xml:space="preserve">
+    <value>FP Master Statut : {0}</value>
+    <comment>string.Format("FP Master Statut : {0}", dc.rfidDev.FPStatusMaster));</comment>
+  </data>
+  <data name="str_FP_Slave_Statut_" xml:space="preserve">
+    <value>FP Slave Statut : {0}</value>
+    <comment>(string.Format("FP Slave Statut : {0}", dc.rfidDev.FPStatusSlave))</comment>
+  </data>
+  <data name="str_treeeviewerror" xml:space="preserve">
+    <value>A device defined is not well configured - Live Data will be stopped 
+Please check your setup ?</value>
+  </data>
+  <data name="str_IP_address_" xml:space="preserve">
+    <value>IP address : {0}</value>
+    <comment>(string.Format("IP address : {0}", dc.infoDev.IP_Server)</comment>
+  </data>
+  <data name="str_serverport" xml:space="preserve">
+    <value>port : {0}</value>
+    <comment>string.Format("port : {0}", dc.infoDev.Port_Server));</comment>
+  </data>
+  <data name="str_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="str_Temperature_data_in_acquisition___Please_wait__" xml:space="preserve">
+    <value>Temperature data in acquisition - Please wait !</value>
+  </data>
+  <data name="str_No_temperature_data_acquired" xml:space="preserve">
+    <value>No temperature data acquired - Check fridge !</value>
+  </data>
+  <data name="str_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="str_Tag_Location" xml:space="preserve">
+    <value>Tag Location</value>
+  </data>
+  <data name="str_Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="str_Shelf" xml:space="preserve">
+    <value>Shelf {0}</value>
+    <comment> string.Format("Shelf {0}", _localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);</comment>
+  </data>
+  <data name="str_Expired" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="str_Less_than_30_Days_Left" xml:space="preserve">
+    <value>Less than 30 Days Left</value>
+  </data>
+  <data name="str_Less_than_90_Days_Left" xml:space="preserve">
+    <value>Less than 90 Days Left</value>
+  </data>
+  <data name="str_More_than_90_Days_Left" xml:space="preserve">
+    <value>More than 90 Days Left</value>
+  </data>
+  <data name="str_No_Date" xml:space="preserve">
+    <value>No Date</value>
+  </data>
+  <data name="str_30_Days_Left" xml:space="preserve">
+    <value>&lt;30 Days Left</value>
+  </data>
+  <data name="str_90_Days_Left" xml:space="preserve">
+    <value>&lt;90 Days Left</value>
+  </data>
+  <data name="str_p90_Days_Left" xml:space="preserve">
+    <value>&gt;90 Days Left</value>
+  </data>
+  <data name="str_Tag_s__added_at_last_scan" xml:space="preserve">
+    <value>Tag(s) added at last scan</value>
+  </data>
+  <data name="Livstr_Tag_s__already_present_in_previous_scan" xml:space="preserve">
+    <value>Tag(s) already present in previous scan</value>
+  </data>
+  <data name="str_Tag_s__removed_from_previous_scan" xml:space="preserve">
+    <value>Tag(s) removed from previous scan</value>
+  </data>
+  <data name="str_Between_30_to_90_Days_Left" xml:space="preserve">
+    <value>Between 30 to 90 Days Left</value>
+  </data>
+  <data name="str_Display_in_Tile" xml:space="preserve">
+    <value>Display in Tile</value>
+  </data>
+  <data name="str_Display_in_Details" xml:space="preserve">
+    <value>Display in Details</value>
+  </data>
+  <data name="str_Group_Mode___OFF" xml:space="preserve">
+    <value>Group Mode : OFF</value>
+  </data>
+  <data name="str_Group_Mode__ON" xml:space="preserve">
+    <value>Group Mode : ON</value>
+  </data>
+  <data name="str_Turn_LEDs_On" xml:space="preserve">
+    <value>Turn LEDs On</value>
+  </data>
+  <data name="str_Turn_LEDs_On_Tag_s__Not_Compatible" xml:space="preserve">
+    <value>Turn LEDs On - (Tag(s) Not Compatible)</value>
+  </data>
+  <data name="str_Update_Tag_UID" xml:space="preserve">
+    <value>Update Tag UID</value>
+  </data>
+  <data name="str_Update_Tag_UID_Tag_s__Not_Compatible_" xml:space="preserve">
+    <value>Update Tag UID - (Tag(s) Not Compatible)</value>
+  </data>
+  <data name="str_errorduplicate" xml:space="preserve">
+    <value>Error while processing inventory Tags 
+SDK List contains duplicate TagUID
+Process stopped</value>
+  </data>
+  <data name="str_errorInventoryList" xml:space="preserve">
+    <value>Error while processing inventory Tags 
+SDK found  = {0} 
+ListTagall = {1} 
+DtTagAll = {2}</value>
+  </data>
+  <data name="str_items_allowed" xml:space="preserve">
+    <value>{0} item(s) on {1} allowed</value>
+  </data>
+  <data name="str_0_on_1_allowed" xml:space="preserve">
+    <value>{0} on {1} allowed</value>
+  </data>
+  <data name="str_Error_During_Scan" xml:space="preserve">
+    <value>Error During Scan</value>
+  </data>
+  <data name="str_Scan_return" xml:space="preserve">
+    <value>Scan return :{0}</value>
+  </data>
+  <data name="strt_FP_Master_Statut_format" xml:space="preserve">
+    <value>FP Master Statut : {0}</value>
+  </data>
+  <data name="strt_FP_Slave_Statut_format" xml:space="preserve">
+    <value>FP Slave Statut : {0}</value>
+  </data>
+  <data name="str__Please_Wait___Get_previous_temperature_for_device" xml:space="preserve">
+    <value>Info : Please Wait - Get previous temperature for device {0}</value>
+  </data>
+  <data name="str_Please_Wait___Get_current_temperature_for_device" xml:space="preserve">
+    <value>Info : Please Wait - Get current temperature for device {0}</value>
+  </data>
+  <data name="str_Set_current_temperature_for_device_0" xml:space="preserve">
+    <value>Info : Please Wait - Set current temperature for device {0}</value>
+  </data>
+  <data name="str_badIP" xml:space="preserve">
+    <value>Bad IP for device {0}
+Change remote configuration device</value>
+  </data>
+  <data name="str_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="str_User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="str_Error_while_computing_Sum" xml:space="preserve">
+    <value>Error while computing Sum</value>
+  </data>
+  <data name="str_GetSumValue" xml:space="preserve">
+    <value>{0} sum = {1} - </value>
+  </data>
+  <data name="str_failed_to_serialized" xml:space="preserve">
+    <value>failed to serialized</value>
+  </data>
+  <data name="str_errorserialization" xml:space="preserve">
+    <value>Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}</value>
+  </data>
+  <data name="str_errorDataStoreInventory" xml:space="preserve">
+    <value>Unable to store inventory due to data inconsitency - Data will be loose - Please Rescan
+info :</value>
+  </data>
+  <data name="str_Unable_to_store_inventory_Data_will_be_loose" xml:space="preserve">
+    <value>Unable to store inventory - Data will be loose - Please Rescan</value>
+  </data>
+  <data name="str_Info_on_store_inventory" xml:space="preserve">
+    <value>Info on store inventory</value>
+  </data>
+  <data name="str_Unable_to_find_selected_network_device" xml:space="preserve">
+    <value>Unable to find selected network device</value>
+  </data>
+  <data name="str_Please_select_only_one_tag" xml:space="preserve">
+    <value>Please select only one tag!</value>
+  </data>
+  <data name="str_ErrorMAcroExcel" xml:space="preserve">
+    <value>Error configuration run Excel Macro!
+Exportation aborted</value>
+  </data>
+  <data name="str_CheckCriteria" xml:space="preserve">
+    <value>{0} items don't fit the criteria "{1}" 
+Would you like show the detail?</value>
+  </data>
+  <data name="str_Criteria_info" xml:space="preserve">
+    <value>Criteria info</value>
+  </data>
+  <data name="str_LedFoundOnChannel" xml:space="preserve">
+    <value>Channel {3} : {0} / {1} found. Until now : {2} / {1} found. Continue ?</value>
+  </data>
+  <data name="str_Research_in_progress" xml:space="preserve">
+    <value>Research in progress...</value>
+  </data>
+  <data name="str_Led2" xml:space="preserve">
+    <value>Channel {3} : {0} / {1} found. Total : {2} / {1} found.</value>
+  </data>
+  <data name="str_Research_over" xml:space="preserve">
+    <value>Research over</value>
+  </data>
+  <data name="str_Led3" xml:space="preserve">
+    <value>All axis have been browsed. {0} tags not found. Missing tags ID :</value>
+  </data>
+  <data name="str_LedModeError" xml:space="preserve">
+    <value>Device not return to ready so forced It</value>
+  </data>
+  <data name="str_LedTagFound" xml:space="preserve">
+    <value>{0} tag to find : {1} has been found.</value>
+  </data>
+  <data name="str_LedFound2" xml:space="preserve">
+    <value>{0} tags to find : {1} has been found.</value>
+  </data>
+  <data name="str_LedFound3" xml:space="preserve">
+    <value>{0} tags to find : {1} have been found.</value>
+  </data>
+  <data name="str_LedMissing" xml:space="preserve">
+    <value>
+Missing tags ID :</value>
+  </data>
+  <data name="str_LED_Information" xml:space="preserve">
+    <value>LED Information</value>
+  </data>
+  <data name="str_An_unexpected_error_occurred_during_communication_with_device" xml:space="preserve">
+    <value>An unexpected error occurred during communication with device.</value>
+  </data>
+  <data name="str_tagfind" xml:space="preserve">
+    <value>{0} tag to find : {1} have been found.</value>
+  </data>
+  <data name="str_Missing_tags_ID" xml:space="preserve">
+    <value>Missing tags ID :</value>
+  </data>
+  <data name="str_sum" xml:space="preserve">
+    <value>{0} sum = {1} - </value>
+  </data>
+  <data name="str_DATA_SAVED" xml:space="preserve">
+    <value>DATA SAVED</value>
+  </data>
+  <data name="str_Unknown_Type" xml:space="preserve">
+    <value>Unknown Type</value>
+  </data>
+  <data name="str_Diamond_Smart_Box" xml:space="preserve">
+    <value>Diamond Smart Box</value>
+  </data>
+  <data name="str_Jewelry_Smart_Cabinet" xml:space="preserve">
+    <value>Jewelry Smart Cabinet</value>
+  </data>
+  <data name="str_Diamond_SAS" xml:space="preserve">
+    <value>Diamond SAS</value>
+  </data>
+  <data name="str_Smart_Drawer" xml:space="preserve">
+    <value>Smart Drawer</value>
+  </data>
+  <data name="str_Smart_Board" xml:space="preserve">
+    <value>Smart Board</value>
+  </data>
+  <data name="str_Medical_Cabinet_" xml:space="preserve">
+    <value>Medical Cabinet </value>
+  </data>
+  <data name="str_Smart_Fridge" xml:space="preserve">
+    <value>Smart Fridge</value>
+  </data>
+  <data name="str_Smart_Station" xml:space="preserve">
+    <value>Smart Station</value>
+  </data>
+  <data name="str_Smart_Blood_Fridge" xml:space="preserve">
+    <value>Smart Blood Fridge</value>
+  </data>
+  <data name="str_Error_during_deleting_device_Device_not_deleted" xml:space="preserve">
+    <value>Error during deleting device - Device not deleted</value>
+  </data>
+  <data name="str_DATA_NOT_SAVED" xml:space="preserve">
+    <value>DATA NOT SAVED</value>
+  </data>
+  <data name="str__Failed_Query_Windows_Info" xml:space="preserve">
+    <value>{0} - Failed Query Windows Info {1} / {2}</value>
+  </data>
+  <data name="str_Event_Date" xml:space="preserve">
+    <value>Event Date</value>
+  </data>
+  <data name="str_User_Scan" xml:space="preserve">
+    <value>User Scan</value>
+  </data>
+  <data name="str_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="str_Select_only_one_for_display_data_or_2_to_compare_two_inventories" xml:space="preserve">
+    <value>Select only one for display data or 2 to compare two inventories</value>
+  </data>
+  <data name="ReaderHistoryForm_UpdateTabControlCompare_All" xml:space="preserve">
+    <value>All ({0})</value>
+  </data>
+  <data name="ReaderHistoryForm_UpdateTabControlCompare_Previous" xml:space="preserve">
+    <value>Previous ({0})</value>
+  </data>
+  <data name="ReaderHistoryForm_UpdateTabControlCompare_Added" xml:space="preserve">
+    <value>Added ({0})</value>
+  </data>
+  <data name="ReaderHistoryForm_UpdateTabControlCompare_Removed" xml:space="preserve">
+    <value>Removed ({0})</value>
+  </data>
+  <data name="str_Device_Name" xml:space="preserve">
+    <value>Device Name</value>
+  </data>
+  <data name="str_Device_Type" xml:space="preserve">
+    <value>Device Type</value>
+  </data>
+  <data name="str_Server_IP" xml:space="preserve">
+    <value>Server IP</value>
+  </data>
+  <data name="str_Server_Port" xml:space="preserve">
+    <value>Server Port</value>
+  </data>
+  <data name="str_Status" xml:space="preserve">
+    <value>Status :</value>
+  </data>
+  <data name="str_Ping_Server_OK" xml:space="preserve">
+    <value>Status : Ping Server OK</value>
+  </data>
+  <data name="str_Unable_to_connect_to_server" xml:space="preserve">
+    <value>Status : Unable to connect to server {0} on port {1}</value>
+  </data>
+  <data name="str_Unable_to_connect_to_machine" xml:space="preserve">
+    <value>Status : Unable to connect to machine {0}</value>
+  </data>
+  <data name="str_Enter_a_valid_IP_or_DNS_Not_Resolve_adress" xml:space="preserve">
+    <value>Status : Enter a valid IP or DNS Not Resolve adress {0}</value>
+  </data>
+  <data name="str_Error_while_Saving_Data" xml:space="preserve">
+    <value>Error while Saving Data</value>
+  </data>
+  <data name="Rstr_Unable_to_connect_to_server__0__on_port__1" xml:space="preserve">
+    <value>Status : Unable to connect to server {0} on port {1}</value>
+  </data>
+  <data name="str_Unable_to_connect_to_machine__0" xml:space="preserve">
+    <value>Status : Unable to connect to machine {0}</value>
+  </data>
+  <data name="str_Status___Enter_a_valid_IP_or_DNS_Not_Resolve_adress__0_" xml:space="preserve">
+    <value>Status : Enter a valid IP or DNS Not Resolve adress {0}</value>
+  </data>
+  <data name="str_search_Online_reader___Please_wait_" xml:space="preserve">
+    <value>Status : search Online reader - Please wait!</value>
+  </data>
+  <data name="str_DeviceFormat" xml:space="preserve">
+    <value>Device : {0}</value>
+  </data>
+  <data name="str_UID_already_in_use_Please_Change_UID" xml:space="preserve">
+    <value>UID already in use - Please Change UID</value>
+  </data>
+  <data name="str_Invalid_Tag_ID" xml:space="preserve">
+    <value>Invalid Tag ID</value>
+  </data>
+  <data name="str_RFID_device_not_ready" xml:space="preserve">
+    <value>RFID device not ready</value>
+  </data>
+  <data name="str_Tag_blocked_or_not_well_supplied__Operation_failed" xml:space="preserve">
+    <value>Tag blocked or not well supplied. Operation failed !</value>
+  </data>
+  <data name="str_Tag_blocked__Operation_failed" xml:space="preserve">
+    <value>Tag blocked. Operation failed !</value>
+  </data>
+  <data name="str_Tag_not_well_supplied__Operation_failed" xml:space="preserve">
+    <value>Tag not well supplied. Operation failed !</value>
+  </data>
+  <data name="str_Updated_tag_confirmation_has_failed" xml:space="preserve">
+    <value>Updated tag confirmation has failed.</value>
+  </data>
+  <data name="str_Tag_UID_succesfully_updated_" xml:space="preserve">
+    <value>Tag UID succesfully updated.</value>
+  </data>
+  <data name="str_Change_UID_Date" xml:space="preserve">
+    <value>Change UID Date</value>
+  </data>
+  <data name="str_No_data_Temperature_found_in_Database_" xml:space="preserve">
+    <value>No data Temperature found in Database!</value>
+  </data>
+  <data name="strTemperature_Report" xml:space="preserve">
+    <value>Temperature Report - {0} - {1}</value>
+  </data>
+  <data name="str_minValue" xml:space="preserve">
+    <value>Min value : {0}</value>
+  </data>
+  <data name="str_maxvalue" xml:space="preserve">
+    <value>Max value : {0}</value>
+  </data>
+  <data name="str_Average_value" xml:space="preserve">
+    <value>Average value : {0:0.00}</value>
+  </data>
+  <data name="str_Download" xml:space="preserve">
+    <value>Download : {0} Ko / {1}Ko</value>
+  </data>
+  <data name="str_User_already_Exist___Please_change_Firstname_or_LastName" xml:space="preserve">
+    <value>User already Exist - Please change Firstname or LastName</value>
+  </data>
+  <data name="str_Please_enter_FirstName_and_LastName_field_before_enroll" xml:space="preserve">
+    <value>Please enter FirstName and LastName field before enroll</value>
+  </data>
+  <data name="str_Error_During_Deleting_user___User_not_deleted" xml:space="preserve">
+    <value>Error During Deleting user - User not deleted</value>
+  </data>
+  <data name="str_Use_only_one_separator" xml:space="preserve">
+    <value>Use only one separator</value>
+  </data>
+  <data name="str_Enter_a_valid_removed_value" xml:space="preserve">
+    <value>Enter a valid removed value</value>
+  </data>
+  <data name="str_Use_only_one_separator_for_double" xml:space="preserve">
+    <value>Use only one separator for double</value>
+  </data>
+  <data name="str_Unable_to_get_Badge_from__0" xml:space="preserve">
+    <value>Unable to get Badge from {0}</value>
+  </data>
+  <data name="strr_Right_Thumb" xml:space="preserve">
+    <value>Right Thumb</value>
+  </data>
+  <data name="str_Right_Index" xml:space="preserve">
+    <value>Right Index</value>
+  </data>
+  <data name="str_Another_instance_of_smartTracker_is_running" xml:space="preserve">
+    <value>Another instance of smartTracker is running</value>
+  </data>
+  <data name="str_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="str_Continue_Evaluation" xml:space="preserve">
+    <value>Continue Evaluation</value>
+  </data>
+  <data name="str_days_remaining" xml:space="preserve">
+    <value>Days Remaining {0} / {1}</value>
+  </data>
+  <data name="str_Enter_a_License" xml:space="preserve">
+    <value>Enter a license</value>
+  </data>
+  <data name="str_Evaluation_Period" xml:space="preserve">
+    <value>Evaluation Period</value>
+  </data>
+  <data name="str_License_Info_Saved" xml:space="preserve">
+    <value>License Saved</value>
+  </data>
+  <data name="str_License_removed" xml:space="preserve">
+    <value>License removed</value>
+  </data>
+  <data name="str_Not_a_valid_license_for_this_machine" xml:space="preserve">
+    <value>Not a valid license for this machine</value>
+  </data>
+  <data name="str_runs_remaining" xml:space="preserve">
+    <value>Runs Remaining {0} / {1}</value>
+  </data>
+  <data name="str_Started_app" xml:space="preserve">
+    <value>Unable to start application : {0}</value>
+  </data>
+  <data name="str_Right_Middle" xml:space="preserve">
+    <value>Right Middle</value>
+  </data>
+  <data name="str_Right_Ring" xml:space="preserve">
+    <value>Right Ring</value>
+  </data>
+  <data name="str_Right_Little" xml:space="preserve">
+    <value>Right Little</value>
+  </data>
+  <data name="str_Left_Thumb" xml:space="preserve">
+    <value>Left Thumb</value>
+  </data>
+  <data name="str_Left_Index" xml:space="preserve">
+    <value>Left Index</value>
+  </data>
+  <data name="str_Left_Middle" xml:space="preserve">
+    <value>Left Middle</value>
+  </data>
+  <data name="str_Left_Ring" xml:space="preserve">
+    <value>Left Ring</value>
+  </data>
+  <data name="str_Left_Little" xml:space="preserve">
+    <value>Left Little</value>
+  </data>
+  <data name="UserStatForm_InitForm_User" xml:space="preserve">
+    <value>User :</value>
+  </data>
+  <data name="UserStatForm_InitForm_Reader" xml:space="preserve">
+    <value>Reader :</value>
+  </data>
+  <data name="str_Manual_Scan" xml:space="preserve">
+    <value>Manual Scan</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_Inventory_Count" xml:space="preserve">
+    <value>Inventory Count</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_Inventory_count_per_Reader" xml:space="preserve">
+    <value>Inventory count per Reader</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_User_Name" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_Inventory_count_versus_Time" xml:space="preserve">
+    <value>Inventory count versus Time</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="UserStatForm_buttonGet_Click_Inventory_count_per_User" xml:space="preserve">
+    <value>Inventory count per User</value>
+  </data>
+  <data name="UserStatForm_toolStripButtonExport_Click_export" xml:space="preserve">
+    <value>export</value>
+  </data>
+  <data name="WeightScalefrm_FindDevice_Info___No_Device_Detected___Quit_Live_Data" xml:space="preserve">
+    <value>Info : No Device Detected - Quit Live Data</value>
+  </data>
+  <data name="str_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="str_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="WeightScalefrm_StartScan_Previous" xml:space="preserve">
+    <value>Previous {0} : </value>
+  </data>
+  <data name="str_In_Connection" xml:space="preserve">
+    <value>Info : In Connection </value>
+  </data>
+  <data name="str_Device_Connected___Search_Scale" xml:space="preserve">
+    <value>Info : Device Connected - Search Scale</value>
+  </data>
+  <data name="str_More_than_one_tag" xml:space="preserve">
+    <value>Info : More than one tag scanned</value>
+  </data>
+  <data name="WeightScalefrm_ProcessTag_Wait_Stability" xml:space="preserve">
+    <value>Wait Stability</value>
+  </data>
+  <data name="WeightScalefrm_GetComScale" xml:space="preserve">
+    <value>Several Serial Port for Scale Found ! 
+ Please Connect only one scale</value>
+  </data>
+  <data name="WeightScalefrm_FindAndConnectScale_Info___Search_scale" xml:space="preserve">
+    <value>Info : Search scale </value>
+  </data>
+  <data name="WeightScalefrm_FindAndConnectScale_Info___Scale_found_on_port" xml:space="preserve">
+    <value>Info : Scale found on port </value>
+  </data>
+  <data name="WeightScalefrm_FindAndConnectScale_Unable_to_connect_scale_on_port" xml:space="preserve">
+    <value>Unable to connect scale on port </value>
+  </data>
+  <data name="WeightScalefrm_FindAndConnectScale_No_Scale_serialPort_Found" xml:space="preserve">
+    <value>No Scale serialPort Found!</value>
+  </data>
+  <data name="WeightScalefrm_UpdateWeight_Weight_____0___1_" xml:space="preserve">
+    <value>Weight : +{0} {1}</value>
+  </data>
+  <data name="WeightScalefrm_UpdateWeight_Weight____0___1_" xml:space="preserve">
+    <value>Weight : {0} {1}</value>
+  </data>
+  <data name="WeightScalefrm_refreshInfo_Previous__0____0_0_Cts" xml:space="preserve">
+    <value>Previous {0} : 0.0 Cts</value>
+  </data>
+  <data name="WeightScalefrm_refreshInfo_Previous__0_____1__Cts" xml:space="preserve">
+    <value>Previous {0} : {1} Cts</value>
+  </data>
+  <data name="WeightScalefrm_noColumn" xml:space="preserve">
+    <value>No column Weight find in database
+Please Correct the database column before use weight scale feature</value>
+  </data>
+  <data name="WeightScalefrm_timer1_Tick_Previous__0____" xml:space="preserve">
+    <value>Previous {0} : </value>
+  </data>
+  <data name="WeightScalefrm_timer1_Tick_Info___Search_connected_device" xml:space="preserve">
+    <value>Info : Search connected device</value>
+  </data>
+  <data name="WeightScalefrm_updateWeight_error" xml:space="preserve">
+    <value>Error while updating weight info
+Update not done</value>
+  </data>
+  <data name="WeightScalefrm_updateWeight_product" xml:space="preserve">
+    <value>Product Unreferenced
+Unable to store Weight modification</value>
+  </data>
+  <data name="str_Search_Scale" xml:space="preserve">
+    <value>Search Scale!</value>
+  </data>
+  <data name="WeightScalefrm_doChart_Weight_evolution_versus_Time" xml:space="preserve">
+    <value>Weight evolution versus Time</value>
+  </data>
+  <data name="LiveDataForm_updateTagUIDToolStripMenuItem_Click_Update_firmware_with_version_above_2_54_to_use_writing_feature" xml:space="preserve">
+    <value>Update firmware with version above 2.54 to use writing feature</value>
+  </data>
+  <data name="LiveDataForm_AddTagToDt" xml:space="preserve">
+    <value>Several Product  Reference  found for tag {0}
+ Check Database !</value>
+  </data>
+  <data name="LiveDataForm_AddTagToDt_ERROR" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="LiveDataForm_allAtOnceToolStripMenuItem_Click_Perform_a_fresh_scan_before_use_LED_Feature" xml:space="preserve">
+    <value>Perform a fresh scan before use LED Feature</value>
+  </data>
+</root>

@@ -31,8 +31,10 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2015.6.3.1692")]
-[assembly: AssemblyFileVersion("2015.6.3.1692")]
+[assembly: AssemblyVersion("2015.6.3.1696")]
+[assembly: AssemblyFileVersion("2015.6.3.1696")]
+//1696 - bug tag to drawer ARM get inventories
+//1694 - Run one scan after connect for LED 
 //1684 - badge reader remote on SMC
 //1680 : test XU4 temperature kirsh
 //1676 Add unlock comand with TCP (Betrace) 

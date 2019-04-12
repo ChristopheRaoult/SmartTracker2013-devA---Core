@@ -1024,7 +1024,6 @@ namespace smartTracker
             // 
             // timerAutoPad
             // 
-            this.timerAutoPad.Enabled = true;
             this.timerAutoPad.Interval = 1000;
             this.timerAutoPad.Tick += new System.EventHandler(this.timerAutoPad_Tick);
             // 

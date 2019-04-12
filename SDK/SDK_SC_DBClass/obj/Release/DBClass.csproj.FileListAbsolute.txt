@@ -1,0 +1,10 @@
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\DBClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\ExcelLibrary.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\bin\Release\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Release\DBClass.csprojResolveAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Release\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Release\DBClass.pdb

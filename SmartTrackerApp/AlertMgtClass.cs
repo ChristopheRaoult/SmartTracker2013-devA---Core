@@ -471,7 +471,7 @@ namespace smartTracker
                     break;
                 case AlertType.AT_DLC_Expired:
 
-                    string[] dt2 = spareData.Split(';');
+                   /* string[] dt2 = spareData.Split(';');
                     
                     if (dt2!= null)
                     {
@@ -481,7 +481,7 @@ namespace smartTracker
                     for (int i = 1; i < dt2.Length; i++)
                         body += " <br /> " + dt2[i];
                     }
-
+                    */
                     break;
 
                 case AlertType.AT_Bad_Blood_Patient:

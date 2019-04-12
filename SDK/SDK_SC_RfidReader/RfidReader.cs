@@ -38,7 +38,8 @@ namespace SDK_SC_RfidReader
     /// </summary>
     public class RfidReader : IRfidReader, IDisposable
     {
-        private ushort _status;
+        public int _status;
+        public int _correlation;
         /// <summary>
         /// internal light value
         /// </summary>
@@ -819,6 +820,7 @@ namespace SDK_SC_RfidReader
         private List<string> GetDevicePortCom()
         {
             List<string> comPortList = new List<string>(System.IO.Ports.SerialPort.GetPortNames());
+            return comPortList; // Change due to new ARM
             try
             {
                 const string VID = "0403";
@@ -1797,6 +1799,21 @@ namespace SDK_SC_RfidReader
             Thread.Sleep(10);
         }
 
+        public void LedAll(int axis , int timeout, bool bChangeChannel = true)
+        {
+            if (bChangeChannel)
+                SwitchCurrentAxis(axis);
+            StartLedOn2(axis);
+            ushort Rcor;
+            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out Rcor);
+            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+            Thread.Sleep(50);
+
+            if (timeout > 5) //assert is not second but ms so not block function bigger than 5 sec
+                Thread.Sleep(timeout);
+            else
+                Thread.Sleep(timeout * 1000);
+        }
 
         public void LEdOnAll(int axis , int timeout, bool bChangeChannel = true)
         {
@@ -1804,17 +1821,17 @@ namespace SDK_SC_RfidReader
                 SwitchCurrentAxis(axis);
 
             DeviceBoard.setAntenna(true);
-            Thread.Sleep(50);
-            //DeviceBoard.sendSyncPulse();
-            //Thread.Sleep(50);
+            Thread.Sleep(10);
+            DeviceBoard.sendSyncPulse();
+            Thread.Sleep(10);
             ushort Rcor;
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-            Thread.Sleep(50);
+            Thread.Sleep(10);
 
             if(timeout > 5 ) //assert is not second but ms so not block function bigger than 5 sec
             Thread.Sleep(timeout);
             else
-            Thread.Sleep(timeout * 1000);
+            Thread.Sleep(timeout*1000);
         }
                
 
@@ -1954,24 +1971,11 @@ namespace SDK_SC_RfidReader
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 == 1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                    Thread.Sleep(50);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(1);
-                                }
-                                else
-                                {
-                                    //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
                                 tagFound.Add(tagUID);
                             }
                         }
@@ -1990,24 +1994,11 @@ namespace SDK_SC_RfidReader
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 == 1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                    Thread.Sleep(50);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(1);
-                                }
-                                else
-                                {
-                                   // DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
                                 tagFound.Add(tagUID);
                             }
                         }
@@ -2037,6 +2028,8 @@ namespace SDK_SC_RfidReader
             foreach (string tagId in tagList)
             {
                 _status = 0;
+                DeviceBoard.sendSyncPulse();
+                Thread.Sleep(10);
                 DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out rcor);
                 _eventConfirmation.WaitOne(500);
                 Thread.Sleep(10);
@@ -2061,25 +2054,12 @@ namespace SDK_SC_RfidReader
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 == 1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                    Thread.Sleep(50);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(1);
-                                }
-                                else
-                                {
-                                   // DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                tagFound.Add(tagId);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
+                                tagFound.Add(tagUID);
                             }
                         }
                     }
@@ -2098,25 +2078,12 @@ namespace SDK_SC_RfidReader
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 == 1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                    Thread.Sleep(50);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(1);
-                                }
-                                else
-                                {
-                                   // DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                tagFound.Add(tagId);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
+                                tagFound.Add(tagUID);
                             }
                         }
                     }
@@ -2124,6 +2091,20 @@ namespace SDK_SC_RfidReader
             }
 
             foreach (string tagId in tagFound) tagList.Remove(tagId);
+        }
+
+        private void TestLed()
+        {
+            ushort rcor;
+            lastLedOn = DateTime.Now;
+            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
+            Thread.Sleep(50);
+           // DeviceBoard.setAntenna(false);
+           // Thread.Sleep(1);
+           // DeviceBoard.setAntenna(true);
+           // Thread.Sleep(1);
+            DeviceBoard.sendSyncPulse();
+            Thread.Sleep(1);
         }
 
         private TimeSpan ts;
@@ -2135,12 +2116,12 @@ namespace SDK_SC_RfidReader
             _status = 0;
            
             DeviceBoard.setAntenna(true);
-            Thread.Sleep(10);
+            Thread.Sleep(50);
             DeviceBoard.sendSyncPulse();
-            Thread.Sleep(10);
+            Thread.Sleep(50);
             ushort Rcor;
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
-            Thread.Sleep(10);
+            Thread.Sleep(50);
             List<string> tagFound = new List<string>();
 
             lastLedOn = DateTime.Now;
@@ -2168,29 +2149,16 @@ namespace SDK_SC_RfidReader
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
                             _eventConfirmation.WaitOne(500);
-                            Thread.Sleep(10);
+                            Thread.Sleep(50);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 ==1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte) LowlevelBasicOrder.KL, out rcor);
-                                    Thread.Sleep(50);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(1);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(1);
-                                }
-                                else
-                                {
-                                   // DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                tagFound.Add(tagId);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
+                                tagFound.Add(tagUID);
                             }
                         }
                     }
@@ -2205,29 +2173,16 @@ namespace SDK_SC_RfidReader
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
                             _eventConfirmation.WaitOne(500);
-                            Thread.Sleep(10);
+                            Thread.Sleep(50);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
-                                //if (ts.TotalMilliseconds > timeLedNotOn)
-                                if (0 == 1)
-                                {
-                                    lastLedOn = DateTime.Now;
-                                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                    Thread.Sleep(500);
-                                    DeviceBoard.setAntenna(false);
-                                    Thread.Sleep(10);
-                                    DeviceBoard.setAntenna(true);
-                                    Thread.Sleep(10);
-                                    DeviceBoard.sendSyncPulse();
-                                    Thread.Sleep(10);
-                                }
-                                else
-                                {
-                                   // DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                }
-                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-                                tagFound.Add(tagId);
+                                //Led Off in process
+                                TestLed();
+                                // Led On in process
+                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                Thread.Sleep(25);
+                                tagFound.Add(tagUID);
                             }
                         }
                     }
@@ -2938,16 +2893,17 @@ namespace SDK_SC_RfidReader
                                 ti.TagId_DEC = null;
                                 ReaderData.ListTagInfo.Add(ti);
 
-                            } // Change for ST - Warning DT
+                            //} // Change for ST - Warning DT
 
-                            notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
-                            if (NotifyEvent != null)
-                            {
-                                if (DeviceBoard != null)
-                                    AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
-                                NotifyEvent(this, notifyEvent);
+                                notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
+                                if (NotifyEvent != null)
+                                {
+                                    if (DeviceBoard != null)
+                                        AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
+                                    NotifyEvent(this, notifyEvent);
+                                }
+                            // for DT put here
                             }
-                            // for DT put } here
 
                             _checkKZout = 0; // raz cpt  test sortie
 
@@ -3193,6 +3149,7 @@ namespace SDK_SC_RfidReader
                             if (backDoorPacket.backDoorEventType == (byte)BackDoorEventType.BDET_LowLevelOrder)
                             {
                                 _status = backDoorPacket.value1;
+                                _correlation = backDoorPacket.value2;
                                 if (_eventConfirmation != null)
                                  _eventConfirmation.Set();
                             }

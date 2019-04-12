@@ -1,0 +1,9 @@
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\bin\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.ExceptionMessageBox.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.Properties.Resources.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.GenerateResource.Cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.csprojResolveAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.CoreCompileInputs.cache

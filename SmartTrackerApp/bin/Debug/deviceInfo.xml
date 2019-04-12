@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Devices>
+  <Device serialNumber="AA031401">
+    <SerialName>P767v1-00001</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{2FD3A356-F2FF-F243-9B0D-9243C137E641}</SerialFPMaster>
+    <SerialFPSlave>{BFCB44E6-EB02-3142-A596-9ED337EACE19}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTU7PL54</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA777515">
+    <SerialName>P767v1-00002</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{7EA8B6D7-35E6-A844-8263-BAA7D00C7412}</SerialFPMaster>
+    <SerialFPSlave>{22FDE386-C206-7C46-9274-E8DC1339701B}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTU7PLIA</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA031397">
+    <SerialName>P767v1-00003</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{1919DF94-0A31-174B-808C-F3E4FE918D09}</SerialFPMaster>
+    <SerialFPSlave>{F34A9E20-A811-EF40-B671-9EC0DA2C8D7C}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTU7PAY9</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA031402">
+    <SerialName>P767v1-00004</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{B23AB6BF-5E63-2C44-89A0-10485F07D798}</SerialFPMaster>
+    <SerialFPSlave>{877C2193-B166-984B-8FB0-CDADDC4ED740}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTU7PLIE</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA031395">
+    <SerialName>P767v1-00005</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{E3C48531-1D5B-1042-BFAA-28941411BBB7}</SerialFPMaster>
+    <SerialFPSlave>{75B35046-82E7-8247-81DF-4D9A5ECF1F17}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTVEPH3U</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA777509">
+    <SerialName>P767v1-00006</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{CDEEBF3D-ABEB-DB4A-8F4C-9FDA02D0F1AE}</SerialFPMaster>
+    <SerialFPSlave>{52F498E8-85D8-B745-8256-95369136447B}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTU7PMN9</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="AA777482">
+    <SerialName>P767v1-00007</SerialName>
+    <DeviceType>DT_MSR</DeviceType>
+    <SerialFPMaster>{D7E026A6-75C3-5344-8DF5-A0412F76B468}</SerialFPMaster>
+    <SerialFPSlave>{9E5655F6-157F-324F-A0CE-0B65E010D344}</SerialFPSlave>
+    <BadgeType>RT_HF</BadgeType>
+    <BadgeUsbSerial>FTVH50E8</BadgeUsbSerial>
+  </Device>
+  <Device serialNumber="22222">
+    <SerialName>SCALE</SerialName>
+    <DeviceType>DT_STR</DeviceType>
+    <ScaleUsbSerial>FTWOW8QBA</ScaleUsbSerial>
+  </Device>
+</Devices>

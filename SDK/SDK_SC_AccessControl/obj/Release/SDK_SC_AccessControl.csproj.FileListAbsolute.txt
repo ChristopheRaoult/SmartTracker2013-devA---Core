@@ -1,0 +1,9 @@
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\SDK_SC_AccessControl.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\bin\Release\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Release\SDK_SC_AccessControl.csprojResolveAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Release\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Release\SDK_SC_AccessControl.pdb

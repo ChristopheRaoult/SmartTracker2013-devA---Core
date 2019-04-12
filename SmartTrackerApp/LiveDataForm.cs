@@ -1667,7 +1667,7 @@ namespace smartTracker
                         }
                     }
 
-                    if ((_selectedReader >= 0) & (_selectedReader < _nbLocalDevice))  //reader local
+                    if ((_selectedReader >= 0) & (_selectedReader < _nbLocalDevice)) //reader local
                     {
                         if (_localDeviceArray == null) return;
                         lock (_locker)
@@ -1677,9 +1677,9 @@ namespace smartTracker
                             if (_bShowServer)
                                 dataListView.ShowGroups = false;
 
-                            if (_localDeviceArray[_selectedReader].rfidDev.DeviceStatus == DeviceStatus.DS_InScan)  
+                            if (_localDeviceArray[_selectedReader].rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
                                 return;
-                           
+
 
                             // rebuil before empty list
                             bool needUpdate = false;
@@ -1688,7 +1688,7 @@ namespace smartTracker
                             bool previousState = aColumn.IsVisible;
                             aColumn.IsVisible = false;
                             if ((_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                       (_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SBF))
+                                (_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SBF))
                                 aColumn.IsVisible = true;
 
                             if (aColumn.IsVisible != previousState) needUpdate = true;
@@ -1704,15 +1704,15 @@ namespace smartTracker
                             /***************/
 
                             DataTable newDt = new DataTable();
-                            newDt.Columns.Add(ResStrings.str_Event, typeof(string));
-                          
+                            newDt.Columns.Add(ResStrings.str_Event, typeof (string));
+
                             for (int i = 0; i < _columnInfo.Count; i++)
                             {
-                                newDt.Columns.Add(_columnInfo[i].ToString(), typeof(string));
+                                newDt.Columns.Add(_columnInfo[i].ToString(), typeof (string));
                             }
 
-                            newDt.Columns.Add(ResStrings.str_Tag_Location, typeof(string));
-                            newDt.Columns.Add(ResStrings.str_Expiration, typeof(string));
+                            newDt.Columns.Add(ResStrings.str_Tag_Location, typeof (string));
+                            newDt.Columns.Add(ResStrings.str_Expiration, typeof (string));
 
                             foreach (DataRow dr in _localDeviceArray[_selectedReader].currentInventory.dtTagAdded.Rows)
                             {
@@ -1738,15 +1738,16 @@ namespace smartTracker
                                     else
                                     {
                                         // put shelve 1 if no value
-                                        string tmpInfo = string.Format(ResStrings.str_Shelf,1);
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf, 1);
                                         rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
                                 }
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
@@ -1781,17 +1782,21 @@ namespace smartTracker
                                     (_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SBF))
                                 {
                                     if ((_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel != null) &&
-                                     (_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel.Contains(dr.ItemArray[0])))
+                                        (_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel.Contains
+                                            (dr.ItemArray[0])))
                                     {
-                                        string tmpInfo = string.Format(ResStrings.str_Shelf, _localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf,
+                                            _localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel[
+                                                dr.ItemArray[0]]);
                                         rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
                                 }
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
@@ -1815,7 +1820,8 @@ namespace smartTracker
 
                                 newDt.Rows.Add(rowToadd);
                             }
-                            foreach (DataRow dr in _localDeviceArray[_selectedReader].currentInventory.dtTagPresent.Rows)
+                            foreach (DataRow dr in _localDeviceArray[_selectedReader].currentInventory.dtTagPresent.Rows
+                                )
                             {
 
                                 DataRow rowToadd = newDt.NewRow();
@@ -1823,21 +1829,25 @@ namespace smartTracker
                                 for (int i = 0; i < dr.ItemArray.Length; i++)
                                     rowToadd[i + 1] = dr.ItemArray[i];
                                 if ((_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                   (_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SBF))
+                                    (_localDeviceArray[_selectedReader].infoDev.deviceType == DeviceType.DT_SBF))
+                                {
+                                    if ((_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel != null) &&
+                                        (_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel.Contains
+                                            (dr.ItemArray[0])))
                                     {
-                                        if ((_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel != null) &&
-                                        (_localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel.Contains(dr.ItemArray[0])))
-                                        {
-                                            string tmpInfo = string.Format(ResStrings.str_Shelf, _localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);
-                                            rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
-                                        }
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf,
+                                            _localDeviceArray[_selectedReader].currentInventory.ListTagWithChannel[
+                                                dr.ItemArray[0]]);
+                                        rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
+                                }
 
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
@@ -1859,17 +1869,38 @@ namespace smartTracker
                                     }
                                 }
                                 newDt.Rows.Add(rowToadd);
-                            }                             
+                            }
 
                             dataListView.DataSource = null;
                             dataListView.DataSource = newDt;
-                         
+
                         }
 
-                        Invoke((MethodInvoker)delegate { labelPresent.Text = string.Format(ResStrings.str_PRESENT_format, _localDeviceArray[_selectedReader].currentInventory.dtTagPresent.Rows.Count); pictureBoxPresent.Refresh(); });
-                        Invoke((MethodInvoker)delegate { labelAdded.Text = string.Format(ResStrings.str_ADDED_format, _localDeviceArray[_selectedReader].currentInventory.dtTagAdded.Rows.Count); pictureBoxAdded.Refresh(); });
-                        Invoke((MethodInvoker)delegate { labelRemoved.Text = string.Format(ResStrings.str_REMOVED_format, _localDeviceArray[_selectedReader].currentInventory.dtTagRemove.Rows.Count); pictureBoxRemoved.Refresh(); });
-                        labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, _localDeviceArray[_selectedReader].currentInventory.dtTagAll.Rows.Count); });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelPresent.Text = string.Format(ResStrings.str_PRESENT_format,
+                                _localDeviceArray[_selectedReader].currentInventory.dtTagPresent.Rows.Count);
+                            pictureBoxPresent.Refresh();
+                        });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelAdded.Text = string.Format(ResStrings.str_ADDED_format,
+                                _localDeviceArray[_selectedReader].currentInventory.dtTagAdded.Rows.Count);
+                            pictureBoxAdded.Refresh();
+                        });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelRemoved.Text = string.Format(ResStrings.str_REMOVED_format,
+                                _localDeviceArray[_selectedReader].currentInventory.dtTagRemove.Rows.Count);
+                            pictureBoxRemoved.Refresh();
+                        });
+                        labelInventoryTagCount.Invoke(
+                            (MethodInvoker)
+                                delegate
+                                {
+                                    labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags,
+                                        _localDeviceArray[_selectedReader].currentInventory.dtTagAll.Rows.Count);
+                                });
                         for (int i = 0; i < dataListView.Columns.Count; i++)
                         {
                             OLVColumn ol = dataListView.GetColumn(i);
@@ -1879,25 +1910,28 @@ namespace smartTracker
                             if (ol.Index == dataListView.Columns.Count - 1)
                                 ol.FillsFreeSpace = true;
                         }
-                        
+
                     }
                     else
                     {
                         if (_networkDeviceArray == null) return;
                         lock (_locker)
                         {
+                            bool isMailNeeded = false;
                             dataListView.Items.Clear();
                             //put column
                             bool needUpdate = false;
 
-                           
 
-                           
+
+
                             OLVColumn aColumn = dataListView.AllColumns[dataListView.AllColumns.Count - 2];
                             bool previousState = aColumn.IsVisible;
                             aColumn.IsVisible = false;
-                            if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                       (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SBF))
+                            if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                 DeviceType.DT_SFR) ||
+                                (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                 DeviceType.DT_SBF))
                                 aColumn.IsVisible = true;
 
                             if (aColumn.IsVisible != previousState) needUpdate = true;
@@ -1913,42 +1947,58 @@ namespace smartTracker
 
 
                             DataTable newDt = new DataTable();
-                            newDt.Columns.Add(ResStrings.str_Event, typeof(string));
+                            newDt.Columns.Add(ResStrings.str_Event, typeof (string));
 
                             for (int i = 0; i < _columnInfo.Count; i++)
                             {
-                                newDt.Columns.Add(_columnInfo[i].ToString(), typeof(string));
+                                newDt.Columns.Add(_columnInfo[i].ToString(), typeof (string));
                             }
 
-                            newDt.Columns.Add(ResStrings.str_Tag_Location, typeof(string));
-                            newDt.Columns.Add(ResStrings.str_Expiration, typeof(string));
+                            newDt.Columns.Add(ResStrings.str_Tag_Location, typeof (string));
+                            newDt.Columns.Add(ResStrings.str_Expiration, typeof (string));
 
-                            foreach (DataRow dr in _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAdded.Rows)
+
+                            foreach (
+                                DataRow dr in
+                                    _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAdded
+                                        .Rows)
                             {
                                 DataRow rowToadd = newDt.NewRow();
 
                                 rowToadd[0] = ResStrings.str_Added;
                                 for (int i = 0; i < dr.ItemArray.Length; i++)
                                     rowToadd[i + 1] = dr.ItemArray[i];
-                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SBF))
-                                    if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel != null) && (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel.Contains(dr.ItemArray[0])))
+                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SFR) ||
+                                    (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SBF))
+                                    if (
+                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                            .ListTagWithChannel != null) &&
+                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                            .ListTagWithChannel.Contains(dr.ItemArray[0])))
                                     {
-                                        string tmpInfo = string.Format(ResStrings.str_Shelf, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf,
+                                            _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                                .ListTagWithChannel[dr.ItemArray[0]]);
                                         rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
                                         double daysAgo = elapsed.TotalDays;
 
                                         if (daysAgo < 0)
+                                        {
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_Expired;
+                                            isMailNeeded = true;
+                                        }
                                         else if ((daysAgo >= 0) & (daysAgo < 30))
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_30_Days_Left;
                                         else if ((daysAgo >= 31) & (daysAgo < 90))
@@ -1965,32 +2015,45 @@ namespace smartTracker
                                 newDt.Rows.Add(rowToadd);
                             }
 
-                            foreach (DataRow dr in _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagRemove.Rows)
+                            foreach (
+                                DataRow dr in
+                                    _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagRemove
+                                        .Rows)
                             {
                                 DataRow rowToadd = newDt.NewRow();
 
                                 rowToadd[0] = ResStrings.str_Removed;
                                 for (int i = 0; i < dr.ItemArray.Length; i++)
                                     rowToadd[i + 1] = dr.ItemArray[i];
-                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SBF))
-                                    if (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel.Contains(dr.ItemArray[0]))
+                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SFR) ||
+                                    (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SBF))
+                                    if (
+                                        _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                            .ListTagWithChannel.Contains(dr.ItemArray[0]))
                                     {
-                                        string tmpInfo = string.Format(ResStrings.str_Shelf, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf,
+                                            _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                                .ListTagWithChannel[dr.ItemArray[0]]);
                                         rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
                                         double daysAgo = elapsed.TotalDays;
 
                                         if (daysAgo < 0)
+                                        {
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_Expired;
+                                            isMailNeeded = true;
+                                        }
                                         else if ((daysAgo >= 0) & (daysAgo < 30))
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_Less_than_30_Days_Left;
                                         else if ((daysAgo >= 31) & (daysAgo < 90))
@@ -2007,32 +2070,47 @@ namespace smartTracker
                                 newDt.Rows.Add(rowToadd);
 
                             }
-                            foreach (DataRow dr in _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagPresent.Rows)
+                            foreach (
+                                DataRow dr in
+                                    _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagPresent
+                                        .Rows)
                             {
                                 DataRow rowToadd = newDt.NewRow();
 
                                 rowToadd[0] = ResStrings.str_Present;
                                 for (int i = 0; i < dr.ItemArray.Length; i++)
                                     rowToadd[i + 1] = dr.ItemArray[i];
-                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                          (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType == DeviceType.DT_SBF))
-                                    if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel !=null) && (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel.Contains(dr.ItemArray[0])))
+                                if ((_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SFR) ||
+                                    (_networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev.deviceType ==
+                                     DeviceType.DT_SBF))
+                                    if (
+                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                            .ListTagWithChannel != null) &&
+                                        (_networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                            .ListTagWithChannel.Contains(dr.ItemArray[0])))
                                     {
-                                        string tmpInfo = string.Format(ResStrings.str_Shelf, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.ListTagWithChannel[dr.ItemArray[0]]);
+                                        string tmpInfo = string.Format(ResStrings.str_Shelf,
+                                            _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory
+                                                .ListTagWithChannel[dr.ItemArray[0]]);
                                         rowToadd[dr.ItemArray.Length + 1] = tmpInfo;
                                     }
                                 if (!string.IsNullOrEmpty(_columnExpiredDate))
                                 {
-                                    string date = (string)dr.ItemArray[_rowDlcDate - 1];
+                                    string date = (string) dr.ItemArray[_rowDlcDate - 1];
                                     DateTime dt;
-                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture, DateTimeStyles.None, out dt))
+                                    if (DateTime.TryParseExact(date, _formats, CultureInfo.CurrentUICulture,
+                                        DateTimeStyles.None, out dt))
                                     {
                                         DateTime now = DateTime.Now;
                                         TimeSpan elapsed = dt.Subtract(now);
                                         double daysAgo = elapsed.TotalDays;
 
                                         if (daysAgo < 0)
+                                        {
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_Expired;
+                                            isMailNeeded = true;
+                                        }
                                         else if ((daysAgo >= 0) & (daysAgo < 30))
                                             rowToadd[dr.ItemArray.Length + 2] = ResStrings.str_Less_than_30_Days_Left;
                                         else if ((daysAgo >= 31) & (daysAgo < 90))
@@ -2048,16 +2126,49 @@ namespace smartTracker
                                 }
                                 newDt.Rows.Add(rowToadd);
                             }
+
+                            if (isMailNeeded)
+                            {
+                                _db.storeAlert(AlertType.AT_DLC_Expired, _networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev, null, null);
+                                AlertMgtClass.treatAlert(AlertType.AT_DLC_Expired, _networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev, null,
+                                    _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory, null, BShowAlert);
+                            }
+
                             dataListView.DataSource = null;
                             dataListView.DataSource = newDt;
 
                         }
 
 
-                        Invoke((MethodInvoker)delegate { labelPresent.Text = string.Format(ResStrings.str_PRESENT_format, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagPresent.Rows.Count); pictureBoxPresent.Refresh(); });
-                        Invoke((MethodInvoker)delegate { labelAdded.Text = string.Format(ResStrings.str_ADDED_format, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAdded.Rows.Count); pictureBoxAdded.Refresh(); });
-                        Invoke((MethodInvoker)delegate { labelRemoved.Text = string.Format(ResStrings.str_REMOVED_format, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagRemove.Rows.Count); pictureBoxRemoved.Refresh(); });
-                        labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAll.Rows.Count); });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelPresent.Text = string.Format(ResStrings.str_PRESENT_format,
+                                _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagPresent.Rows
+                                    .Count);
+                            pictureBoxPresent.Refresh();
+                        });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelAdded.Text = string.Format(ResStrings.str_ADDED_format,
+                                _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAdded.Rows
+                                    .Count);
+                            pictureBoxAdded.Refresh();
+                        });
+                        Invoke((MethodInvoker) delegate
+                        {
+                            labelRemoved.Text = string.Format(ResStrings.str_REMOVED_format,
+                                _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagRemove.Rows
+                                    .Count);
+                            pictureBoxRemoved.Refresh();
+                        });
+                        labelInventoryTagCount.Invoke(
+                            (MethodInvoker)
+                                delegate
+                                {
+                                    labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags,
+                                        _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.dtTagAll
+                                            .Rows.Count);
+                                });
                         for (int i = 0; i < dataListView.Columns.Count; i++)
                         {
                             OLVColumn ol = dataListView.GetColumn(i);
@@ -2067,7 +2178,7 @@ namespace smartTracker
                             if (ol.Index == dataListView.Columns.Count - 1)
                                 ol.FillsFreeSpace = true;
                         }
-                   
+
                     }
 
                     if (!_bWasInAccumulation)
@@ -2467,6 +2578,17 @@ namespace smartTracker
                             Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
                             Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
                             Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
+
+                            switch (_localDeviceArray[nIndex].infoDev.deviceType)
+                            {
+                                    case DeviceType.DT_PAD:
+                                    case DeviceType.DT_SBR:
+                                    case DeviceType.DT_STR:
+                                    break;
+                                        default: Invoke((MethodInvoker)delegate { toolStripButtonScan_Click(null, null); });
+                                    break;
+                            }
+                          
                         }
                     }
 
@@ -4087,12 +4209,14 @@ namespace smartTracker
                             dc.rfidDev.NotifyRFIDEvent += rfidDev_NotifyRFIDEvent;
                             dc.rfidDev.NotifyFPEvent += rfidDev_NotifyFPEvent;
                             dc.rfidDev.Create_1FP_Device(dc.infoDev.SerialRFID, deviceToConnect.portCom, dc.infoDev.SerialFPMaster, true);
+                          
                             break;
                         case DeviceType.DT_SAS:
                       
                             dc.rfidDev.NotifyRFIDEvent += rfidDev_NotifyRFIDEvent;
                             dc.rfidDev.NotifyFPEvent += rfidDev_NotifyFPEvent;
                             dc.rfidDev.Create_2FP_Device(dc.infoDev.SerialRFID, deviceToConnect.portCom, dc.infoDev.SerialFPMaster, dc.infoDev.SerialFPSlave, true);
+                         
                             break;
                         case DeviceType.DT_MSR:
                             dc.rfidDev.NotifyRFIDEvent += rfidDev_NotifyRFIDEvent;
@@ -4142,7 +4266,7 @@ namespace smartTracker
                                 }
                                 dc.slaveBadgerReader.loadBadge(listBadge1);
                             }
-
+                          
 
                             break;
                         case DeviceType.DT_SMC:
@@ -4185,6 +4309,7 @@ namespace smartTracker
                                     listBadge2.Add(uct.user.BadgeReaderID);
                             }
                             dc.myMedicalCabinet.LoadBadges(listBadge2);
+                          
 
                             break;
 
@@ -4250,7 +4375,7 @@ namespace smartTracker
                             }
                             dc.myFridgeCabinet.LoadBadges(listBadge3);
 
-
+                          
 
                             break;
                         case DeviceType.DT_SBF:
@@ -4314,7 +4439,7 @@ namespace smartTracker
                                     listBadge4.Add(uct.user.BadgeReaderID);
                             }
                             dc.myFridgeCabinet.LoadBadges(listBadge4);
-
+                           
 
                             break;
 
@@ -5514,6 +5639,54 @@ namespace smartTracker
                                                                                         _db.storeAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, spData);
                                                                                         AlertMgtClass.treatAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                                                     }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        if (_alertStock != null)
+                                                                        {
+                                                                            string colAlert = _db.GetColumnNameForAlert(AlertType.AT_Stock_Limit);
+                                                                            if (!string.IsNullOrEmpty(colAlert))
+                                                                            {
+                                                                                int nbMin = 0;
+                                                                                int.TryParse(_alertStock.alertData, out nbMin);
+
+                                                                                Dictionary<string, int> stockProduct = new Dictionary<string, int>();
+                                                                                foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagAll.Rows)
+                                                                                {
+
+                                                                                    string productName = (string)oRow[colAlert];
+
+                                                                                    if (string.IsNullOrEmpty(productName)) continue;
+                                                                                    if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                                                    if (stockProduct.ContainsKey(productName))
+                                                                                        stockProduct[productName]++;
+                                                                                    else
+                                                                                        stockProduct.Add(productName, 1);
+                                                                                }
+                                                                                foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagRemove.Rows)
+                                                                                {
+
+                                                                                    string productName = (string)oRow[colAlert];
+                                                                                    if (string.IsNullOrEmpty(productName)) continue;
+                                                                                    if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                                                    if (!stockProduct.ContainsKey(productName))
+                                                                                        stockProduct.Add(productName, 0);
+                                                                                }
+
+                                                                                string spData = string.Empty;
+                                                                                foreach (KeyValuePair<string, int> pair in stockProduct)
+                                                                                {
+                                                                                    if (pair.Value <= nbMin)
+                                                                                    {
+                                                                                        if (spData.Length > 0) spData += ";";
+                                                                                        spData += pair.Key + ";" + pair.Value;
+                                                                                    }
+                                                                                }
+
+                                                                                if (!string.IsNullOrEmpty(spData))
+                                                                                {
+                                                                                    _db.storeAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, spData);
+                                                                                    AlertMgtClass.treatAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                                                 }
                                                                             }
                                                                         }
@@ -7113,6 +7286,7 @@ namespace smartTracker
                 if ((currentDevice.ConnectionStatus == ConnectionStatus.CS_Connected) &&
                     (currentDevice.DeviceStatus == DeviceStatus.DS_Ready))
                 {
+                    currentDevice.get_RFID_Device.DeviceBoard.setBridgeState(false,167,167);
                     currentDevice.TestLighting(selectedTags);
                     string message = string.Empty;
 
@@ -7928,7 +8102,8 @@ namespace smartTracker
                                             #endregion
 
                                             // alert remove nb item
-                                            if (_bUseAlarm && _networkDeviceArray[i].currentInventory.bUserScan)
+                                            //if (_bUseAlarm && _networkDeviceArray[i].currentInventory.bUserScan)
+                                            if (_bUseAlarm)
                                             {
 
                                                 if (_alertItems != null)
@@ -7967,6 +8142,54 @@ namespace smartTracker
                                                                 _db.storeAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, spData);
                                                                 AlertMgtClass.treatAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                             }
+                                                        }
+                                                    }
+                                                }
+                                                if (_alertStock != null)
+                                                {
+                                                    string colAlert = _db.GetColumnNameForAlert(AlertType.AT_Stock_Limit);
+                                                    if (!string.IsNullOrEmpty(colAlert))
+                                                    {
+                                                        int nbMin = 0;
+                                                        int.TryParse(_alertStock.alertData, out nbMin);
+
+                                                        Dictionary<string, int> stockProduct = new Dictionary<string, int>();
+                                                        foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagAll.Rows)
+                                                        {
+
+                                                            string productName = (string)oRow[colAlert];
+
+                                                            if (string.IsNullOrEmpty(productName)) continue;
+                                                            if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                            if (stockProduct.ContainsKey(productName))
+                                                                stockProduct[productName]++;
+                                                            else
+                                                                stockProduct.Add(productName, 1);
+                                                        }
+                                                        foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagRemove.Rows)
+                                                        {
+
+                                                            string productName = (string)oRow[colAlert];
+                                                            if (string.IsNullOrEmpty(productName)) continue;
+                                                            if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                            if (!stockProduct.ContainsKey(productName))
+                                                                stockProduct.Add(productName, 0);
+                                                        }
+
+                                                        string spData = string.Empty;
+                                                        foreach (KeyValuePair<string, int> pair in stockProduct)
+                                                        {
+                                                            if (pair.Value <= nbMin)
+                                                            {
+                                                                if (spData.Length > 0) spData += ";";
+                                                                spData += pair.Key + ";" + pair.Value;
+                                                            }
+                                                        }
+
+                                                        if (!string.IsNullOrEmpty(spData))
+                                                        {
+                                                            _db.storeAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, spData);
+                                                            AlertMgtClass.treatAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                         }
                                                     }
                                                 }
@@ -8187,6 +8410,54 @@ namespace smartTracker
                                                                 _db.storeAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, spData);
                                                                 AlertMgtClass.treatAlert(AlertType.AT_Limit_Value_Exceed, _networkDeviceArray[i].infoDev, tmpUtc, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                             }
+                                                        }
+                                                    }
+                                                }
+                                                if (_alertStock != null)
+                                                {
+                                                    string colAlert = _db.GetColumnNameForAlert(AlertType.AT_Stock_Limit);
+                                                    if (!string.IsNullOrEmpty(colAlert))
+                                                    {
+                                                        int nbMin = 0;
+                                                        int.TryParse(_alertStock.alertData, out nbMin);
+
+                                                        Dictionary<string, int> stockProduct = new Dictionary<string, int>();
+                                                        foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagAll.Rows)
+                                                        {
+
+                                                            string productName = (string)oRow[colAlert];
+
+                                                            if (string.IsNullOrEmpty(productName)) continue;
+                                                            if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                            if (stockProduct.ContainsKey(productName))
+                                                                stockProduct[productName]++;
+                                                            else
+                                                                stockProduct.Add(productName, 1);
+                                                        }
+                                                        foreach (DataRow oRow in _networkDeviceArray[i].currentInventory.dtTagRemove.Rows)
+                                                        {
+
+                                                            string productName = (string)oRow[colAlert];
+                                                            if (string.IsNullOrEmpty(productName)) continue;
+                                                            if (productName.Equals(ResStrings.str_Unreferenced)) continue;
+                                                            if (!stockProduct.ContainsKey(productName))
+                                                                stockProduct.Add(productName, 0);
+                                                        }
+
+                                                        string spData = string.Empty;
+                                                        foreach (KeyValuePair<string, int> pair in stockProduct)
+                                                        {
+                                                            if (pair.Value <= nbMin)
+                                                            {
+                                                                if (spData.Length > 0) spData += ";";
+                                                                spData += pair.Key + ";" + pair.Value;
+                                                            }
+                                                        }
+
+                                                        if (!string.IsNullOrEmpty(spData))
+                                                        {
+                                                            _db.storeAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, spData);
+                                                            AlertMgtClass.treatAlert(AlertType.AT_Stock_Limit, _networkDeviceArray[i].infoDev, null, _networkDeviceArray[i].currentInventory, spData, BShowAlert);
                                                         }
                                                     }
                                                 }
