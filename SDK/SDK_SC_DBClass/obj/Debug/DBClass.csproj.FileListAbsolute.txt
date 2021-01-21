@@ -8,4 +8,27 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClas
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csprojResolveAssemblyReference.cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Debug\DBClass.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Debug\DBClass.pdb
-Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\DBClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\ExcelLibrary.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\obj\Debug\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\obj\Debug\DBClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csprojAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csproj.CopyComplete
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\DBClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\ExcelLibrary.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csprojAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\obj\Debug\DBClass.csproj.CopyComplete
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\obj\Debug\DBClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_DBClass\obj\Debug\DBClass.pdb

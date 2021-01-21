@@ -10,5 +10,30 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidRe
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.GenerateResource.Cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.pdb
-Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csprojResolveAssemblyReference.cache
-Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.XML
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.StatusForm.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.CalibrationGraphDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.ConversionsDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.DoorAndLightDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.FindThresholdDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.TagSetsDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.GenerateResource.Cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csprojAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.XML
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\bin\Debug\SDK_SC_RfidReader.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.StatusForm.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.CalibrationGraphDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.ConversionsDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.DoorAndLightDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.FindThresholdDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.UtilsWindows.TagSetsDialog.resources
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.GenerateResource.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.pdb

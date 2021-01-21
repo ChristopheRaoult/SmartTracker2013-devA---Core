@@ -70,15 +70,19 @@ namespace TcpIP_class
                     string cmd = "PING?";
                     try
                     {
-                        SendData(tcpclnt, cmd);
-
-                        if (GetData(tcpclnt, out Data) == 1)
+                        if (tcpclnt.Connected)
                         {
-                            retCodeStr = Data;
-                            if (Data.Equals(ReturnType.pingServerOk))
+
+                            SendData(tcpclnt, cmd);
+
+                            if (GetData(tcpclnt, out Data) == 1)
                             {
-                                _cpuKind = CpuKind.IsWindows;
-                               
+                                retCodeStr = Data;
+                                if (Data.Equals(ReturnType.pingServerOk))
+                                {
+                                    _cpuKind = CpuKind.IsWindows;
+
+                                }
                             }
                         }
 
@@ -89,7 +93,8 @@ namespace TcpIP_class
                     }
                     finally
                     {
-                        tcpclnt.Close();
+                        if (tcpclnt.Connected)
+                            tcpclnt.Close();
                     }
                 
                 }
@@ -1640,6 +1645,7 @@ namespace TcpIP_class
                 try
                 {
                     ScanResult = _tcpArmDevice.GetInventoryById(IdEvent);
+                    if (ScanResult != null)
                     ScanResult.serialNumberDevice = _tcpArmDevice.GetSerialNumber();
                     ret = RetCode.RC_Succeed;
                 }

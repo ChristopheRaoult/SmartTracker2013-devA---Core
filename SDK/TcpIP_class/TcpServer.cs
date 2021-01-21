@@ -21,6 +21,8 @@ using DataClass;
 using SDK_SC_RFID_Devices;
 using SDK_SC_Fingerprint;
 using SDK_SC_MedicalCabinet;
+using Newtonsoft.Json;
+
 namespace TcpIP_class
 {
 
@@ -41,6 +43,8 @@ namespace TcpIP_class
         }
 
         public event NotifyHandlerDelegate NotifyLog;
+
+        public SynchronizedDevice syncDevice = null;
 
 
         private string _cryptedAuthorization;
@@ -222,8 +226,7 @@ namespace TcpIP_class
             }
                 
                 try
-                {
-               
+                {             
                     
 
                     strReceive = ReadData(mySocket);
@@ -854,9 +857,72 @@ namespace TcpIP_class
                                     }
                                     break;
                                 }
-                            #endregion
-                            #region GET_USER_WITH_GRANT
-                            case "GET_USER_WITH_GRANT?":
+                        #endregion
+                        #region CMD GET USER CORE?
+                        case "GET_USER_CORE?":
+                            {
+                                if (nbArg == 2) // il y a un serial donc return allowed
+                                {
+                                    string serialRFID = command[1];
+
+                                    db = new MainDBClass();
+
+                                    if (db.OpenDB())
+                                    {
+                                        //UserClassTemplate[] uct = db.RecoverUser();
+                                        //UserClassTemplate[] uct = db.RecoverAllowedUser(serialRFID);
+                                        DeviceGrant[] uct = db.RecoverAllowedUser(serialRFID);
+                                        if (uct != null)
+                                        {
+                                            SendReturnCode(mySocket, myClient, uct.Length.ToString(), false);
+                                            foreach (DeviceGrant dev in uct)
+                                            {
+                                                string idStream = JsonConvert.SerializeObject(dev.user);
+                                                SendReturnCode(mySocket, myClient, idStream, false);
+                                            }
+                                            db.CloseDB();
+                                        }
+                                        else
+                                        {
+                                            SendReturnCode(mySocket, myClient, "0", false);
+                                        }
+                                    }
+
+                                    else
+                                        SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
+                                }
+                                else // pas de serial return all template
+                                {
+                                    db = new MainDBClass();
+
+                                    if (db.OpenDB())
+                                    {
+
+                                        UserClassTemplate[] uct = db.RecoverUser();
+                                        if (uct != null)
+                                        {
+                                            SendReturnCode(mySocket, myClient, uct.Length.ToString(), false);
+                                            foreach (UserClassTemplate dev in uct)
+                                            {
+                                                string idStream = JsonConvert.SerializeObject(dev);
+                                                SendReturnCode(mySocket, myClient, idStream, false);
+                                            }
+                                            db.CloseDB();
+                                        }
+                                        else
+                                        {
+                                            SendReturnCode(mySocket, myClient, "0", false);
+                                        }
+                                    }
+
+                                    else
+                                        SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
+                                }
+                                break;
+                            }
+                        #endregion
+                        #region GET_USER_WITH_GRANT
+                        case "GET_USER_WITH_GRANT?":
                                 {
                                     if (nbArg == 2) // il y a un serial donc return allowed
                                     {
@@ -947,9 +1013,73 @@ namespace TcpIP_class
 
                                     break;
                                 }
+                        #endregion
+                        #region GET_USER_WITH_GRANT_CORE
+                        case "GET_USER_WITH_GRANT_CORE?":
+                            {
+                                if (nbArg == 2) // il y a un serial donc return allowed
+                                {
+                                    string serialRFID = command[1];
+
+                                    db = new MainDBClass();
+
+                                    if (db.OpenDB())
+                                    {                                       
+                                        UserClassTemplate[] uctall = db.RecoverUser();
+                                        DeviceGrant[] dgall = db.RecoverAllowedUser(serialRFID);
+                                        if (uctall != null)
+                                        {
+                                            SendReturnCode(mySocket, myClient, uctall.Length.ToString(), false);
+                                            foreach (UserClassTemplate uct in uctall)
+                                            {
+                                                DeviceGrant newUser = null;
+                                                bool buserWithGrant = false;
+                                                if (dgall != null)
+                                                {
+                                                    foreach (DeviceGrant dg in dgall)
+                                                    {
+                                                        if ((dg.user.lastName.Equals(uct.lastName)) && (dg.user.firstName.Equals(uct.firstName)))
+                                                        {
+                                                            newUser = dg;
+                                                            buserWithGrant = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (buserWithGrant) // find user with grant - send it
+                                                {                                                   
+                                                    string idStream = JsonConvert.SerializeObject(newUser);
+                                                    SendReturnCode(mySocket, myClient, idStream, false);
+                                                }
+                                                else // find user with no grant - create it and send it
+                                                {
+                                                    newUser = new DeviceGrant();
+                                                    newUser.user = uct;
+                                                    newUser.userGrant = UserGrant.UG_NONE;
+                                                    newUser.serialRFID = serialRFID;
+                                                    string idStream = JsonConvert.SerializeObject(newUser);
+                                                    SendReturnCode(mySocket, myClient, idStream, false);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            SendReturnCode(mySocket, myClient, "0", false);
+                                        }
+                                    }
+
+                                    else
+                                        SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
+                                }
+                                else
+                                    SendReturnCode(mySocket, myClient, ReturnType.noData, false);
+
+                                break;
+                            }
                             #endregion
-                            #region CMD GET USER_STR?
-                            case "GET_USER_STR?":
+                        #region CMD GET USER_STR?
+                        case "GET_USER_STR?":
                                 {
                                     if (nbArg == 2) // il y a un serial donc return allowed
                                     {
@@ -1594,7 +1724,6 @@ namespace TcpIP_class
                                             SendReturnCode(mySocket, myClient, localDeviceArray[0].rfidDev.DeviceStatus.ToString(), false);
                                         }
 
-
                                     }
                                     else // several reader ; search it
                                     {
@@ -1633,6 +1762,137 @@ namespace TcpIP_class
                                                                     MemoryStream mem = new MemoryStream();
                                                                     bf.Serialize(mem, siv);
                                                                     string idStream = Convert.ToBase64String(mem.ToArray());
+                                                                    SendReturnCode(mySocket, myClient, idStream, false);
+                                                                }
+                                                                else
+                                                                {
+                                                                    //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", dc.currentInventory.nbTagAdded, dc.currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.dtTagPresent.Rows.Count, dc.currentInventory.nbTagRemoved, dc.currentInventory.dtTagRemove.Rows.Count);
+                                                                    //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd SCAN_AND_WAIT?");
+                                                                    SendReturnCode(mySocket, myClient, "Error during processing data", false);
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                            SendReturnCode(mySocket, myClient, "Error During Scan", false);
+                                                    }
+                                                    else
+                                                        SendReturnCode(mySocket, myClient, "Error Start Scan", false);
+                                                }
+                                                else
+                                                    SendReturnCode(mySocket, myClient, dc.rfidDev.DeviceStatus.ToString(), false);
+
+                                            }
+                                        }
+                                        if (!bFind) SendReturnCode(mySocket, myClient, "Reader Not Exist", false);
+                                    }
+                                    break;
+                                }
+
+                            #endregion
+                            #region SCAN_AND_WAIT_CORE
+                            case "SCAN_AND_WAIT_CORE?":
+                                {
+                                    if (nbArg == 1) // unique reader assume in index  0 of local array
+                                    {
+
+                                        if ((localDeviceArray[0].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
+                                       (localDeviceArray[0].rfidDev.DeviceStatus == DeviceStatus.DS_Ready) && (localDeviceArray[0].rfidDev.get_RFID_Device.UserActionPending == false))
+                                        {
+                                            requestScanFromServer = true;
+
+                                        if (syncDevice != null)
+                                        {
+                                            localDeviceArray[0].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                            syncDevice.CanStartScan();  //loop to wait concurent device not in scan
+                                        }
+
+                                            eventScanStart.Reset();
+                                            eventScanCancelled.Reset();
+                                            eventScanCompleted.Reset();
+                                            localDeviceArray[0].rfidDev.ScanDevice(false);
+
+                                            if (eventScanStart.WaitOne(2500, false))
+                                            {
+                                                int timeout = (int)localDeviceArray[0].rfidDev.get_RFID_Device.ScanTimeout;
+                                                if (eventScanCompleted.WaitOne(timeout, false))
+                                                {
+                                                    Hashtable ColumnInfo = null;
+                                                    MainDBClass db2 = new MainDBClass();
+
+                                                    if (db2.OpenDB())
+                                                    {
+                                                        ColumnInfo = db2.GetColumnInfo();
+                                                        //StoredInventoryData siv = ConvertInventory.ConvertForStore(localDeviceArray[0].currentInventory, ColumnInfo);
+                                                        StoredInventoryData siv = ConvertInventory.ConvertForStore(localDeviceArray[0].currentInventory);
+                                                        if (siv != null)
+                                                        {                                                            
+                                                            string idStream = JsonConvert.SerializeObject(siv);
+                                                            SendReturnCode(mySocket, myClient, idStream, false);
+                                                        }
+                                                        else
+                                                        {
+                                                            //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", localDeviceArray[0].currentInventory.nbTagAdded, localDeviceArray[0].currentInventory.dtTagAdded.Rows.Count, localDeviceArray[0].currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.dtTagPresent.Rows.Count, localDeviceArray[0].currentInventory.nbTagRemoved, localDeviceArray[0].currentInventory.dtTagRemove.Rows.Count);
+                                                            //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd SCAN_AND_WAIT?");
+                                                            SendReturnCode(mySocket, myClient, "Error during processing data", false);
+
+                                                        }
+                                                    }
+                                                    db2.CloseDB();
+                                                }
+                                                else
+                                                    SendReturnCode(mySocket, myClient, "Error During Scan", false);
+                                            }
+                                            else
+                                                SendReturnCode(mySocket, myClient, "Error Start Scan", false);
+                                        }
+                                        else
+                                        {
+                                            SendReturnCode(mySocket, myClient, localDeviceArray[0].rfidDev.DeviceStatus.ToString(), false);
+                                        }
+
+
+                                    }
+                                    else // several reader ; search it
+                                    {
+                                        string serialRFID = command[1];
+                                        bool bFind = false;
+                                        foreach (deviceClass dc in localDeviceArray)
+                                        {
+                                            if (dc.infoDev.SerialRFID.Equals(serialRFID))
+                                            {
+                                                bFind = true;
+                                                serialRFID = command[1];
+                                                if ((dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
+                                                  (dc.rfidDev.DeviceStatus == DeviceStatus.DS_Ready) && (dc.rfidDev.get_RFID_Device.UserActionPending == false))
+                                                {
+                                                    requestScanFromServer = true;
+
+                                                    if (syncDevice != null)
+                                                    {
+                                                        dc.rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                                        syncDevice.CanStartScan();  //loop to wait concurent device not in scan
+                                                    }
+
+                                                    eventScanStart.Reset();
+                                                    eventScanCancelled.Reset();
+                                                    eventScanCompleted.Reset();
+                                                    dc.rfidDev.ScanDevice(false);
+                                                    if (eventScanStart.WaitOne(2500, false))
+                                                    {
+                                                        int timeout = (int)dc.rfidDev.get_RFID_Device.ScanTimeout;
+                                                        if (eventScanCompleted.WaitOne(timeout, false))
+                                                        {
+                                                            Hashtable ColumnInfo = null;
+                                                            MainDBClass db2 = new MainDBClass();
+
+                                                            if (db2.OpenDB())
+                                                            {
+                                                                ColumnInfo = db2.GetColumnInfo();
+                                                                //StoredInventoryData siv = ConvertInventory.ConvertForStore(dc.currentInventory, ColumnInfo);
+                                                                StoredInventoryData siv = ConvertInventory.ConvertForStore(dc.currentInventory);
+                                                                if (siv != null)
+                                                                {
+                                                                    string idStream = JsonConvert.SerializeObject(siv);
                                                                     SendReturnCode(mySocket, myClient, idStream, false);
                                                                 }
                                                                 else
@@ -1857,10 +2117,101 @@ namespace TcpIP_class
                                     }
                                     break;
                                 }
+                        #endregion
+                        #region GET_LAST_SCAN_CORE
+                        case "GET_LAST_SCAN_CORE?":
+                            {
+                                if (nbArg == 1) // unique reader assume in index  0 of local array
+                                {
 
-                            #endregion
-                            #region GET_SCAN_FROM_ID
-                            case "GET_SCAN_FROM_ID?":
+                                    if (localDeviceArray[0].rfidDev.DeviceStatus != DeviceStatus.DS_Ready)
+                                    {
+                                        SendReturnCode(mySocket, myClient, ReturnType.ReaderNotInReadyState, false);
+                                        break;
+                                    }
+
+                                    Hashtable ColumnInfo = null;
+                                    MainDBClass db3 = new MainDBClass();
+
+                                    if (db3.OpenDB())
+                                    {
+                                        ColumnInfo = db3.GetColumnInfo();
+                                        //StoredInventoryData siv = ConvertInventory.ConvertForStore(localDeviceArray[0].currentInventory, ColumnInfo);
+                                        StoredInventoryData siv = ConvertInventory.ConvertForStore(localDeviceArray[0].currentInventory);
+                                        if (siv != null)
+                                        {
+                                            string idStream = JsonConvert.SerializeObject(siv);
+                                            SendReturnCode(mySocket, myClient, idStream, false);                                    
+                                            if (NotifyLog != null)
+                                            {
+                                                string user = string.Format("{0} {1}", localDeviceArray[0].currentInventory.userFirstName, localDeviceArray[0].currentInventory.userLastName);
+                                                string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", localDeviceArray[0].currentInventory.nbTagAll, localDeviceArray[0].currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, localDeviceArray[0].currentInventory.nbTagRemoved, localDeviceArray[0].currentInventory.IdScanEvent, localDeviceArray[0].currentInventory.eventDate.ToLocalTime().ToString("G"), user);
+                                                NotifyLog("Sent Inventory: " + info);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", localDeviceArray[0].currentInventory.nbTagAdded, localDeviceArray[0].currentInventory.dtTagAdded.Rows.Count, localDeviceArray[0].currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.dtTagPresent.Rows.Count, localDeviceArray[0].currentInventory.nbTagRemoved, localDeviceArray[0].currentInventory.dtTagRemove.Rows.Count);
+                                            //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd GET_LAST_SCAN");
+                                            SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+                                        }
+                                    }
+                                    db3.CloseDB();
+
+                                }
+                                else // several reader ; search it
+                                {
+                                    string serialRFID = command[1];
+
+                                    foreach (deviceClass dc in localDeviceArray)
+                                    {
+                                        if (dc.infoDev.SerialRFID.Equals(serialRFID))
+                                        {
+
+                                            if (dc.rfidDev.DeviceStatus != DeviceStatus.DS_Ready)
+                                            {
+                                                SendReturnCode(mySocket, myClient, ReturnType.ReaderNotInReadyState, false);
+                                                break;
+                                            }
+
+                                            Hashtable ColumnInfo = null;
+                                            MainDBClass db3 = new MainDBClass();
+
+                                            if (db3.OpenDB())
+                                            {
+                                                ColumnInfo = db3.GetColumnInfo();
+                                                //StoredInventoryData siv = ConvertInventory.ConvertForStore(dc.currentInventory, ColumnInfo);
+                                                StoredInventoryData siv = ConvertInventory.ConvertForStore(dc.currentInventory);
+                                                if (siv != null)
+                                                {
+                                                    string idStream = JsonConvert.SerializeObject(siv);
+                                                    SendReturnCode(mySocket, myClient, idStream, false);
+                                                    if (NotifyLog != null)
+                                                    {
+                                                        string user = string.Format("{0} {1}", dc.currentInventory.userFirstName, dc.currentInventory.userLastName);
+                                                        string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", dc.currentInventory.nbTagAll, dc.currentInventory.nbTagPresent, dc.currentInventory.nbTagAdded, dc.currentInventory.nbTagRemoved, dc.currentInventory.IdScanEvent, dc.currentInventory.eventDate.ToLocalTime().ToString("G"), user);
+                                                        NotifyLog("Sent Inventory: " + info);
+                                                    }
+                                                }
+
+                                                else
+                                                {
+                                                    //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", dc.currentInventory.nbTagAdded, dc.currentInventory.dtTagAdded.Rows.Count, dc.currentInventory.nbTagPresent, dc.currentInventory.dtTagPresent.Rows.Count, dc.currentInventory.nbTagRemoved, dc.currentInventory.dtTagRemove.Rows.Count);
+                                                    //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd GET_LAST_SCAN");
+                                                    SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+                                                }
+                                            }
+                                            db3.CloseDB();
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                        #endregion
+
+                        #region GET_SCAN_FROM_ID
+                        case "GET_SCAN_FROM_ID?":
                                 {
                                     if (nbArg == 2) // unique reader assume in index  0 of local array
                                     {
@@ -1883,10 +2234,7 @@ namespace TcpIP_class
                                             StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv);
                                             if (siv != null)
                                             {
-                                                BinaryFormatter bf = new BinaryFormatter();
-                                                MemoryStream mem = new MemoryStream();
-                                                bf.Serialize(mem, siv);
-                                                string idStream = Convert.ToBase64String(mem.ToArray());
+                                                string idStream = JsonConvert.SerializeObject(siv);
                                                 SendReturnCode(mySocket, myClient, idStream, false);
                                                 if (NotifyLog != null )
                                                 {
@@ -1932,10 +2280,7 @@ namespace TcpIP_class
                                                     StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv);
                                                     if (siv != null)
                                                     {
-                                                        BinaryFormatter bf = new BinaryFormatter();
-                                                        MemoryStream mem = new MemoryStream();
-                                                        bf.Serialize(mem, siv);
-                                                        string idStream = Convert.ToBase64String(mem.ToArray());
+                                                        string idStream = JsonConvert.SerializeObject(siv);
                                                         SendReturnCode(mySocket, myClient, idStream, false);
                                                         if (NotifyLog != null)
                                                         {
@@ -1958,9 +2303,99 @@ namespace TcpIP_class
                                     break;
                                 }
 
-                            #endregion
-                            #region GET_LAST_SCAN_DATE
-                            case "GET_LAST_SCAN_DATE?":
+                        #endregion
+                        #region GET_SCAN_FROM_ID_CORE
+                        case "GET_SCAN_FROM_ID_CORE?":
+                            {
+                                if (nbArg == 2) // unique reader assume in index  0 of local array
+                                {                                   
+
+                                    Hashtable ColumnInfo = null;
+                                    MainDBClass db3 = new MainDBClass();
+                                    string IdEventStr = command[1];
+
+                                    if (db3.OpenDB())
+                                    {
+                                        ColumnInfo = db3.GetColumnInfo();
+                                        InventoryData tmpInv = db3.GetLastScanFromID(localDeviceArray[0].infoDev.SerialRFID, int.Parse(IdEventStr));
+                                        //StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv, ColumnInfo);
+                                        StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv);
+                                        if (siv != null)
+                                        {
+                                            string idStream = JsonConvert.SerializeObject(siv);
+                                            SendReturnCode(mySocket, myClient, idStream, false);
+                                            if (NotifyLog != null)
+                                            {
+                                                string user = string.Format("{0} {1}", tmpInv.userFirstName, tmpInv.userLastName);
+                                                string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", tmpInv.nbTagAll, tmpInv.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, tmpInv.nbTagRemoved, tmpInv.IdScanEvent, tmpInv.eventDate.ToLocalTime().ToString("G"), user);
+                                                NotifyLog("Sent Inventory: " + info);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", localDeviceArray[0].currentInventory.nbTagAdded, localDeviceArray[0].currentInventory.dtTagAdded.Rows.Count, localDeviceArray[0].currentInventory.nbTagPresent, localDeviceArray[0].currentInventory.dtTagPresent.Rows.Count, localDeviceArray[0].currentInventory.nbTagRemoved, localDeviceArray[0].currentInventory.dtTagRemove.Rows.Count);
+                                            //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd GET_LAST_SCAN");
+                                            SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+                                        }
+                                    }
+                                    db3.CloseDB();
+
+                                }
+                                else // several reader ; search it
+                                {
+                                    string serialRFID = command[1];
+                                    string IdEventStr = command[2];
+
+                                    foreach (deviceClass dc in localDeviceArray)
+                                    {
+                                        if (dc.infoDev.SerialRFID.Equals(serialRFID))
+                                        {
+
+                                            if (dc.rfidDev.DeviceStatus != DeviceStatus.DS_Ready)
+                                            {
+                                                SendReturnCode(mySocket, myClient, ReturnType.ReaderNotInReadyState, false);
+                                                break;
+                                            }
+
+                                            Hashtable ColumnInfo = null;
+                                            MainDBClass db3 = new MainDBClass();
+
+                                            if (db3.OpenDB())
+                                            {
+                                                ColumnInfo = db3.GetColumnInfo();
+                                                InventoryData tmpInv = db3.GetLastScanFromID(serialRFID, int.Parse(IdEventStr));
+                                                //StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv, ColumnInfo);
+                                                StoredInventoryData siv = ConvertInventory.ConvertForStore(tmpInv);
+                                                if (siv != null)
+                                                {
+                                                    string idStream = JsonConvert.SerializeObject(siv);
+                                                    SendReturnCode(mySocket, myClient, idStream, false);
+                                                    if (NotifyLog != null)
+                                                    {
+                                                        string user = string.Format("{0} {1}", tmpInv.userFirstName, tmpInv.userLastName);
+                                                        string info = string.Format("Id: {4} - Date: {5} - User: {6} - All: {0} - Present: {1} - Added: {2} - Removed: {3}", tmpInv.nbTagAll, tmpInv.nbTagPresent, localDeviceArray[0].currentInventory.nbTagAdded, tmpInv.nbTagRemoved, tmpInv.IdScanEvent, tmpInv.eventDate.ToLocalTime().ToString("G"), user); NotifyLog("Sent Inventory: " + info);
+                                                    }
+                                                }
+
+                                                else
+                                                {
+                                                    //string info = string.Format("Added : {0}/{1} , Present : {2}/{3} , Removed : {4}/{5}", dc.currentInventory.nbTagAdded, dc.currentInventory.dtTagAdded.Rows.Count, dc.currentInventory.nbTagPresent, dc.currentInventory.dtTagPresent.Rows.Count, dc.currentInventory.nbTagRemoved, dc.currentInventory.dtTagRemove.Rows.Count);
+                                                    //ErrorMessage.ExceptionMessageBox.Show("Error After Convert for Store", info, "Info in  server cmd GET_LAST_SCAN");
+                                                    SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+                                                }
+                                            }
+                                            db3.CloseDB();
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                        #endregion
+
+
+                        #region GET_LAST_SCAN_DATE
+                        case "GET_LAST_SCAN_DATE?":
                                 {
                                     if (nbArg == 1) // unique reader assume in index  0 of local array
                                     {
@@ -2066,9 +2501,65 @@ namespace TcpIP_class
                                         SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
                                     break;
                                 }
-                            #endregion
-                            #region GET_SCAN_FROM_SPAREDATA?
-                            case "GET_SCAN_FROM_SPAREDATA?":
+                        #endregion
+                        #region GET_SCAN_FROM_DATE_CORE
+                        case "GET_SCAN_FROM_DATE_CORE?":
+                            {
+                                string serialRFID;
+                                string date;
+                                db = new MainDBClass();
+
+                                if (db.OpenDB())
+                                {
+
+                                    if (nbArg == 2)
+                                    {
+                                        serialRFID = localDeviceArray[0].infoDev.SerialRFID;
+                                        date = command[1];
+                                    }
+                                    else
+                                    {
+                                        serialRFID = command[1];
+                                        date = command[2];
+                                    }
+
+                                    string[] invd = db.GetInventory(serialRFID, date);
+
+                                    if (invd != null)
+                                    {
+                                        SendReturnCode(mySocket, myClient, invd.Length.ToString(), false);
+                                        foreach (string str in invd)
+                                        {
+                                            BinaryFormatter bf = new BinaryFormatter();
+                                            MemoryStream mem = new MemoryStream(Convert.FromBase64String(str));
+                                            StoredInventoryData sid = (StoredInventoryData)bf.Deserialize(mem);
+                                            if (sid != null)
+                                            {
+                                                string idStream = JsonConvert.SerializeObject(sid);
+                                                SendReturnCode(mySocket, myClient, str, false);
+                                            }
+                                            else
+                                            {
+                                                SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+
+                                            }
+                                        }
+                                        db.CloseDB();
+                                    }
+                                    else
+                                    {
+                                        SendReturnCode(mySocket, myClient, "0", false);
+                                    }
+                                }
+                                else
+                                    SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
+                                break;
+                            }
+                        #endregion
+
+
+                        #region GET_SCAN_FROM_SPAREDATA?
+                        case "GET_SCAN_FROM_SPAREDATA?":
                                 {
                                     string serialRFID;
                                     string sp1, sp2;
@@ -2097,7 +2588,19 @@ namespace TcpIP_class
                                             SendReturnCode(mySocket, myClient, invd.Length.ToString(), false);
                                             foreach (string str in invd)
                                             {
-                                                SendReturnCode(mySocket, myClient, str, false);
+
+                                                BinaryFormatter bf = new BinaryFormatter();
+                                                MemoryStream mem = new MemoryStream(Convert.FromBase64String(str));
+                                                StoredInventoryData sid = (StoredInventoryData)bf.Deserialize(mem);
+                                                if (sid != null)
+                                                {
+                                                    string idStream = JsonConvert.SerializeObject(sid);
+                                                    SendReturnCode(mySocket, myClient, str, false);
+                                                }
+                                                else
+                                                {
+                                                    SendReturnCode(mySocket, myClient, ReturnType.Data_Error, false);
+                                                }                                          
                                             }
                                             db.CloseDB();
                                         }
@@ -2110,9 +2613,59 @@ namespace TcpIP_class
                                         SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
                                     break;
                                 }
-                            #endregion
-                            #region ADD_USER_FINGER
-                            case "ADD_USER_FINGER?":
+                        #endregion
+
+                        #region GET_SCAN_FROM_SPAREDATA_CORE?
+                        case "GET_SCAN_FROM_SPAREDATA_CORE?":
+                            {
+                                string serialRFID;
+                                string sp1, sp2;
+                                db = new MainDBClass();
+
+                                if (db.OpenDB())
+                                {
+
+                                    if (nbArg == 3)
+                                    {
+                                        serialRFID = localDeviceArray[0].infoDev.SerialRFID;
+                                        sp1 = command[1];
+                                        sp2 = command[2];
+                                    }
+                                    else
+                                    {
+                                        serialRFID = command[1];
+                                        sp1 = command[2];
+                                        sp2 = command[3];
+                                    }
+
+                                    string[] invd = db.GetInventoryFromData(serialRFID, sp1, sp2);
+
+                                    if (invd != null)
+                                    {
+                                        SendReturnCode(mySocket, myClient, invd.Length.ToString(), false);
+                                        foreach (string str in invd)
+                                        {
+
+
+
+                                            SendReturnCode(mySocket, myClient, str, false);
+                                        }
+                                        db.CloseDB();
+                                    }
+                                    else
+                                    {
+                                        SendReturnCode(mySocket, myClient, "0", false);
+                                    }
+                                }
+                                else
+                                    SendReturnCode(mySocket, myClient, ReturnType.errorDB, false);
+                                break;
+                            }
+                        #endregion
+
+
+                        #region ADD_USER_FINGER
+                        case "ADD_USER_FINGER?":
                                 {
                                     string FirstName = command[1];
                                     string LastName = command[2];
@@ -2676,9 +3229,62 @@ namespace TcpIP_class
                                     }
                                     break;
                                 }
-                            #endregion
-                            #region FanemInfo
-                            case "GET_FANEM_INFO?":
+                        #endregion
+                        #region Fridge Actual temp Core
+                        case "GET_FRIDGE_CURRENT_TEMP_CORE?":
+                            {
+
+                                if (nbArg == 1) // unique reader assume in index  0 of local array
+                                {
+                                    if ((localDeviceArray[0].infoDev.deviceType == DeviceType.DT_SFR) || (localDeviceArray[0].infoDev.deviceType == DeviceType.DT_SBF))
+                                    {
+                                        if (localDeviceArray[0].myFridgeCabinet.GetTempInfo != null)
+                                        {                                           
+                                            string idTemp = JsonConvert.SerializeObject(localDeviceArray[0].myFridgeCabinet.GetTempInfo);
+                                            SendReturnCode(mySocket, myClient, idTemp, false);
+                                        }
+                                        else
+                                            SendReturnCode(mySocket, myClient, ReturnType.noData, false);
+                                    }
+                                    else
+                                        SendReturnCode(mySocket, myClient, ReturnType.wrongReader, false);
+                                }
+                                else // several reader ; search it
+                                {
+                                    string serialRFID = command[1];
+                                    bool bFind = false;
+                                    foreach (deviceClass dc in localDeviceArray)
+                                    {
+                                        if (dc.infoDev.SerialRFID.Equals(serialRFID))
+                                        {
+                                            if ((dc.infoDev.deviceType == DeviceType.DT_SFR) || (dc.infoDev.deviceType == DeviceType.DT_SBF))
+                                            {
+                                                if (dc.myFridgeCabinet.GetTempInfo != null)
+                                                {                                                 
+                                                    string idTemp = JsonConvert.SerializeObject(dc.myFridgeCabinet.GetTempInfo);
+                                                    bFind = true;
+                                                    SendReturnCode(mySocket, myClient, idTemp, false);
+                                                    break;
+                                                }
+                                                else
+                                                    SendReturnCode(mySocket, myClient, ReturnType.noData, false);
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                SendReturnCode(mySocket, myClient, ReturnType.wrongReader, false);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (!bFind) SendReturnCode(mySocket, myClient, ReturnType.readerNotExist, false);
+                                }
+                                break;
+                            }
+                        #endregion
+
+                        #region FanemInfo
+                        case "GET_FANEM_INFO?":
                                 {
                                     if (nbArg == 1) // unique reader assume in index  0 of local array
                                     {

@@ -840,7 +840,6 @@ namespace smartTracker
             this.dataGridViewScan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewScan.Size = new System.Drawing.Size(715, 169);
             this.dataGridViewScan.TabIndex = 1;
-            this.dataGridViewScan.SelectionChanged += new System.EventHandler(this.dataGridViewScan_SelectionChanged);
             // 
             // tabPage3
             // 
@@ -950,6 +949,7 @@ namespace smartTracker
             this.dataListView.FullRowSelect = true;
             this.dataListView.GridLines = true;
             this.dataListView.GroupImageList = this.grouptimageList;
+            this.dataListView.HideSelection = false;
             this.dataListView.Location = new System.Drawing.Point(0, 0);
             this.dataListView.Name = "dataListView";
             this.dataListView.ShowItemCountOnGroups = true;

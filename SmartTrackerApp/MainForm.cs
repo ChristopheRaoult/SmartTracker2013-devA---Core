@@ -805,7 +805,42 @@ namespace smartTracker
                 config.AppSettings.Settings.Add("Desc_Template", "Name of the template for Blood");
             if (ConfigurationManager.AppSettings["Template"] == null)
                 config.AppSettings.Settings.Add("Template", "Not configured");
-        
+
+            if (ConfigurationManager.AppSettings["Desc_bSynchonizedDevice"] == null)
+                config.AppSettings.Settings.Add("Desc_bSynchonizedDevice", "Bool to synchronized device");
+            if (ConfigurationManager.AppSettings["bSynchonizedDevice"] == null)
+                config.AppSettings.Settings.Add("bSynchonizedDevice", "False");
+
+            if (ConfigurationManager.AppSettings["Desc_DeviceIpRight"] == null)
+                config.AppSettings.Settings.Add("Desc_DeviceIpRight", "Ip of device at Right");
+            if (ConfigurationManager.AppSettings["DeviceIpRight"] == null)
+                config.AppSettings.Settings.Add("DeviceIpRight", "");
+
+            if (ConfigurationManager.AppSettings["Desc_DevicePortRight"] == null)
+                config.AppSettings.Settings.Add("Desc_DevicePortRight", "Port of device at Right");
+            if (ConfigurationManager.AppSettings["DevicePortRight"] == null)
+                config.AppSettings.Settings.Add("DevicePortRight", "6901");
+
+            if (ConfigurationManager.AppSettings["Desc_DeviceIpLeft"] == null)
+                config.AppSettings.Settings.Add("Desc_DeviceIpLeft", "Ip of device at Left");
+            if (ConfigurationManager.AppSettings["DeviceIpLeft"] == null)
+                config.AppSettings.Settings.Add("DeviceIpLeft", "");
+
+            if (ConfigurationManager.AppSettings["Desc_DevicePortLeft"] == null)
+                config.AppSettings.Settings.Add("Desc_DevicePortLeft", "Port of device at Left");
+            if (ConfigurationManager.AppSettings["DevicePortLeft"] == null)
+                config.AppSettings.Settings.Add("DevicePortLeft", "6901");
+
+            if (ConfigurationManager.AppSettings["Desc_TimeoutInSec"] == null)
+                config.AppSettings.Settings.Add("Desc_TimeoutInSec", "Timeout in Second to run scan ");
+            if (ConfigurationManager.AppSettings["TimeoutInSec"] == null)
+                config.AppSettings.Settings.Add("TimeoutInSec", "120");
+
+            if (ConfigurationManager.AppSettings["Desc_DoDoorScan"] == null)
+                config.AppSettings.Settings.Add("Desc_DoDoorScan", "Perform scan when door is closed");
+            if (ConfigurationManager.AppSettings["DoDoorScan"] == null)
+                config.AppSettings.Settings.Add("DoDoorScan", "True");
+
             config.Save(ConfigurationSaveMode.Modified, true);
             // Force a reload of a changed section.
             ConfigurationManager.RefreshSection("appSettings");

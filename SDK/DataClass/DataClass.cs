@@ -114,6 +114,9 @@ namespace DataClass
         DS_DoorClose = 7,
         [Description("LEDs On")]
         DS_LedOn = 8,
+
+        [Description("Device waiting for scan")]
+        DS_WaitForScan = 9,
     }
     public enum FPStatus
     {
@@ -240,7 +243,7 @@ namespace DataClass
     }
 
     [Serializable]
-    public class DeviceInfo
+    public class DeviceInfo 
     {   
         public int idDevice;        
         public string DeviceName;
@@ -258,7 +261,6 @@ namespace DataClass
         public string comSlaveReader;
         public string comMasterReader;
         public AccessBagerReaderType accessReaderType;
-     
     }
 
     [Serializable]

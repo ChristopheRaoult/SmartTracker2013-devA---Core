@@ -1864,10 +1864,14 @@ namespace SDK_SC_RfidReader
 
             SwitchCurrentAxis(axis);
             DeviceBoard.setAntenna(true);
+            Thread.Sleep(50);
             DeviceBoard.sendSyncPulse();
+            Thread.Sleep(50);
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
+            Thread.Sleep(50);
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out Rcor);
-            Thread.Sleep(100);           
+            _eventConfirmation.WaitOne(500);
+            Thread.Sleep(50);
 
             if (_status == 1)
             {
@@ -1937,26 +1941,47 @@ namespace SDK_SC_RfidReader
             ushort Rcor;
             _status = 0;
             List<string> tagFound = new List<string>();
-          
-            SwitchCurrentAxis(axis);         
+
+            SwitchCurrentAxis(axis);
             DeviceBoard.setAntenna(true);
+            if (HardwareVersion.StartsWith("11"))
+             Thread.Sleep(50);
+            else
+              Thread.Sleep(1);
             DeviceBoard.sendSyncPulse();
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
 
             lastLedOn = DateTime.Now;
 
             foreach (DictionaryEntry entry in ListTagUID)
             {
+                DeviceBoard.sendSyncPulse();
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
+
                 if ((bool)entry.Value) continue;
-               
+                string TagId = (string)entry.Key;
                 //string tagUID = SerialRFID.ConvertAlphaNumToOct(alphaUID.Substring(0,10));
-                string tagUID = getTagUidOct((string) entry.Key);
+                string tagUID = getTagUidOct(TagId);
                 if (string.IsNullOrEmpty(tagUID))
                     tagUID = SerialRFID.ConvertAlphaNumToOct((string)entry.Key,TagType.TT_SPCE2_RO);
                 if (string.IsNullOrEmpty(tagUID)) continue;
                 DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out Rcor);
                 _eventConfirmation.WaitOne(500);
-                Thread.Sleep(50);
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
                 if (_status == 1)
                 {
                     _confirmationStatut = 0;
@@ -1967,7 +1992,10 @@ namespace SDK_SC_RfidReader
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out Rcor);
                             _eventConfirmation.WaitOne(500);
-
+                            if (HardwareVersion.StartsWith("11"))
+                                Thread.Sleep(50);
+                            else
+                                Thread.Sleep(1);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
@@ -1976,7 +2004,7 @@ namespace SDK_SC_RfidReader
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
                                 Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                tagFound.Add(TagId);
                             }
                         }
                     }
@@ -1985,6 +2013,10 @@ namespace SDK_SC_RfidReader
                         LoadUIDForConfirmation(tagUID);
                         DeviceBoard.confirmLoadedUID(24);
                         _eventConfirmation.WaitOne(500);
+                        if (HardwareVersion.StartsWith("11"))
+                            Thread.Sleep(50);
+                        else
+                            Thread.Sleep(1);
                         if (_confirmationStatut == 1)
                         {
                             _status = 0;
@@ -1998,8 +2030,11 @@ namespace SDK_SC_RfidReader
                                 TestLed();
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                if (HardwareVersion.StartsWith("11"))
+                                    Thread.Sleep(50);
+                                else
+                                    Thread.Sleep(1);
+                                tagFound.Add(TagId);
                             }
                         }
                     }
@@ -2015,11 +2050,20 @@ namespace SDK_SC_RfidReader
             ushort rcor;
             _status = 0;
             SwitchCurrentAxis(axis);
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
             DeviceBoard.setAntenna(true);
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
             DeviceBoard.sendSyncPulse();
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
 
             lastLedOn = DateTime.Now;
 
@@ -2027,12 +2071,19 @@ namespace SDK_SC_RfidReader
 
             foreach (string tagId in tagList)
             {
-                _status = 0;
                 DeviceBoard.sendSyncPulse();
-                Thread.Sleep(10);
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
+
+                _status = 0;
                 DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out rcor);
                 _eventConfirmation.WaitOne(500);
-                Thread.Sleep(10);
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
                 if (_status == 1)
                 {
                     _confirmationStatut = 0;
@@ -2050,7 +2101,10 @@ namespace SDK_SC_RfidReader
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
                             _eventConfirmation.WaitOne(500);
-                            Thread.Sleep(10);
+                            if (HardwareVersion.StartsWith("11"))
+                                Thread.Sleep(50);
+                            else
+                                Thread.Sleep(1);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
@@ -2059,7 +2113,7 @@ namespace SDK_SC_RfidReader
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
                                 Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                tagFound.Add(tagId);
                             }
                         }
                     }
@@ -2082,8 +2136,11 @@ namespace SDK_SC_RfidReader
                                 TestLed();
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                if (HardwareVersion.StartsWith("11"))
+                                    Thread.Sleep(50);
+                                else
+                                    Thread.Sleep(1);
+                                tagFound.Add(tagId);
                             }
                         }
                     }
@@ -2098,13 +2155,12 @@ namespace SDK_SC_RfidReader
             ushort rcor;
             lastLedOn = DateTime.Now;
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out rcor);
-            Thread.Sleep(50);
+            Thread.Sleep(10);
            // DeviceBoard.setAntenna(false);
            // Thread.Sleep(1);
            // DeviceBoard.setAntenna(true);
            // Thread.Sleep(1);
-            DeviceBoard.sendSyncPulse();
-            Thread.Sleep(1);
+         
         }
 
         private TimeSpan ts;
@@ -2116,23 +2172,42 @@ namespace SDK_SC_RfidReader
             _status = 0;
            
             DeviceBoard.setAntenna(true);
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
+            
             DeviceBoard.sendSyncPulse();
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
             ushort Rcor;
             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
-            Thread.Sleep(50);
+            if (HardwareVersion.StartsWith("11"))
+                Thread.Sleep(50);
+            else
+                Thread.Sleep(1);
             List<string> tagFound = new List<string>();
 
             lastLedOn = DateTime.Now;
 
             foreach (string tagId in tagList)
             {
-               
+
+                DeviceBoard.sendSyncPulse();
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
+
                 _status = 0;
                 DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out rcor);
                 _eventConfirmation.WaitOne(500);
-                Thread.Sleep(10);
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
                 if (_status == 1)
                 {
                     _confirmationStatut = 0;
@@ -2149,7 +2224,10 @@ namespace SDK_SC_RfidReader
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
                             _eventConfirmation.WaitOne(500);
-                            Thread.Sleep(50);
+                            if (HardwareVersion.StartsWith("11"))
+                                Thread.Sleep(50);
+                            else
+                                Thread.Sleep(1);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
@@ -2157,8 +2235,11 @@ namespace SDK_SC_RfidReader
                                 TestLed();
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                if (HardwareVersion.StartsWith("11"))
+                                    Thread.Sleep(50);
+                                else
+                                    Thread.Sleep(1);
+                                tagFound.Add(tagId);
                             }
                         }
                     }
@@ -2167,13 +2248,17 @@ namespace SDK_SC_RfidReader
                         LoadUIDForConfirmation(tagUID);
                         DeviceBoard.confirmLoadedUID(24);
                         _eventConfirmation.WaitOne(500);
-                        Thread.Sleep(10);
+                        if (HardwareVersion.StartsWith("11"))
+                            Thread.Sleep(50);
                         if (_confirmationStatut == 1)
                         {
                             _status = 0;
                             DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
                             _eventConfirmation.WaitOne(500);
-                            Thread.Sleep(50);
+                            if (HardwareVersion.StartsWith("11"))
+                                Thread.Sleep(50);
+                            else
+                                Thread.Sleep(1);
                             if (_status == 1)
                             {
                                 ts = DateTime.Now - lastLedOn;
@@ -2181,8 +2266,11 @@ namespace SDK_SC_RfidReader
                                 TestLed();
                                 // Led On in process
                                 //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                Thread.Sleep(25);
-                                tagFound.Add(tagUID);
+                                if (HardwareVersion.StartsWith("11"))
+                                    Thread.Sleep(50);
+                                else
+                                    Thread.Sleep(1);
+                                tagFound.Add(tagId);
                             }
                         }
                     }
@@ -2350,7 +2438,10 @@ namespace SDK_SC_RfidReader
             else if (strUIDtoConfirm.StartsWith("3")) // it's a RW or RO
                 nbDigits = 12;
             else if (strUIDtoConfirm.StartsWith("2")) // it's a RW so 42 digits or until EOF - for now let full mem
-                nbDigits = 42;
+            {
+                //nbDigits = 42;
+                nbDigits = (byte) strUIDtoConfirm.Length;
+            }
 
 
             // convert string in bit
@@ -2935,30 +3026,30 @@ namespace SDK_SC_RfidReader
                         if (codeToAddAlpha.Contains("§"))
                             codeToAdd = codeToAddAlpha.Substring(0, codeToAddAlpha.IndexOf('§'));
 
-                        if (!ReaderData.strListTag.Contains(codeToAdd))
-                        {
-                            ReaderData.strListTag.Add(codeToAdd);
-                            ReaderData.nbTagScan = ReaderData.strListTag.Count;
-                            TagInfo ti = new TagInfo();
-                            ti.TagType = TagType.TT_SPCE2_RW;
-                            ti.TagIdSerial = 0;
-                            ti.TagIdOctal = codeToAddOct;
-                            ti.TagId_R8_RO = null;
-                            ti.TagId_RW = codeToAdd;
-                            ti.TagId_DEC = null;
-                            ReaderData.ListTagInfo.Add(ti);
+                            if (!ReaderData.strListTag.Contains(codeToAdd))
+                            {
+                                ReaderData.strListTag.Add(codeToAdd);
+                                ReaderData.nbTagScan = ReaderData.strListTag.Count;
+                                TagInfo ti = new TagInfo();
+                                ti.TagType = TagType.TT_SPCE2_RW;
+                                ti.TagIdSerial = 0;
+                                ti.TagIdOctal = codeToAddOct;
+                                ti.TagId_R8_RO = null;
+                                ti.TagId_RW = codeToAdd;
+                                ti.TagId_DEC = null;
+                                ReaderData.ListTagInfo.Add(ti);
 
 
-                        } // Change for ST - Warning DT
+                                //} // Change for ST - Warning DT
 
-                        notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
-                        if (NotifyEvent != null)
-                        {
-                            if (DeviceBoard != null)
-                                AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
-                            NotifyEvent(this, notifyEvent);
-                        }
-                        // for DT put } here
+                                notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
+                                if (NotifyEvent != null)
+                                {
+                                    if (DeviceBoard != null)
+                                        AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
+                                    NotifyEvent(this, notifyEvent);
+                                }
+                            } // for DT put here
 
                         _checkKZout = 0; // raz cpt  test sortie
 
@@ -2986,30 +3077,30 @@ namespace SDK_SC_RfidReader
                         string codeToAddOct = sb.ToString();
                         string codeToAdd = SerialRFID.CodeMemFullToDec(codeToAddOct);
 
-                        if (!ReaderData.strListTag.Contains(codeToAdd))
-                        {
-                            ReaderData.strListTag.Add(codeToAdd);
-                            ReaderData.nbTagScan = ReaderData.strListTag.Count;
-                            TagInfo ti = new TagInfo();
-                            ti.TagType = TagType.TT_SPCE2_DEC;
-                            ti.TagIdSerial = 0;
-                            ti.TagIdOctal = codeToAddOct;
-                            ti.TagId_R8_RO = null;
-                            ti.TagId_RW = null;
-                            ti.TagId_DEC = codeToAdd;
-                            ReaderData.ListTagInfo.Add(ti);
+                            if (!ReaderData.strListTag.Contains(codeToAdd))
+                            {
+                                ReaderData.strListTag.Add(codeToAdd);
+                                ReaderData.nbTagScan = ReaderData.strListTag.Count;
+                                TagInfo ti = new TagInfo();
+                                ti.TagType = TagType.TT_SPCE2_DEC;
+                                ti.TagIdSerial = 0;
+                                ti.TagIdOctal = codeToAddOct;
+                                ti.TagId_R8_RO = null;
+                                ti.TagId_RW = null;
+                                ti.TagId_DEC = codeToAdd;
+                                ReaderData.ListTagInfo.Add(ti);
 
 
-                        } // Change for ST - Warning DT
+                                //} // Change for ST - Warning DT
 
-                        notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
-                        if (NotifyEvent != null)
-                        {
-                            if (DeviceBoard != null)
-                                AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
-                            NotifyEvent(this, notifyEvent);
-                        }
-                        // for DT put } here
+                                notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
+                                if (NotifyEvent != null)
+                                {
+                                    if (DeviceBoard != null)
+                                        AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
+                                    NotifyEvent(this, notifyEvent);
+                                }
+                            }  // for DT put } here
 
                         _checkKZout = 0; // raz cpt  test sortie
 
@@ -3022,7 +3113,7 @@ namespace SDK_SC_RfidReader
                             PBAE_RfidTagAdded tagAddedMessage = (PBAE_RfidTagAdded)Utilities.MarshalToStruct(asyncEventMessage.serialMessage, typeof(PBAE_RfidTagAdded));
                             string codeToAddOct = SerialRFID.SerialNumberAsString(SerialRFID.SerialNumber(tagAddedMessage.serialNumber));
                             string codeToAdd =  codeToAddOct.Substring(0, MaxDigit);
-                           
+
                             // KB : Error scan 03 12 2012
                             if (!ReaderData.strListTag.Contains(codeToAdd))
                             {
@@ -3038,7 +3129,7 @@ namespace SDK_SC_RfidReader
                                 ti.TagId_DEC = null;
                                 ReaderData.ListTagInfo.Add(ti);
 
-                            } // Change for ST - Warning DT
+                                //} // Change for ST - Warning DT
 
                                 notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
                                 if (NotifyEvent != null)
@@ -3046,8 +3137,8 @@ namespace SDK_SC_RfidReader
                                     if (DeviceBoard != null)
                                         AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
                                     NotifyEvent(this, notifyEvent);
-                                }                               
-                            // for DT put } here
+                                }
+                            }// for DT put  here
                            
                             _checkKZout = 0; // raz cpt  test sortie
                             break;
@@ -3065,30 +3156,30 @@ namespace SDK_SC_RfidReader
 
                             // KB : Error scan 03 12 2012
                             if (!ReaderData.strListTag.Contains(codeToAdd))
+                            {
+                                ReaderData.strListTag.Add(codeToAdd);
+                                ReaderData.nbTagScan = ReaderData.strListTag.Count;
+
+                                TagInfo ti = new TagInfo();
+                                ti.TagType = TagType.TT_SPCE2_RO;
+                                ti.TagIdSerial = SerialRFID.SerialNumber(tagAddedMessage.serialNumber);
+                                ti.TagIdOctal = codeToAddOct;
+                                ti.TagId_R8_RO = codeToAddOct;
+                                ti.TagId_RW = null;
+                                ti.TagId_DEC = null;
+                                ReaderData.ListTagInfo.Add(ti);
+
+
+                                // } // Change for ST - Warning DT
+
+                                notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
+                                if (NotifyEvent != null)
                                 {
-                                    ReaderData.strListTag.Add(codeToAdd);
-                                    ReaderData.nbTagScan = ReaderData.strListTag.Count;
-
-                                    TagInfo ti = new TagInfo();
-                                    ti.TagType = TagType.TT_SPCE2_RO;
-                                    ti.TagIdSerial = SerialRFID.SerialNumber(tagAddedMessage.serialNumber);
-                                    ti.TagIdOctal = codeToAddOct;
-                                    ti.TagId_R8_RO = codeToAddOct;
-                                    ti.TagId_RW = null;
-                                    ti.TagId_DEC = null;
-                                    ReaderData.ListTagInfo.Add(ti);
-
-
-                                } // Change for ST - Warning DT
-
-                            notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
-                                    if (NotifyEvent != null)
-                                    {
-                                        if (DeviceBoard != null)
-                                    AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
-                                        NotifyEvent(this, notifyEvent);
-                                    }
-                            // for DT put } here
+                                    if (DeviceBoard != null)
+                                        AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
+                                    NotifyEvent(this, notifyEvent);
+                                }
+                            }// for DT put } here
 
                             _checkKZout = 0; // raz cpt  test sortie
                             break;
@@ -3107,9 +3198,9 @@ namespace SDK_SC_RfidReader
                                 codeToAdd = codeToAddAlpha.Substring(0, codeToAddAlpha.IndexOf('§'));
                             else
                                 codeToAdd = codeToAddAlpha.Substring(0, 10);
-                           
-                            
-                            
+
+
+
                             // KB : Error scan 03 12 2012
                             if (!ReaderData.strListTag.Contains(codeToAdd))
                             {
@@ -3126,16 +3217,16 @@ namespace SDK_SC_RfidReader
                                 ReaderData.ListTagInfo.Add(ti);
 
 
-                            } // Change for ST - Warning DT
+                                //} // Change for ST - Warning DT
 
-                            notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
-                            if (NotifyEvent != null)
-                            {
-                                if (DeviceBoard != null)
-                                    AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
-                                NotifyEvent(this, notifyEvent);
-                            }
-                            // for DT put } here
+                                notifyEvent = new rfidReaderArgs(SerialNumber, rfidReaderArgs.ReaderNotify.RN_TagAdded, codeToAdd);
+                                if (NotifyEvent != null)
+                                {
+                                    if (DeviceBoard != null)
+                                        AddMessage(DeviceBoard.deviceId, rfidReaderArgs.ReaderNotify.RN_TagAdded.ToString() + ":" + codeToAdd, "NFY :", DateTime.Now);
+                                    NotifyEvent(this, notifyEvent);
+                                }
+                            }// for DT put  here
 
                             _checkKZout = 0; // raz cpt  test sortie
                             break;

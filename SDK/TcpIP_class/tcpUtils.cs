@@ -17,6 +17,8 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Data;
+using System.Xml;
+using System.Xml.Serialization;
 using DataClass;
 
 using System.Collections.Specialized;
@@ -173,7 +175,7 @@ namespace TcpIP_class
             {
                 return true;
             }
-            return true;
+            return false;
 
         }
 
@@ -947,5 +949,73 @@ namespace TcpIP_class
             return false;
         }
     }
+
+
+
+    public static class XmlSerializerExtensions
+    {
+        #region Private fields
+        private static readonly Dictionary<RuntimeTypeHandle, XmlSerializer> ms_serializers = new Dictionary<RuntimeTypeHandle, XmlSerializer>();
+        #endregion
+        #region Public methods
+        /// <summary>
+        ///   Serialize object to xml string by <see cref = "XmlSerializer" />
+        /// </summary>
+        /// <typeparam name = "T"></typeparam>
+        /// <param name = "value"></param>
+        /// <returns></returns>
+        public static string ToXml<T>(this T value)
+            where T : new()
+        {
+            var _serializer = GetValue(typeof(T));
+            using (var _stream = new MemoryStream())
+            {
+                using (var _writer = new XmlTextWriter(_stream, new UTF8Encoding()))
+                {
+                    _serializer.Serialize(_writer, value);
+                    return Encoding.UTF8.GetString(_stream.ToArray());
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Deserialize object from string
+        /// </summary>
+        /// <typeparam name = "T">Type of deserialized object</typeparam>
+        /// <param name = "srcString">Xml source</param>
+        /// <returns></returns>
+        public static T FromXml<T>(this string srcString)
+            where T : new()
+        {
+            var _serializer = GetValue(typeof(T));
+            using (var _stringReader = new StringReader(srcString))
+            {
+                using (XmlReader _reader = new XmlTextReader(_stringReader))
+                {
+                    return (T)_serializer.Deserialize(_reader);
+                }
+            }
+        }
+        #endregion
+        #region Private methods
+        private static XmlSerializer GetValue(Type type)
+        {
+            XmlSerializer _serializer;
+            if (!ms_serializers.TryGetValue(type.TypeHandle, out _serializer))
+            {
+                lock (ms_serializers)
+                {
+                    if (!ms_serializers.TryGetValue(type.TypeHandle, out _serializer))
+                    {
+                        _serializer = new XmlSerializer(type);
+                        ms_serializers.Add(type.TypeHandle, _serializer);
+                    }
+                }
+            }
+            return _serializer;
+        }
+        #endregion
+    }
+
 
 }

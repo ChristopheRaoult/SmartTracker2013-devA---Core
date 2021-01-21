@@ -7483,3 +7483,179 @@ Stack Traces:
 
 _______________________________________________________________
 
+Application:       smartTracker 2014
+Version:           2015.6.3.1696
+Date:              10/05/2019 10:10:55
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    4.01:14:20.6560000
+App up time:       00:03:46.5100242
+Total memory:      12182Mb
+Available memory:  4641Mb
+
+Exception classes:   
+   System.NullReferenceException
+Exception messages: 
+   La référence d'objet n'est pas définie à une instance d'un objet.
+Stack Traces:
+   à DB_Class_SQLite.DBClassSQLite.GetLastScan(String serialRFID) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\DBClassSQLite.cs:ligne 5211
+/r/n/r/n *************************/r/nLa référence d'objet n'est pas définie à une instance d'un objet.
+(in DBClass at DataClass.InventoryData GetLastScan(System.String))
+   à DB_Class_SQLite.DBClassSQLite.GetLastScan(String serialRFID) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\DBClassSQLite.cs:ligne 5211
+
+_______________________________________________________________
+
+Application:       smartTracker 2014
+Version:           2015.6.3.1696
+Date:              10/05/2019 10:11:08
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    4.01:14:29.6560000
+App up time:       00:03:55.5085039
+Total memory:      12182Mb
+Available memory:  4649Mb
+
+Exception classes:   
+   System.NullReferenceException
+Exception messages: 
+   La référence d'objet n'est pas définie à une instance d'un objet.
+Stack Traces:
+   à DB_Class_SQLite.DBClassSQLite.IsInventoryExist(InventoryData IDtoStore) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\DBClassSQLite.cs:ligne 4643
+/r/n/r/n *************************/r/nLa référence d'objet n'est pas définie à une instance d'un objet.
+(in DBClass at Boolean IsInventoryExist(DataClass.InventoryData))
+   à DB_Class_SQLite.DBClassSQLite.IsInventoryExist(InventoryData IDtoStore) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_DBClass\DBClassSQLite.cs:ligne 4643
+
+_______________________________________________________________
+
+Application:       smartTracker 2014
+Version:           2015.6.3.1696
+Date:              05/02/2020 15:56:33
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    5.06:21:23.0310000
+App up time:       00:07:19.3128802
+Total memory:      12182Mb
+Available memory:  4588Mb
+
+Exception classes:   
+   System.NotSupportedException
+   System.InvalidOperationException
+
+Exception messages: 
+   Impossible de sérialiser le membre DataClass.StoredInventoryData.ListTagWithChannel de type System.Collections.Hashtable, car il implémente IDictionary.
+   Une erreur s'est produite lors de la réflexion du type 'DataClass.StoredInventoryData'.
+
+Stack Traces:
+   à System.Xml.Serialization.TypeScope.GetDefaultIndexer(Type type, String memberInfo)
+   à System.Xml.Serialization.TypeScope.ImportTypeDesc(Type type, MemberInfo memberInfo, Boolean directReference)
+   à System.Xml.Serialization.TypeScope.GetTypeDesc(Type type, MemberInfo source, Boolean directReference, Boolean throwOnError)
+   à System.Xml.Serialization.StructModel.GetFieldModel(FieldInfo fieldInfo)
+   à System.Xml.Serialization.StructModel.GetFieldModel(MemberInfo memberInfo)
+   à System.Xml.Serialization.XmlReflectionImporter.InitializeStructMembers(StructMapping mapping, StructModel model, Boolean openModel, String typeName, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportStructLikeMapping(StructModel model, String ns, Boolean openModel, XmlAttributes a, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, Boolean repeats, Boolean openModel, RecursionLimiter limiter)
+--- Next Call Stack:
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, Boolean repeats, Boolean openModel, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportElement(TypeModel model, XmlRootAttribute root, String defaultNamespace, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(Type type, XmlRootAttribute root, String defaultNamespace)
+   à System.Xml.Serialization.XmlSerializer..ctor(Type type, String defaultNamespace)
+   à System.Xml.Serialization.XmlSerializer..ctor(Type type)
+   à TcpIP_class.XmlSerializerExtensions.GetValue(Type type) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\tcpUtils.cs:ligne 1010
+   à TcpIP_class.XmlSerializerExtensions.ToXml[T](T value) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\tcpUtils.cs:ligne 970
+   à TcpIP_class.TcpIpServer.EcouteClient() dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\TcpServer.cs:ligne 1754
+
+/r/n/r/n *************************/r/nUne erreur s'est produite lors de la réflexion du type 'DataClass.StoredInventoryData'.
+(in System.Xml at System.Xml.Serialization.TypeMapping ImportTypeMapping(System.Xml.Serialization.TypeModel, System.String, ImportContext, System.String, System.Xml.Serialization.XmlAttributes, Boolean, Boolean, System.Xml.Serialization.RecursionLimiter))
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, Boolean repeats, Boolean openModel, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportElement(TypeModel model, XmlRootAttribute root, String defaultNamespace, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(Type type, XmlRootAttribute root, String defaultNamespace)
+   à System.Xml.Serialization.XmlSerializer..ctor(Type type, String defaultNamespace)
+   à System.Xml.Serialization.XmlSerializer..ctor(Type type)
+   à TcpIP_class.XmlSerializerExtensions.GetValue(Type type) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\tcpUtils.cs:ligne 1010
+   à TcpIP_class.XmlSerializerExtensions.ToXml[T](T value) dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\tcpUtils.cs:ligne 970
+   à TcpIP_class.TcpIpServer.EcouteClient() dans z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\TcpIP_class\TcpServer.cs:ligne 1754
+InnerException :
+Impossible de sérialiser le membre DataClass.StoredInventoryData.ListTagWithChannel de type System.Collections.Hashtable, car il implémente IDictionary.
+(in System.Xml at System.Reflection.PropertyInfo GetDefaultIndexer(System.Type, System.String))
+   à System.Xml.Serialization.TypeScope.GetDefaultIndexer(Type type, String memberInfo)
+   à System.Xml.Serialization.TypeScope.ImportTypeDesc(Type type, MemberInfo memberInfo, Boolean directReference)
+   à System.Xml.Serialization.TypeScope.GetTypeDesc(Type type, MemberInfo source, Boolean directReference, Boolean throwOnError)
+   à System.Xml.Serialization.StructModel.GetFieldModel(FieldInfo fieldInfo)
+   à System.Xml.Serialization.StructModel.GetFieldModel(MemberInfo memberInfo)
+   à System.Xml.Serialization.XmlReflectionImporter.InitializeStructMembers(StructMapping mapping, StructModel model, Boolean openModel, String typeName, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportStructLikeMapping(StructModel model, String ns, Boolean openModel, XmlAttributes a, RecursionLimiter limiter)
+   à System.Xml.Serialization.XmlReflectionImporter.ImportTypeMapping(TypeModel model, String ns, ImportContext context, String dataType, XmlAttributes a, Boolean repeats, Boolean openModel, RecursionLimiter limiter)
+
+
+
+_______________________________________________________________
+
+Application:       smartTracker 2014
+Version:           2021.1.20.1698
+Date:              20/01/2021 16:43:29
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    5.22:23:54.8130000
+App up time:       00:00:51.4408974
+Total memory:      12182Mb
+Available memory:  3757Mb
+
+Exception classes:   
+   System.ObjectDisposedException
+Exception messages: 
+   Impossible d'accéder à un objet supprimé.
+Nom de l'objet : 'LiveDataForm'.
+Stack Traces:
+   à System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   à System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   à System.Windows.Forms.Control.Invoke(Delegate method)
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 3300
+/r/n/r/n *************************/r/nImpossible d'accéder à un objet supprimé.
+Nom de l'objet : 'LiveDataForm'.
+(in System.Windows.Forms at System.Object MarshaledInvoke(System.Windows.Forms.Control, System.Delegate, System.Object[], Boolean))
+   à System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   à System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   à System.Windows.Forms.Control.Invoke(Delegate method)
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 3300
+
+_______________________________________________________________
+
+Application:       smartTracker 2014
+Version:           2021.1.20.1698
+Date:              20/01/2021 18:11:52
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    5.23:52:16.8130000
+App up time:       00:00:29.6409065
+Total memory:      12182Mb
+Available memory:  3821Mb
+
+Exception classes:   
+   System.NullReferenceException
+Exception messages: 
+   La référence d'objet n'est pas définie à une instance d'un objet.
+Stack Traces:
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 3661
+/r/n/r/n *************************/r/nLa référence d'objet n'est pas définie à une instance d'un objet.
+(in smartTracker at Void rfidDev_NotifyRFIDEvent(System.Object, SDK_SC_RfidReader.rfidReaderArgs))
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 3661
+
+_______________________________________________________________
+

@@ -108,6 +108,13 @@ namespace SDK_SC_RFID_Devices
         private byte _channelInScan;
         private byte _corrValueOnLastKB;
 
+        //synchronisation
+        public bool bUseSynchronisation = false;
+        public EventWaitHandle CanStartScan = new AutoResetEvent(false);
+        public int TimeoutInSec = 120;
+
+        public bool DoDoorScan = true;
+
         private Hashtable listTagWithChannel;
         public Hashtable ListTagWithChannel { get { return listTagWithChannel; } set { listTagWithChannel = value; } }
 
@@ -1482,14 +1489,28 @@ namespace SDK_SC_RFID_Devices
                     
                     StopLightingLeds();
                     deviceStatus = DeviceStatus.DS_DoorClose;
-                    if (NotifyRFIDEvent != null) NotifyRFIDEvent(this, args);
-                     setLightvsState();
+                   
+                    setLightvsState();
                     doorOpenTooLongTimer.Stop();
                     Thread.Sleep(500);
-
-
-
-                    ScanDevice();
+                    // Semaphore ????
+                    CanStartScan.Reset();
+                    if (NotifyRFIDEvent != null) NotifyRFIDEvent(this, args);                
+                    
+                   
+                    if (DoDoorScan)
+                    {
+                        if (bUseSynchronisation)
+                        {
+                            CanStartScan.WaitOne(TimeoutInSec * 1000, false);
+                        }
+                        ScanDevice();
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                        deviceStatus = DeviceStatus.DS_Ready;
+                    }
                     break;
                 case rfidReaderArgs.ReaderNotify.RN_UsbCableUnplug:
                 case rfidReaderArgs.ReaderNotify.RN_Power_OFF:
@@ -1532,7 +1553,7 @@ namespace SDK_SC_RFID_Devices
         {
             bWasInLedDoorOpen = false;
             if ((conStatus == DataClass.ConnectionStatus.CS_Connected) &&
-                ((deviceStatus == DataClass.DeviceStatus.DS_Ready) || (deviceStatus == DataClass.DeviceStatus.DS_DoorClose)))
+                ((deviceStatus == DataClass.DeviceStatus.DS_Ready) || (deviceStatus == DataClass.DeviceStatus.DS_DoorClose) || (deviceStatus == DataClass.DeviceStatus.DS_WaitForScan)))
             {
 
                 myDevice.RequestScan3D(bUseKR, bUnlockAllTag);
@@ -1584,7 +1605,7 @@ namespace SDK_SC_RFID_Devices
         {
             bWasInLedDoorOpen = false;
             if ((conStatus == DataClass.ConnectionStatus.CS_Connected) &&
-                (deviceStatus == DataClass.DeviceStatus.DS_Ready))
+                ((deviceStatus == DataClass.DeviceStatus.DS_Ready)) || (deviceStatus == DataClass.DeviceStatus.DS_WaitForScan))
             {
                 myDevice.RequestScan3D(true, true,UseMutex);
                 return true;
@@ -2709,13 +2730,13 @@ namespace SDK_SC_RFID_Devices
                 double.TryParse(myDevice.FirmwareVersion.Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out fv);
             return(fv); 
         }
-
+       
     }
 
     /// <summary>
     /// Classe to define a device
     /// </summary>
-    public class deviceClass
+    public class deviceClass : ICloneable
     {
         /// <summary>
         /// 
@@ -2797,6 +2818,10 @@ namespace SDK_SC_RFID_Devices
             lastProcessInventoryGmtDate = DateTime.MaxValue;
             netFridgeTemperatureProcessDone = false;
             netLastScanEventID = -1;
+        }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
    

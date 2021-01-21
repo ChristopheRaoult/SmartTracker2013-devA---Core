@@ -1,0 +1,243 @@
+{
+  "format": 1,
+  "restore": {
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\TcpIP_class.csproj": {}
+  },
+  "projects": {
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj",
+        "projectName": "DataClass",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj",
+        "projectName": "ErrorMessage",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_AccessControl\\SDK_SC_AccessControl.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_AccessControl\\SDK_SC_AccessControl.csproj",
+        "projectName": "SDK_SC_AccessControl",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_AccessControl\\SDK_SC_AccessControl.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj",
+        "projectName": "DBClass",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj",
+        "projectName": "SDK_SC_Fingerprint",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj",
+        "projectName": "SDK_SC_MedicalCabinet",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj",
+        "projectName": "SDK_SC_RfidReader",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj"
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RFID_Devices\\SDK_SC_RFID_Devices.csproj": {
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RFID_Devices\\SDK_SC_RFID_Devices.csproj",
+        "projectName": "SDK_SC_RFID_Devices",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RFID_Devices\\SDK_SC_RFID_Devices.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_AccessControl\\SDK_SC_AccessControl.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_AccessControl\\SDK_SC_AccessControl.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\TcpIP_class.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\TcpIP_class.csproj",
+        "projectName": "TcpIP_class",
+        "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\TcpIP_class.csproj",
+        "packagesPath": "C:\\Users\\Christophe\\.nuget\\packages\\",
+        "outputPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\Christophe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net35"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://www.nuget.org/api/v2/": {}
+        },
+        "frameworks": {
+          "net35": {
+            "projectReferences": {
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\DataClass\\DataClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\ErrorMessage\\ErrorMessage.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_DBClass\\DBClass.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_Fingerprint\\SDK_SC_Fingerprint.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_MedicalCabinet\\SDK_SC_MedicalCabinet.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RfidReader\\SDK_SC_RfidReader.csproj"
+              },
+              "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RFID_Devices\\SDK_SC_RFID_Devices.csproj": {
+                "projectPath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\SDK_SC_RFID_Devices\\SDK_SC_RFID_Devices.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net35": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

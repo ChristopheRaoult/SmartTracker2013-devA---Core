@@ -7,4 +7,25 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_Access
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csprojResolveAssemblyReference.cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.pdb
-Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\SDK_SC_AccessControl.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csprojAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csproj.CopyComplete
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\SDK_SC_AccessControl.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\DataClass.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\ErrorMessage.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\DataClass.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csprojAssemblyReference.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csproj.CoreCompileInputs.cache
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.csproj.CopyComplete
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.dll
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_AccessControl\obj\Debug\SDK_SC_AccessControl.pdb

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "GsrSYv2hU9IpKbQBEOWxg1AnxLFkwfrsyApE8NkoTf+dbTHjW+M6S2ovVo8lLeRWU088OUIJVrfvj3+L5DKb8w==",
+  "success": true,
+  "projectFilePath": "Z:\\DEV SOFT\\REPO_CSHARP\\SmartTracker2013\\SmartTracker2013-devA - Core\\SDK\\TcpIP_class\\TcpIP_class.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Christophe\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

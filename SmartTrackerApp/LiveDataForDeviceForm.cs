@@ -145,11 +145,19 @@ namespace smartTracker
         private string pathCsvLed;
         private string pathCsvError;
         private string pathCsvInScan;
-       
-       
+
+
+        private SynchronizedDevice syncDevice = null;
+        public bool bUseSynchonisation = false;
+        public string DeviceIpRight = string.Empty;
+        public int DevicePortRight = 6901;
+        public string DeviceIpLeft = string.Empty;
+        public int DevicePortLeft = 6901;
+        public int TimeoutInSec = 120;
+
         #endregion
 
-       
+
         #region datagridScanHistory
         DataTable _tbReaderScan;
         InventoryData[] _inventoryArray;
@@ -366,6 +374,29 @@ namespace smartTracker
 
                 _myRegexUid = new Regex(@"[0-7]{10}");
 
+                //synchonisation
+
+                bool.TryParse(ConfigurationManager.AppSettings["bSynchonizedDevice"], out bUseSynchonisation);
+                DeviceIpRight = ConfigurationManager.AppSettings["DeviceIpRight"];
+                DeviceIpLeft = ConfigurationManager.AppSettings["DeviceIpLeft"];
+                int.TryParse(ConfigurationManager.AppSettings["DevicePortRight"], out DevicePortRight);
+                int.TryParse(ConfigurationManager.AppSettings["DevicePortLeft"], out DevicePortLeft);
+                int.TryParse(ConfigurationManager.AppSettings["TimeoutInSec"], out TimeoutInSec);
+
+                if (bUseSynchonisation)
+                {
+                    syncDevice = new SynchronizedDevice()
+                    {
+                        bUseSynchonisation = true,
+                        DeviceIpRight = DeviceIpRight,
+                        DeviceIpLeft = DeviceIpLeft,
+                        DevicePortLeft = DevicePortLeft,
+                        DevicePortRight = DevicePortRight,
+                        TimeoutInSec = TimeoutInSec
+                    };
+                    _tcpIpServer.syncDevice = syncDevice;
+                }
+
             }
             catch (Exception exp)
             {
@@ -438,11 +469,22 @@ namespace smartTracker
 
                             if (_localDeviceArray[treeNodeSelected].infoDev.deviceType == DeviceType.DT_SBR)
                             {
-                                
-                                 _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice(false);
+
+                                _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice(false);
                             }
                             else
+                            {
+                                if (bUseSynchonisation)
+                                {
+                                    if (syncDevice != null)
+                                    {
+                                        _localDeviceArray[treeNodeSelected].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                        UpdateTreeView();
+                                        syncDevice.CanStartScan();
+                                    }
+                                }
                                 _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice();
+                            }
                         }
                         else
                         {
@@ -1122,7 +1164,6 @@ namespace smartTracker
                                         _tcpNotificationThreadInfo.ThreadTcpLoop();
                                     }
                                 }
-
                             }
                             #endregion
 

@@ -14,7 +14,7 @@
     <add key="Desc_TimeZoneOffset" value="Double value to set the offset hour from GMT" />
     <add key="TimeZoneOffset" value="1.0" />
     <add key="Desc_bShowServer" value="Boolean to enable server mode at startup" />
-    <add key="bShowServer" value="False" />
+    <add key="bShowServer" value="True" />
     <add key="Desc_bCompareOnLotID" value="Boolean to enable the server window at startup" />
     <add key="bCompareOnLotID" value="True" />
     <add key="Desc_bScreenSaver" value="Boolean to enable the screen saver" />
@@ -36,7 +36,7 @@
     <add key="Desc_bViewerMode" value="Enable Disable Viewer Mode - To display the inventory from a shared database with no action on reader" />
     <add key="bViewerMode" value="False" />
     <add key="Desc_bAutoUpdate" value="Enable Disable Auto Update Mode - With True the update will be checked at each startup" />
-    <add key="bAutoUpdate" value="True" />
+    <add key="bAutoUpdate" value="False" />
     <add key="Desc_bInterruptScanWithFP" value="If true, user stop the current scan if well authentified on the fingerprint" />
     <add key="bInterruptScanWithFP" value="False" />
     <add key="ClientSettingsProvider.ServiceUri" value="" />
@@ -49,11 +49,25 @@
     <add key="TcpUnlockingAuthorization" value="Put Unlocking String" />
     <add key="Desc_TcpUnlockingAuthorization" value="Put Authorizing string to unlock door with TCP command" />
     <add key="Desc_Rfid_Printer_Serial" value="Serial number of RFID printer board" />
-    <add key="Rfid_Printer_Serial" value="14100248" />
+    <add key="Rfid_Printer_Serial" value="Not configured" />
     <add key="Desc_PrinterIP" value="IP of the printer" />
-    <add key="PrinterIP" value="192.168.1.125" />
+    <add key="PrinterIP" value="xxx.xxx.xxx.xxx" />
     <add key="Desc_Template" value="Name of the template for Blood" />
-    <add key="Template" value="MED200D" />
+    <add key="Template" value="Not configured" />
+    <add key="Desc_bSynchonizedDevice" value="Bool to synchronized device" />
+    <add key="bSynchonizedDevice" value="False" />
+    <add key="Desc_DeviceIpRight" value="Ip of device at Right" />
+    <add key="DeviceIpRight" value="192.168.1.25" />
+    <add key="Desc_DevicePortRight" value="Port of device at Right" />
+    <add key="DevicePortRight" value="6902" />
+    <add key="Desc_DeviceIpLeft" value="Ip of device at Left" />
+    <add key="DeviceIpLeft" value="192.138.1.26" />
+    <add key="Desc_DevicePortLeft" value="Port of device at Left" />
+    <add key="DevicePortLeft" value="6903" />
+    <add key="Desc_TimeoutInSec" value="Timeout in Second to run scan " />
+    <add key="TimeoutInSec" value="10" />
+    <add key="Desc_DoDoorScan" value="Perform scan when door is closed" />
+    <add key="DoDoorScan" value="True" />
   </appSettings>
   <system.web>
     <anonymousIdentification />

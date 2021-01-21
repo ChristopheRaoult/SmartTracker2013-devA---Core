@@ -35,6 +35,7 @@ using smartTracker.Properties;
 using TcpIP_class;
 
 
+
 using BrightIdeasSoftware;
 using Cursor = System.Windows.Forms.Cursor;
 using Timer = System.Timers.Timer;
@@ -183,8 +184,16 @@ namespace smartTracker
         private string pathCsvError;
         private string pathCsvInScan;
         private string pathCsvLog;
-       
-       
+
+        private SynchronizedDevice syncDevice = null;
+        public bool bUseSynchonisation = false;
+        public string DeviceIpRight = string.Empty;
+        public int DevicePortRight = 6901;
+        public string DeviceIpLeft = string.Empty;
+        public int DevicePortLeft = 6901;
+        public int TimeoutInSec = 120;
+        public bool DoDoorScan = true;
+
         #endregion
         #region group
         private void UpdateGroup()
@@ -209,130 +218,7 @@ namespace smartTracker
                     MessageBox.Show(string.Format(ResStrings.LiveDataForm_button1_Click_All_Tag_in_box_fit_criteria, _bti.BoxRef, _bti.Criteria), ResStrings.strInfo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        #endregion
-        #region datagridScanHistory
-        DataTable _tbReaderScan;
-        InventoryData[] _inventoryArray;
-
-        private void InitReaderScanTable()
-        {
-            _tbReaderScan = new DataTable();
-            _tbReaderScan.Columns.Add(ResStrings.str_EventDate, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_Serial_RFID, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_Reader_Name, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_Door_Used, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_First_Name, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_Last_Name, typeof(string));
-            _tbReaderScan.Columns.Add(ResStrings.str_All, typeof(int));
-            _tbReaderScan.Columns.Add(ResStrings.str_Present, typeof(int));
-            _tbReaderScan.Columns.Add(ResStrings.str_Added, typeof(int));
-            _tbReaderScan.Columns.Add(ResStrings.str_Removed, typeof(int));
-            dataGridViewScan.DataSource = null;
-            dataGridViewScan.DataSource = _tbReaderScan.DefaultView;
-
-        }
-        private void ProcessData(DeviceInfo di)
-        {
-            InitReaderScanTable();
-           
-            InventoryData[] invData = _db.GetInventory(di, null , 25);
-            if (invData == null) return;
-            _inventoryArray = new InventoryData[invData.Length];
-            invData.CopyTo(_inventoryArray, 0);
-            foreach (InventoryData dt in _inventoryArray)
-            {
-                try
-                {
-                    DeviceInfo tmpdi = _db.RecoverDevice(dt.serialNumberDevice);
-                    if (tmpdi != null)
-                    _tbReaderScan.Rows.Add(dt.eventDate.ToString("G"), dt.serialNumberDevice, tmpdi.DeviceName,dt.userDoor.ToString(),
-                        dt.userFirstName, dt.userLastName,dt.nbTagAll, dt.nbTagPresent, 
-                        dt.nbTagAdded, dt.nbTagRemoved);
-                }
-                catch 
-                {
-
-                }
-            }
-            dataGridViewScan.DataSource = null;
-            dataGridViewScan.DataSource = _tbReaderScan.DefaultView;          
-        }
-        private void UpdateScanHistory(DeviceInfo di)
-        {
-            if (di == null)
-            {
-                if (_selectedReader == -1) return;
-
-                if ((_selectedReader >= 0) & (_selectedReader < _nbLocalDevice))  //reader local
-                {
-                    if (_localDeviceArray == null) return;
-                    di = _localDeviceArray[_selectedReader].infoDev;
-                }
-                else
-                {
-                    if (_networkDeviceArray == null) return;
-                    di = _networkDeviceArray[_selectedReader - _nbLocalDevice].infoDev;
-                }
-            }
-
-            ProcessData(di);
-        }
-        private void dataGridViewScan_SelectionChanged(object sender, EventArgs e)
-        {
-            if (tabControlInfo.SelectedIndex == 1)
-            {
-                if (dataGridViewScan.SelectedRows.Count == 1)
-                {
-                    int selectedData = dataGridViewScan.SelectedRows[0].Index;
-
-                    if (_selectedReader == -1) return;
-
-                    if ((_selectedReader >= 0) & (_selectedReader < _nbLocalDevice))  //reader local
-                    {
-                        if (_localDeviceArray == null) return;
-                        _localDeviceArray[_selectedReader].currentInventory = _inventoryArray[selectedData];
-
-                        listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
-
-                        foreach (string strTag in _localDeviceArray[_selectedReader].currentInventory.listTagAll)
-                        {
-                            string tag = strTag;
-                            listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Add(tag); });
-                        }
-                    }
-                    else
-                    {
-                        if (_networkDeviceArray == null) return;
-                        _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory = _inventoryArray[selectedData];
-
-                        listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
-
-                        foreach (string strTag in _networkDeviceArray[_selectedReader - _nbLocalDevice].currentInventory.listTagAll)
-                        {
-                            string tag = strTag;
-                            listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Add(tag); });
-                        }
-                    }
-
-                    labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _inventoryArray[selectedData].eventDate.ToLocalTime().ToString("G"); });
-                    labelInventoryUser.Invoke((MethodInvoker)delegate {                                                                         
-                                                                        labelInventoryUser.Text = string.Format("{0} {1}", _inventoryArray[selectedData].userFirstName, _inventoryArray[selectedData].userLastName); 
-                                                                        if (_inventoryArray[selectedData].bUserScan)
-                                                                        {
-                                                                            if (_inventoryArray[selectedData].userDoor == DoorInfo.DI_SLAVE_DOOR)
-                                                                                labelInventoryUser.Text += ResStrings.str_SlaveDoor;                                                                               
-                                                                            else
-                                                                                labelInventoryUser.Text += ResStrings.str_MasterDoor;
-                                                                        }
-                                                                       });
-                  
-
-                    timerObjectList.Start();               
-                }
-            }
-        }
-
-        #endregion
+        #endregion 
         #region Formule
         public void LoadFormule()
         {
@@ -346,6 +232,8 @@ namespace smartTracker
 
             _tcpIpServer = tcpIpServer;
             tcpIpServer.CryptedAuthorization =  ConfigurationManager.AppSettings["TcpUnlockingAuthorization"];
+
+
        
             _toolKeepLastScan.Text = ResStrings.LiveDataForm_LiveDataForm_Keep_Last_Scan;
             _toolKeepLastScan.Enabled = false;
@@ -358,9 +246,7 @@ namespace smartTracker
             normalToolStripMenuItem.Checked = true;
             accumulateToolStripMenuItem.Checked = false;
             waitModeToolStripMenuItem.Checked = false;
-
-           
-
+            
         }
         private void toolKeepLastScan_Click(object sender, EventArgs e)
         {
@@ -397,6 +283,32 @@ namespace smartTracker
                 bool.TryParse(ConfigurationManager.AppSettings["bUseAlarm"], out _bUseAlarm);
                 bool.TryParse(ConfigurationManager.AppSettings["bInterruptScanWithFP"], out _interruptScanWithFp);
                 bool.TryParse(ConfigurationManager.AppSettings["bShowServer"], out _bShowServer);
+
+                //synchonisation
+
+                bool.TryParse(ConfigurationManager.AppSettings["bSynchonizedDevice"], out bUseSynchonisation);
+                DeviceIpRight = ConfigurationManager.AppSettings["DeviceIpRight"];
+                DeviceIpLeft = ConfigurationManager.AppSettings["DeviceIpLeft"];
+                int.TryParse(ConfigurationManager.AppSettings["DevicePortRight"], out DevicePortRight);
+                int.TryParse(ConfigurationManager.AppSettings["DevicePortLeft"], out DevicePortLeft);
+                int.TryParse(ConfigurationManager.AppSettings["TimeoutInSec"], out TimeoutInSec);
+                bool.TryParse(ConfigurationManager.AppSettings["DoDoorScan"], out DoDoorScan); 
+
+                if (bUseSynchonisation)
+                {
+                    syncDevice = new SynchronizedDevice()
+                    {
+                        bUseSynchonisation = true,
+                        DeviceIpRight = DeviceIpRight,
+                        DeviceIpLeft = DeviceIpLeft,
+                        DevicePortLeft = DevicePortLeft,
+                        DevicePortRight = DevicePortRight,
+                        TimeoutInSec = TimeoutInSec
+                    };
+                    _tcpIpServer.syncDevice = syncDevice;
+                }
+
+
                 MaxTempFridgeValue = _db.GetMaxTempFridgeValue();
                 _maxTimeOpenDoor = _db.GetDoorOpenToLongTime();               
                 if (_bUseAlarm)
@@ -463,7 +375,7 @@ namespace smartTracker
                 CreateLocalDevice();
                 CreateNetworkDevice();               
                 UpdateTreeView();
-                UpdateScanHistory(null);
+                //UpdateScanHistory(null);
 
                 _dateFridgeALarmBlocked = DateTime.Now;
                 ClockFridge.Interval = 1000;
@@ -499,6 +411,7 @@ namespace smartTracker
                 _lastAccessType = AccessType.AT_NONE;
 
                 _myRegexUid = new Regex(@"[0-7]{10}");
+                
 
             }
             catch (Exception exp)
@@ -605,7 +518,18 @@ namespace smartTracker
                                     _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice(false);
                             }
                             else
+                            {
+                                if (bUseSynchonisation)
+                                {
+                                    if (syncDevice != null)
+                                    {
+                                        _localDeviceArray[treeNodeSelected].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                        UpdateTreeView();
+                                        syncDevice.CanStartScan();
+                                    }
+                                }
                                 _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice();
+                            }
                         }
                         else
                         {
@@ -1234,8 +1158,8 @@ namespace smartTracker
                         Thread.Sleep(5);
                         RefreshInventory();
 
-                        if (tabControlInfo.SelectedIndex == 1)
-                            UpdateScanHistory(null);
+                       /* if (tabControlInfo.SelectedIndex == 1)
+                            UpdateScanHistory(null);*/
                     }
                 }
                 _bComeFromFridge = false;
@@ -1299,8 +1223,8 @@ namespace smartTracker
                             RefreshInventory();
                         }
 
-                        if (tabControlInfo.SelectedIndex == 1)
-                            UpdateScanHistory(null);
+                        /*if (tabControlInfo.SelectedIndex == 1)
+                            UpdateScanHistory(null);*/
                     }
                 }
                 _bComeFromFridge = false;
@@ -2485,7 +2409,7 @@ namespace smartTracker
                         _localDeviceArray[nIndex].infoDev = tmpDeviceArray[nIndex];
                         _localDeviceArray[nIndex].rfidDev = new RFID_Device();
                         _localDeviceArray[nIndex].rfidDev.TimeDoorOpenTooLong = _maxTimeOpenDoor;
-                        _localDeviceArray[nIndex].rfidDev.InterruptScanWithFP = _interruptScanWithFp;
+                        _localDeviceArray[nIndex].rfidDev.InterruptScanWithFP = _interruptScanWithFp;                       
 
                         InventoryData tmpInv = _db.GetLastScan(_localDeviceArray[nIndex].infoDev.SerialRFID);
                         if (tmpInv != null)
@@ -2509,351 +2433,351 @@ namespace smartTracker
             try
             {
             if (_bClosing) return;
-            switch (args.RN_Value)
-            {
-                #region Disconnect/FailedToDisconnect
-                case rfidReaderArgs.ReaderNotify.RN_Disconnected:
-                case rfidReaderArgs.ReaderNotify.RN_FailedToConnect:
+                switch (args.RN_Value)
+                {
+                    #region Disconnect/FailedToDisconnect
+                    case rfidReaderArgs.ReaderNotify.RN_Disconnected:
+                    case rfidReaderArgs.ReaderNotify.RN_FailedToConnect:
 
-                    bool bOneConnected = false;
-                    if (_localDeviceArray != null)
-                    {
-                        foreach (deviceClass dc in _localDeviceArray)
+                        bool bOneConnected = false;
+                        if (_localDeviceArray != null)
                         {
-                            if (dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected)
-                                bOneConnected = true;
+                            foreach (deviceClass dc in _localDeviceArray)
+                            {
+                                if (dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected)
+                                    bOneConnected = true;
+                            }
                         }
-                    }
-                    if (_networkDeviceArray != null)
-                    {
-                        foreach (deviceClass dc in _networkDeviceArray)
+                        if (_networkDeviceArray != null)
                         {
-                            if (dc.netConnectionStatus == ConnectionStatus.CS_Connected)
-                                bOneConnected = true;
+                            foreach (deviceClass dc in _networkDeviceArray)
+                            {
+                                if (dc.netConnectionStatus == ConnectionStatus.CS_Connected)
+                                    bOneConnected = true;
+                            }
                         }
-                    }
 
-                    if (!bOneConnected)
-                    {
-                        Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = false; });
-                        Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = false; });
-                    }
-                    else
-                    {
+                        if (!bOneConnected)
+                        {
+                            Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = false; });
+                            Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = false; });
+                        }
+                        else
+                        {
+                            Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
+                            Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
+                        }
+                        if (_localDeviceArray != null)
+                        {
+                            for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                            {
+                                if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                                {
+                                    int index = nIndex;
+                                    Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].ImageIndex = treeViewDevice.Nodes[index].SelectedImageIndex = 2; });
+                                    Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
+                                    Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
+                                    Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
+                                }
+                            }
+                        }
+
+                        Invoke((MethodInvoker)delegate { timerStartup.Interval = 10000; });
+                        Invoke((MethodInvoker)delegate { timerStartup.Enabled = true; });
+
+
+                        break;
+                    #endregion
+                    #region Connect
+                    case rfidReaderArgs.ReaderNotify.RN_Connected:
+
                         Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
                         Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-                    }
-                    if (_localDeviceArray != null)
-                    {
                         for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
                             if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
                                 int index = nIndex;
-                                Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].ImageIndex = treeViewDevice.Nodes[index].SelectedImageIndex = 2; });
+                                Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].ImageIndex = treeViewDevice.Nodes[index].SelectedImageIndex = 1; });
                                 Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
                                 Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
                                 Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
-                            }
-                        }
-                    }
 
-                    Invoke((MethodInvoker)delegate { timerStartup.Interval = 10000; });
-                    Invoke((MethodInvoker)delegate { timerStartup.Enabled = true; });
-
-
-                    break;
-                #endregion
-                #region Connect
-                case rfidReaderArgs.ReaderNotify.RN_Connected:
-
-                    Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
-                    Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
-                        {
-                            int index = nIndex;
-                            Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].ImageIndex = treeViewDevice.Nodes[index].SelectedImageIndex = 1; });
-                            Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
-                            Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
-                            Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
-
-                            switch (_localDeviceArray[nIndex].infoDev.deviceType)
-                            {
+                                switch (_localDeviceArray[nIndex].infoDev.deviceType)
+                                {
                                     case DeviceType.DT_PAD:
                                     case DeviceType.DT_SBR:
                                     case DeviceType.DT_STR:
-                                    break;
-                                        default: Invoke((MethodInvoker)delegate { toolStripButtonScan_Click(null, null); });
-                                    break;
-                            }
-                          
-                        }
-                    }
-
-                    if (bUseCvsExchange) Invoke((MethodInvoker)delegate { toolStripButtonScan_Click(null, null); });
-
-                    break;
-                #endregion
-                #region TagPresence
-                case rfidReaderArgs.ReaderNotify.RN_TagPresenceDetected:
-
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
-                        {
-                            if (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBR)
-                            {
-                                _localDeviceArray[nIndex].bComeFromKZ = !_checkedAccumulate;
-                                _localDeviceArray[nIndex].rfidDev.DisableWaitMode();
-
-                                _bFirstScanAccumulate = !_bKeepLastScan;
-                                _bUserScan = false;
-                                _firstName = ResStrings.str_Manual;
-                                _lastName = ResStrings.str_Scan;
-                                _lastAccessType = AccessType.AT_NONE;
-                                _bAccumulateSbr = true;
-                                if ((_localDeviceArray[nIndex].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
-                                 (_localDeviceArray[nIndex].rfidDev.DeviceStatus == DeviceStatus.DS_Ready))
-                                {
-
-                                    Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = false; });
-                                    Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-                                    _localDeviceArray[nIndex].rfidDev.ScanDevice(false);
-
+                                        break;
+                                    default: Invoke((MethodInvoker)delegate { toolStripButtonScan_Click(null, null); });
+                                        break;
                                 }
-                                else
-                                {
-                                    if (_localDeviceArray[nIndex].infoDev.enabled == 1)
-                                        MessageBox.Show(ResStrings.StrDeviceNotReadyOrNotConnected, ResStrings.strInfo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    else
-                                        MessageBox.Show(ResStrings.str_Device_disabled, ResStrings.strInfo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                }
+
                             }
                         }
-                    }
 
-                    break;
-                #endregion
-                #region ScanStarted
-                case rfidReaderArgs.ReaderNotify.RN_ScanStarted:
+                        if (bUseCvsExchange) Invoke((MethodInvoker)delegate { toolStripButtonScan_Click(null, null); });
 
-                   
-                    if (_tcpIpServer.requestScanFromServer)
-                    {
-                        _bFirstScanAccumulate = true;
-                        _bUserScan = false;
-                        _firstName = ResStrings.str_Manual;
-                        _lastName = ResStrings.str_Scan;
-                        _lastAccessType = AccessType.AT_NONE;
-                        _lastDoorUser = DoorInfo.DI_NO_DOOR;
-                        LastBadge = null;
-                    }
+                        break;
+                    #endregion
+                    #region TagPresence
+                    case rfidReaderArgs.ReaderNotify.RN_TagPresenceDetected:
 
-                    if ((string.IsNullOrEmpty(_firstName)) || (string.IsNullOrEmpty(_lastName)))
-                    {
-                        _firstName = ResStrings.str_Manual;
-                        _lastName = ResStrings.str_Scan;
-                        _lastAccessType = AccessType.AT_NONE;
-                        _lastDoorUser = DoorInfo.DI_NO_DOOR;
-                        LastBadge = null;
-                    }
-                    _nbTagBox = 0;
-                   _bti = null;
-                    if (_localDeviceArray!= null)
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {                       
-                        if ((_localDeviceArray[nIndex].infoDev != null) && (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber)))
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
-                            _localDeviceArray[nIndex].inventorySequence++;
-                            _localDeviceArray[nIndex].cptOut--;
-                            _localDeviceArray[nIndex].bDataCompleted = false;
-
-                            if (treeViewDevice.InvokeRequired)
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
-                                int index = nIndex;
-                                Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].SelectedImageIndex = 3; });
-                                Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
-                                Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
-                                Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
-                            }
-
-                            if (_localDeviceArray[nIndex].infoDev.deviceType != DeviceType.DT_SBR)
-                            {
-                                _bFirstScanAccumulate = false;
-
-                                if (!_bKeepLastScan)
+                                if (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBR)
                                 {
-                                    InventoryData lastScan = _db.GetLastScan(_localDeviceArray[nIndex].infoDev.SerialRFID);
-                                    if (lastScan != null)
-                                        _localDeviceArray[nIndex].previousInventory = lastScan;
-                                    else
-                                        _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
-                                }
-                                else
-                                    _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+                                    _localDeviceArray[nIndex].bComeFromKZ = !_checkedAccumulate;
+                                    _localDeviceArray[nIndex].rfidDev.DisableWaitMode();
 
-                                _localDeviceArray[nIndex].currentInventory = new InventoryData(_columnInfo);
-                                _localDeviceArray[nIndex].currentInventory.bUserScan = _bUserScan;
-                                _localDeviceArray[nIndex].currentInventory.userFirstName = _firstName;
-                                _localDeviceArray[nIndex].currentInventory.userLastName = _lastName;
-                                _localDeviceArray[nIndex].currentInventory.BadgeID = LastBadge;
-                                _localDeviceArray[nIndex].currentInventory.userDoor = _lastDoorUser;
-                                _localDeviceArray[nIndex].currentInventory.accessType = _lastAccessType;
-                                _localDeviceArray[nIndex].currentInventory.serialNumberDevice = _localDeviceArray[nIndex].infoDev.SerialRFID;
-                                _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
-                                
-
-
-                                if (nIndex == _selectedReader)
-                                {
-                                    int index = nIndex;
-                                    labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
-                                            labelInventoryUser.Invoke((MethodInvoker)delegate { 
-                                                                                            labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
-                                                                                            if (_localDeviceArray[index].currentInventory.bUserScan)
-                                                                                            {
-                                                                                                if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
-                                                                                                    labelInventoryUser.Text += ResStrings.str_SlaveDoor;
-                                                                                                else
-                                                                                                    labelInventoryUser.Text += ResStrings.str_MasterDoor;
-                                                                                            }
-                                                                                        });
-                                    listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
-                                    labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags,0); });
-                                }
-                            }
-                            else
-                            {                               
-                                if (_bFirstScanAccumulate)
-                                {
-                                    _bFirstScanAccumulate = false;                                    
-                                    if (!_bKeepLastScan)
+                                    _bFirstScanAccumulate = !_bKeepLastScan;
+                                    _bUserScan = false;
+                                    _firstName = ResStrings.str_Manual;
+                                    _lastName = ResStrings.str_Scan;
+                                    _lastAccessType = AccessType.AT_NONE;
+                                    _bAccumulateSbr = true;
+                                    if ((_localDeviceArray[nIndex].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
+                                     (_localDeviceArray[nIndex].rfidDev.DeviceStatus == DeviceStatus.DS_Ready))
                                     {
-                                        InventoryData lastScan = _db.GetLastScan(_localDeviceArray[nIndex].infoDev.SerialRFID);
-                                        if (lastScan != null)
-                                            _localDeviceArray[nIndex].previousInventory = lastScan;
-                                        else
-                                            _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+
+                                        Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = false; });
+                                        Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
+                                        _localDeviceArray[nIndex].rfidDev.ScanDevice(false);
+
                                     }
                                     else
-                                        _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+                                    {
+                                        if (_localDeviceArray[nIndex].infoDev.enabled == 1)
+                                            MessageBox.Show(ResStrings.StrDeviceNotReadyOrNotConnected, ResStrings.strInfo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        else
+                                            MessageBox.Show(ResStrings.str_Device_disabled, ResStrings.strInfo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    }
+                                }
+                            }
+                        }
 
-                                    _localDeviceArray[nIndex].currentInventory = new InventoryData(_columnInfo);
-                                    _localDeviceArray[nIndex].currentInventory.bUserScan = _bUserScan;
-                                    _localDeviceArray[nIndex].currentInventory.userFirstName = _firstName;
-                                    _localDeviceArray[nIndex].currentInventory.userLastName = _lastName;
-                                    _localDeviceArray[nIndex].currentInventory.accessType = _lastAccessType;
-                                    _localDeviceArray[nIndex].currentInventory.BadgeID = LastBadge;
-                                    _localDeviceArray[nIndex].currentInventory.userDoor = DoorInfo.DI_NO_DOOR;
-                                    _localDeviceArray[nIndex].currentInventory.serialNumberDevice = _localDeviceArray[nIndex].infoDev.SerialRFID;
-                                    _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
+                        break;
+                    #endregion
+                    #region ScanStarted
+                    case rfidReaderArgs.ReaderNotify.RN_ScanStarted:
 
-                                    if (nIndex == _selectedReader)
+
+                        if (_tcpIpServer.requestScanFromServer)
+                        {
+                            _bFirstScanAccumulate = true;
+                            _bUserScan = false;
+                            _firstName = ResStrings.str_Manual;
+                            _lastName = ResStrings.str_Scan;
+                            _lastAccessType = AccessType.AT_NONE;
+                            _lastDoorUser = DoorInfo.DI_NO_DOOR;
+                            LastBadge = null;
+                        }
+
+                        if ((string.IsNullOrEmpty(_firstName)) || (string.IsNullOrEmpty(_lastName)))
+                        {
+                            _firstName = ResStrings.str_Manual;
+                            _lastName = ResStrings.str_Scan;
+                            _lastAccessType = AccessType.AT_NONE;
+                            _lastDoorUser = DoorInfo.DI_NO_DOOR;
+                            LastBadge = null;
+                        }
+                        _nbTagBox = 0;
+                        _bti = null;
+                        if (_localDeviceArray != null)
+                            for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                            {
+                                if ((_localDeviceArray[nIndex].infoDev != null) && (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber)))
+                                {
+                                    _localDeviceArray[nIndex].inventorySequence++;
+                                    _localDeviceArray[nIndex].cptOut--;
+                                    _localDeviceArray[nIndex].bDataCompleted = false;
+
+                                    if (treeViewDevice.InvokeRequired)
                                     {
                                         int index = nIndex;
-                                        labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
-                                        labelInventoryUser.Invoke((MethodInvoker)delegate { 
-                                                                                                labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
-                                                                                                if (_localDeviceArray[index].currentInventory.bUserScan)
-                                                                                                {
-                                                                                                    if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
-                                                                                                        labelInventoryUser.Text += ResStrings.str_SlaveDoor;
-                                                                                                    else
-                                                                                                        labelInventoryUser.Text += ResStrings.str_MasterDoor;
-                                                                                                }
-                                                                                            });
-                                       
-                                        listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
-                                        labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, 0); });
+                                        Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].SelectedImageIndex = 3; });
+                                        Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[2].Text = string.Format(ResStrings.str_Connection_Status_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.ConnectionStatus)); });
+                                        Invoke((MethodInvoker)delegate { treeViewDevice.Nodes[index].Nodes[3].Text = string.Format(ResStrings.str_Statut_, getEnumDesc.GetEnumDescription(_localDeviceArray[index].rfidDev.DeviceStatus)); });
+                                        Invoke((MethodInvoker)delegate { treeViewDevice.Refresh(); });
                                     }
-                                }
-                                else
-                                {
 
-                                    foreach (string uid in _localDeviceArray[nIndex].currentInventory.listTagAdded)
+                                    if (_localDeviceArray[nIndex].infoDev.deviceType != DeviceType.DT_SBR)
                                     {
-                                        if (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uid))
+                                        _bFirstScanAccumulate = false;
+
+                                        if (!_bKeepLastScan)
                                         {
-                                            _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uid);
-                                            DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uid, _db);
-                                            AddTagToDt(dtAndTagPresent);
+                                            InventoryData lastScan = _db.GetLastScan(_localDeviceArray[nIndex].infoDev.SerialRFID);
+                                            if (lastScan != null)
+                                                _localDeviceArray[nIndex].previousInventory = lastScan;
+                                            else
+                                                _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+                                        }
+                                        else
+                                            _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+
+                                        _localDeviceArray[nIndex].currentInventory = new InventoryData(_columnInfo);
+                                        _localDeviceArray[nIndex].currentInventory.bUserScan = _bUserScan;
+                                        _localDeviceArray[nIndex].currentInventory.userFirstName = _firstName;
+                                        _localDeviceArray[nIndex].currentInventory.userLastName = _lastName;
+                                        _localDeviceArray[nIndex].currentInventory.BadgeID = LastBadge;
+                                        _localDeviceArray[nIndex].currentInventory.userDoor = _lastDoorUser;
+                                        _localDeviceArray[nIndex].currentInventory.accessType = _lastAccessType;
+                                        _localDeviceArray[nIndex].currentInventory.serialNumberDevice = _localDeviceArray[nIndex].infoDev.SerialRFID;
+                                        _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
+
+
+
+                                        if (nIndex == _selectedReader)
+                                        {
+                                            int index = nIndex;
+                                            labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
+                                            labelInventoryUser.Invoke((MethodInvoker)delegate {
+                                                labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
+                                                if (_localDeviceArray[index].currentInventory.bUserScan)
+                                                {
+                                                    if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
+                                                        labelInventoryUser.Text += ResStrings.str_SlaveDoor;
+                                                    else
+                                                        labelInventoryUser.Text += ResStrings.str_MasterDoor;
+                                                }
+                                            });
+                                            listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
+                                            labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, 0); });
                                         }
                                     }
-
-                                    _localDeviceArray[nIndex].currentInventory.listTagAdded.Clear();
-                                    _localDeviceArray[nIndex].currentInventory.nbTagAdded = 0;
-                                    _localDeviceArray[nIndex].currentInventory.dtTagAdded.Rows.Clear();
-                                    
-
-                                    _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
-                                    int index = nIndex;
-                                    labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
-                                    labelInventoryUser.Invoke((MethodInvoker)delegate { 
-                                                                                        labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
-                                                                                        if (_localDeviceArray[index].currentInventory.bUserScan)
-                                                                                        {
-                                                                                            if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
-                                                                                                labelInventoryUser.Text += ResStrings.str_SlaveDoor;
-                                                                                            else
-                                                                                                labelInventoryUser.Text += ResStrings.str_MasterDoor;
-                                                                                        }
-                                                                                        });
-                                    labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, listBoxTag.Items.Count); });
-                                }
-                            }
-                            #region TcpNotification
-
-                           
-                            if (_bUseTcpNotification)
-                            {
-                                if (_tcpNotificationThreadInfo != null)
-                                {
-                                    if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
+                                    else
                                     {
-                                        _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanStarted, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1,0);
-                                        _tcpNotificationThreadInfo.ThreadTcpLoop();
+                                        if (_bFirstScanAccumulate)
+                                        {
+                                            _bFirstScanAccumulate = false;
+                                            if (!_bKeepLastScan)
+                                            {
+                                                InventoryData lastScan = _db.GetLastScan(_localDeviceArray[nIndex].infoDev.SerialRFID);
+                                                if (lastScan != null)
+                                                    _localDeviceArray[nIndex].previousInventory = lastScan;
+                                                else
+                                                    _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+                                            }
+                                            else
+                                                _localDeviceArray[nIndex].previousInventory = _localDeviceArray[nIndex].currentInventory;
+
+                                            _localDeviceArray[nIndex].currentInventory = new InventoryData(_columnInfo);
+                                            _localDeviceArray[nIndex].currentInventory.bUserScan = _bUserScan;
+                                            _localDeviceArray[nIndex].currentInventory.userFirstName = _firstName;
+                                            _localDeviceArray[nIndex].currentInventory.userLastName = _lastName;
+                                            _localDeviceArray[nIndex].currentInventory.accessType = _lastAccessType;
+                                            _localDeviceArray[nIndex].currentInventory.BadgeID = LastBadge;
+                                            _localDeviceArray[nIndex].currentInventory.userDoor = DoorInfo.DI_NO_DOOR;
+                                            _localDeviceArray[nIndex].currentInventory.serialNumberDevice = _localDeviceArray[nIndex].infoDev.SerialRFID;
+                                            _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
+
+                                            if (nIndex == _selectedReader)
+                                            {
+                                                int index = nIndex;
+                                                labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
+                                                labelInventoryUser.Invoke((MethodInvoker)delegate {
+                                                    labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
+                                                    if (_localDeviceArray[index].currentInventory.bUserScan)
+                                                    {
+                                                        if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
+                                                            labelInventoryUser.Text += ResStrings.str_SlaveDoor;
+                                                        else
+                                                            labelInventoryUser.Text += ResStrings.str_MasterDoor;
+                                                    }
+                                                });
+
+                                                listBoxTag.Invoke((MethodInvoker)delegate { listBoxTag.Items.Clear(); });
+                                                labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, 0); });
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            foreach (string uid in _localDeviceArray[nIndex].currentInventory.listTagAdded)
+                                            {
+                                                if (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uid))
+                                                {
+                                                    _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uid);
+                                                    DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uid, _db);
+                                                    AddTagToDt(dtAndTagPresent);
+                                                }
+                                            }
+
+                                            _localDeviceArray[nIndex].currentInventory.listTagAdded.Clear();
+                                            _localDeviceArray[nIndex].currentInventory.nbTagAdded = 0;
+                                            _localDeviceArray[nIndex].currentInventory.dtTagAdded.Rows.Clear();
+
+
+                                            _localDeviceArray[nIndex].currentInventory.eventDate = DateTime.UtcNow;
+                                            int index = nIndex;
+                                            labelInventoryDate.Invoke((MethodInvoker)delegate { labelInventoryDate.Text = _localDeviceArray[index].currentInventory.eventDate.ToLocalTime().ToString("G"); });
+                                            labelInventoryUser.Invoke((MethodInvoker)delegate {
+                                                labelInventoryUser.Text = string.Format("{0} {1}", _localDeviceArray[index].currentInventory.userFirstName, _localDeviceArray[index].currentInventory.userLastName);
+                                                if (_localDeviceArray[index].currentInventory.bUserScan)
+                                                {
+                                                    if (_localDeviceArray[index].currentInventory.userDoor == DoorInfo.DI_SLAVE_DOOR)
+                                                        labelInventoryUser.Text += ResStrings.str_SlaveDoor;
+                                                    else
+                                                        labelInventoryUser.Text += ResStrings.str_MasterDoor;
+                                                }
+                                            });
+                                            labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, listBoxTag.Items.Count); });
+                                        }
                                     }
+                                    #region TcpNotification
+
+
+                                    if (_bUseTcpNotification)
+                                    {
+                                        if (_tcpNotificationThreadInfo != null)
+                                        {
+                                            if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
+                                            {
+                                                _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanStarted, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1, 0);
+                                                _tcpNotificationThreadInfo.ThreadTcpLoop();
+                                            }
+                                        }
+
+                                    }
+                                    #endregion
                                 }
-
                             }
-                            #endregion
+
+                        if (bUseCvsExchange)
+                        {
+                            if (File.Exists(pathCsvInScan))
+                                File.Delete(pathCsvInScan);
+                            CsvPutInScan();
+
+                            if (File.Exists(pathCsvLed))
+                                File.Delete(pathCsvLed);
                         }
-                    }
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanStart != null))
+                            _tcpIpServer.eventScanStart.Set();
 
-                    if (bUseCvsExchange)
-                    {
-                        if (File.Exists(pathCsvInScan))
-                            File.Delete(pathCsvInScan);
-                        CsvPutInScan();
+                        break;
+                    #endregion
+                    #region Scan completed
+                    case rfidReaderArgs.ReaderNotify.RN_ScanCompleted:
 
-                        if (File.Exists(pathCsvLed))
-                            File.Delete(pathCsvLed);
-                    }
-                    if ((_tcpIpServer != null) && (_tcpIpServer.eventScanStart != null))
-                    _tcpIpServer.eventScanStart.Set();
-                  
-                    break;
-                #endregion
-                #region Scan completed
-                case rfidReaderArgs.ReaderNotify.RN_ScanCompleted:
-
-                    s1 = Stopwatch.StartNew();
-                    bool bAllScanFinish = true;
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                        s1 = Stopwatch.StartNew();
+                        bool bAllScanFinish = true;
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
                             if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
                                 _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = true;
 
-                               /* if ((_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SFR) ||
-                                     (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBF))
-                                {
-                                    _localDeviceArray[nIndex].currentInventory.ListTagWithChannel = _localDeviceArray[nIndex].myFridgeCabinet.ListTagWithChannel;
-                                }
-                                else*/
-                                    _localDeviceArray[nIndex].currentInventory.ListTagWithChannel = _localDeviceArray[nIndex].rfidDev.ListTagWithChannel;
+                                /* if ((_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SFR) ||
+                                      (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBF))
+                                 {
+                                     _localDeviceArray[nIndex].currentInventory.ListTagWithChannel = _localDeviceArray[nIndex].myFridgeCabinet.ListTagWithChannel;
+                                 }
+                                 else*/
+                                _localDeviceArray[nIndex].currentInventory.ListTagWithChannel = _localDeviceArray[nIndex].rfidDev.ListTagWithChannel;
 
 
                                 if (bScanFromTimer)
@@ -2862,7 +2786,7 @@ namespace smartTracker
                                         _localDeviceArray[nIndex].previousInventory.listTagAll.Count)
                                     {
                                         bScanFromTimer = false;
-                                        Invoke((MethodInvoker) delegate { timerAutoPad.Enabled = true; });
+                                        Invoke((MethodInvoker)delegate { timerAutoPad.Enabled = true; });
                                         return;
                                     }
                                 }
@@ -2907,7 +2831,7 @@ namespace smartTracker
                                             _localDeviceArray[nIndex].currentInventory.nbTagRemoved = 0;
                                             _localDeviceArray[nIndex].currentInventory.dtTagRemove.Rows.Clear();
                                         }
-                                       
+
 
                                         // test duplicate in list - // should no appear
 
@@ -3041,13 +2965,13 @@ namespace smartTracker
 
 
                                         if (_localDeviceArray[nIndex].currentInventory.dtTagAll != null)
-                                        _localDeviceArray[nIndex].currentInventory.dtTagAll.AcceptChanges();
+                                            _localDeviceArray[nIndex].currentInventory.dtTagAll.AcceptChanges();
                                         if (_localDeviceArray[nIndex].currentInventory.dtTagPresent != null)
-                                        _localDeviceArray[nIndex].currentInventory.dtTagPresent.AcceptChanges();
+                                            _localDeviceArray[nIndex].currentInventory.dtTagPresent.AcceptChanges();
                                         if (_localDeviceArray[nIndex].currentInventory.dtTagAdded != null)
-                                        _localDeviceArray[nIndex].currentInventory.dtTagAdded.AcceptChanges();
+                                            _localDeviceArray[nIndex].currentInventory.dtTagAdded.AcceptChanges();
                                         if (_localDeviceArray[nIndex].currentInventory.dtTagRemove != null)
-                                        _localDeviceArray[nIndex].currentInventory.dtTagRemove.AcceptChanges();
+                                            _localDeviceArray[nIndex].currentInventory.dtTagRemove.AcceptChanges();
 
                                         _localDeviceArray[nIndex].currentInventory.nbTagAll = _localDeviceArray[nIndex].currentInventory.listTagAll.Count;
                                         _localDeviceArray[nIndex].currentInventory.nbTagPresent = _localDeviceArray[nIndex].currentInventory.listTagPresent.Count;
@@ -3082,18 +3006,18 @@ namespace smartTracker
 
 
                                         InventoryAndDbClass invCl = new InventoryAndDbClass(_localDeviceArray[nIndex].infoDev, _localDeviceArray[nIndex].currentInventory, _db, _bStoreTagEvent);
-                                     
-                                        bool ret = StoreInventory(invCl, _bStoreTagEvent , out idscanEvent);
-                                     
+
+                                        bool ret = StoreInventory(invCl, _bStoreTagEvent, out idscanEvent);
+
                                         if (ret)
                                         {
                                             _localDeviceArray[nIndex].currentInventory.IdScanEvent = idscanEvent;
                                             _localDeviceArray[nIndex].lastProcessInventoryGmtDate = truncateMs(_localDeviceArray[nIndex].currentInventory.eventDate.ToUniversalTime());
-                                             Invoke((MethodInvoker) delegate
-                                             {
-                                                 if (tabControlInfo.SelectedIndex == 1)
-                                                    UpdateScanHistory(null);
-                                             });
+                                            Invoke((MethodInvoker)delegate
+                                           {
+                                               /*if (tabControlInfo.SelectedIndex == 1)
+                                                  UpdateScanHistory(null);*/
+                                           });
                                         }
 
                                         _bFirstScanAccumulate = !_bKeepLastScan;
@@ -3104,13 +3028,13 @@ namespace smartTracker
                                     {
                                         if (nIndex == _selectedReader)
                                         {
-                                            Invoke((MethodInvoker)delegate { _sip.Hide();  });
-                                            Thread.Sleep(50); Application.DoEvents(); Thread.Sleep(50); 
+                                            Invoke((MethodInvoker)delegate { _sip.Hide(); });
+                                            Thread.Sleep(50); Application.DoEvents(); Thread.Sleep(50);
                                             Invoke((MethodInvoker)delegate { new ScanFinish().Show(); });
-                                            Invoke((MethodInvoker)delegate { ProcessData(null); });
+                                            //Invoke((MethodInvoker)delegate { ProcessData(null); });
                                         }
                                     }
-                                   
+
                                     //alert Remove time exceed
                                     bool bReaderForRemovetoLong = false;
 
@@ -3310,12 +3234,12 @@ namespace smartTracker
                                         {
                                             if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
                                             {
-                                                _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanCompleted, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, idscanEvent,0);
+                                                _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanCompleted, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, idscanEvent, 0);
                                                 _tcpNotificationThreadInfo.ThreadTcpLoop();
-                                             }
+                                            }
                                         }
                                     }
-                                    
+
                                     #endregion
                                     #region cvs
                                     if (bUseCvsExchange)
@@ -3323,22 +3247,22 @@ namespace smartTracker
                                     #endregion
                                     #region php
 
-                                     /*   string res;
-                                    if ((_localDeviceArray[nIndex].currentInventory.nbTagAll == 0) &&
-                                        (_localDeviceArray[nIndex].currentInventory.nbTagRemoved == 0))
-                                    {
-                                        //nothing to save
-                                    }
-                                    else
-                                    {
-                                        phpExport.exportPhp(_localDeviceArray[nIndex].currentInventory, out res);
-                                        MessageBox.Show(res);
-                                    }*/
+                                    /*   string res;
+                                   if ((_localDeviceArray[nIndex].currentInventory.nbTagAll == 0) &&
+                                       (_localDeviceArray[nIndex].currentInventory.nbTagRemoved == 0))
+                                   {
+                                       //nothing to save
+                                   }
+                                   else
+                                   {
+                                       phpExport.exportPhp(_localDeviceArray[nIndex].currentInventory, out res);
+                                       MessageBox.Show(res);
+                                   }*/
 
                                     if (_bUsePhpExport)
                                     {
-                                         if ((_localDeviceArray[nIndex].currentInventory.nbTagAll == 0) &&
-                                        (_localDeviceArray[nIndex].currentInventory.nbTagRemoved == 0))
+                                        if ((_localDeviceArray[nIndex].currentInventory.nbTagAll == 0) &&
+                                       (_localDeviceArray[nIndex].currentInventory.nbTagRemoved == 0))
                                         {
                                             //nothing to save
                                         }
@@ -3366,7 +3290,7 @@ namespace smartTracker
                                 _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
                                 _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
                             }
-                          
+
                         }
 
 
@@ -3423,21 +3347,21 @@ namespace smartTracker
                         {
                             _tcpIpServer.requestScanFromServer = false;
                         }
-                    if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
                             _tcpIpServer.eventScanCompleted.Set();
-                    
-                                    s1.Stop();
-                                    Debug.WriteLine("end completed "+ s1.Elapsed.Milliseconds + "  ms");
-                                    
-                    break;
-                #endregion
-                #region CancelByHost
-                case rfidReaderArgs.ReaderNotify.RN_ScanCancelByHost:
 
-                    // KB when stoping sometimes twice notification is receive from board
-                    // avoid the blocking and treat data only one time
-                    if (_bCancelHost) 
+                        s1.Stop();
+                        Debug.WriteLine("end completed " + s1.Elapsed.Milliseconds + "  ms");
+
                         break;
+                    #endregion
+                    #region CancelByHost
+                    case rfidReaderArgs.ReaderNotify.RN_ScanCancelByHost:
+
+                        // KB when stoping sometimes twice notification is receive from board
+                        // avoid the blocking and treat data only one time
+                        if (_bCancelHost)
+                            break;
 
                         _bCancelHost = true;
                         for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
@@ -3447,32 +3371,85 @@ namespace smartTracker
                                 _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = true;
                                 if (_bWasInAccumulation)
                                 {
-                                    
-                                        // ie if keep last scan -not take into acount removed
-                                        // remove remove last scan
-                                        if ((_bKeepLastScan) || (_bWasInAccumulation))
-                                        {
-                                            _localDeviceArray[nIndex].currentInventory.listTagRemoved.Clear();
-                                            _localDeviceArray[nIndex].currentInventory.nbTagRemoved = 0;
-                                            _localDeviceArray[nIndex].currentInventory.dtTagRemove.Rows.Clear();
-                                        }
 
-                                        if ((_bWasInAccumulation) && (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBR))
+                                    // ie if keep last scan -not take into acount removed
+                                    // remove remove last scan
+                                    if ((_bKeepLastScan) || (_bWasInAccumulation))
+                                    {
+                                        _localDeviceArray[nIndex].currentInventory.listTagRemoved.Clear();
+                                        _localDeviceArray[nIndex].currentInventory.nbTagRemoved = 0;
+                                        _localDeviceArray[nIndex].currentInventory.dtTagRemove.Rows.Clear();
+                                    }
+
+                                    if ((_bWasInAccumulation) && (_localDeviceArray[nIndex].infoDev.deviceType == DeviceType.DT_SBR))
+                                    {
+                                        foreach (string uidSdk in listBoxTag.Items)
                                         {
-                                            foreach (string uidSdk in listBoxTag.Items)
+                                            string escapedTagUid = uidSdk.Replace("'", "''"); // escape ' for DataTable Select() filter
+                                            DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID + "= '" + escapedTagUid + "'");
+
+                                            if (boxInfo.Length > 0) continue;
+
+                                            if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uidSdk))
                                             {
-                                                string escapedTagUid = uidSdk.Replace("'", "''"); // escape ' for DataTable Select() filter
-                                                DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID +"= '" + escapedTagUid + "'");
+                                                //Add all
+                                                _localDeviceArray[nIndex].currentInventory.listTagAll.Add(uidSdk);
+                                                DtAndTagClass dtAndTagAll = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAll, uidSdk, _db);
+                                                AddTagToDt(dtAndTagAll);
 
-                                                if (boxInfo.Length > 0) continue;
-
-                                                if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uidSdk))
+                                                //tag Present
+                                                if (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk))
                                                 {
-                                                    //Add all
-                                                    _localDeviceArray[nIndex].currentInventory.listTagAll.Add(uidSdk);
-                                                    DtAndTagClass dtAndTagAll = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAll, uidSdk, _db);
-                                                    AddTagToDt(dtAndTagAll);
+                                                    _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uidSdk);
+                                                    DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uidSdk, _db);
+                                                    AddTagToDt(dtAndTagPresent);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (string uidSdk in _localDeviceArray[nIndex].rfidDev.get_RFID_Device.ReaderData.strListTag)
+                                        {
+                                            string escapedTagUid = uidSdk.Replace("'", "''"); // escape ' for DataTable Select() filter
+                                            DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID + "= '" + escapedTagUid + "'");
 
+                                            if (boxInfo.Length > 0) continue;
+
+                                            if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uidSdk))
+                                            {
+                                                //Add all
+                                                _localDeviceArray[nIndex].currentInventory.listTagAll.Add(uidSdk);
+                                                DtAndTagClass dtAndTagAll = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAll, uidSdk, _db);
+                                                AddTagToDt(dtAndTagAll);
+
+                                                if (!((_bAccumulateSbr) || (_tcpIpServer.AccumulateMode)))
+                                                {
+                                                    if (!_localDeviceArray[nIndex].previousInventory.listTagAll.Contains(uidSdk))
+                                                    {
+                                                        // Tag Added
+                                                        if ((!_localDeviceArray[nIndex].currentInventory.listTagAdded.Contains(uidSdk)) &&
+                                                            (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk)))
+                                                        {
+                                                            _localDeviceArray[nIndex].currentInventory.listTagAdded.Add(uidSdk);
+                                                            DtAndTagClass dtAndTagAdded = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAdded, uidSdk, _db);
+                                                            AddTagToDt(dtAndTagAdded);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        //tag Present
+                                                        if ((!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk)) &&
+                                                            (!_localDeviceArray[nIndex].currentInventory.listTagAdded.Contains(uidSdk)))
+                                                        {
+                                                            _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uidSdk);
+                                                            DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uidSdk, _db);
+                                                            AddTagToDt(dtAndTagPresent);
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
                                                     //tag Present
                                                     if (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk))
                                                     {
@@ -3483,134 +3460,81 @@ namespace smartTracker
                                                 }
                                             }
                                         }
-                                        else
+                                    }
+                                    //Check and display error if missing tag during processing
+                                    // KB
+
+                                    if ((_checkedAccumulate) || (_bAccumulateSbr))
+                                    {
+                                        _localDeviceArray[nIndex].currentInventory.listTagRemoved.Clear();
+                                        _localDeviceArray[nIndex].currentInventory.dtTagRemove.Rows.Clear();
+                                        _localDeviceArray[nIndex].currentInventory.listTagAdded.Clear();
+                                        _localDeviceArray[nIndex].currentInventory.dtTagAdded.Rows.Clear();
+                                    }
+                                    else
+                                    {
+                                        if (!_bWasInAccumulation)
                                         {
-                                            foreach (string uidSdk in _localDeviceArray[nIndex].rfidDev.get_RFID_Device.ReaderData.strListTag)
+                                            foreach (string uid in _localDeviceArray[nIndex].previousInventory.listTagAll)
                                             {
-                                                string escapedTagUid = uidSdk.Replace("'", "''"); // escape ' for DataTable Select() filter
-                                                DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID + "= '" + escapedTagUid + "'");
-
-                                                if (boxInfo.Length > 0) continue;
-
-                                                if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uidSdk))
+                                                if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uid))
                                                 {
-                                                    //Add all
-                                                    _localDeviceArray[nIndex].currentInventory.listTagAll.Add(uidSdk);
-                                                    DtAndTagClass dtAndTagAll = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAll, uidSdk, _db);
-                                                    AddTagToDt(dtAndTagAll);
-
-                                                    if (!((_bAccumulateSbr) || (_tcpIpServer.AccumulateMode)))
+                                                    if (!_localDeviceArray[nIndex].currentInventory.listTagRemoved.Contains(uid))
                                                     {
-                                                        if (!_localDeviceArray[nIndex].previousInventory.listTagAll.Contains(uidSdk))
-                                                        {
-                                                            // Tag Added
-                                                            if ((!_localDeviceArray[nIndex].currentInventory.listTagAdded.Contains(uidSdk)) &&
-                                                                (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk)))
-                                                            {
-                                                                _localDeviceArray[nIndex].currentInventory.listTagAdded.Add(uidSdk);
-                                                                DtAndTagClass dtAndTagAdded = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagAdded, uidSdk, _db);
-                                                                AddTagToDt(dtAndTagAdded);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            //tag Present
-                                                            if ((!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk)) &&
-                                                                (!_localDeviceArray[nIndex].currentInventory.listTagAdded.Contains(uidSdk)))
-                                                            {
-                                                                _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uidSdk);
-                                                                DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uidSdk, _db);
-                                                                AddTagToDt(dtAndTagPresent);
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        //tag Present
-                                                        if (!_localDeviceArray[nIndex].currentInventory.listTagPresent.Contains(uidSdk))
-                                                        {
-                                                            _localDeviceArray[nIndex].currentInventory.listTagPresent.Add(uidSdk);
-                                                            DtAndTagClass dtAndTagPresent = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagPresent, uidSdk, _db);
-                                                            AddTagToDt(dtAndTagPresent);
-                                                        }
+                                                        _localDeviceArray[nIndex].currentInventory.listTagRemoved.Add(uid);
+                                                        DtAndTagClass dtAndTagRemove = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagRemove, uid, _db);
+                                                        AddTagToDt(dtAndTagRemove);
                                                     }
                                                 }
                                             }
                                         }
-                                        //Check and display error if missing tag during processing
-                                        // KB
+                                    }
 
-                                        if ((_checkedAccumulate) || (_bAccumulateSbr))
-                                        {
-                                            _localDeviceArray[nIndex].currentInventory.listTagRemoved.Clear();
-                                            _localDeviceArray[nIndex].currentInventory.dtTagRemove.Rows.Clear();
-                                            _localDeviceArray[nIndex].currentInventory.listTagAdded.Clear();
-                                            _localDeviceArray[nIndex].currentInventory.dtTagAdded.Rows.Clear();
-                                        }
-                                        else
-                                        {
-                                            if (!_bWasInAccumulation)
-                                            {
-                                                foreach (string uid in _localDeviceArray[nIndex].previousInventory.listTagAll)
-                                                {
-                                                    if (!_localDeviceArray[nIndex].currentInventory.listTagAll.Contains(uid))
-                                                    {
-                                                        if (!_localDeviceArray[nIndex].currentInventory.listTagRemoved.Contains(uid))
-                                                        {
-                                                            _localDeviceArray[nIndex].currentInventory.listTagRemoved.Add(uid);
-                                                            DtAndTagClass dtAndTagRemove = new DtAndTagClass(this, _localDeviceArray[nIndex].currentInventory.dtTagRemove, uid, _db);
-                                                            AddTagToDt(dtAndTagRemove);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        if(  _localDeviceArray[nIndex].currentInventory.dtTagAll != null)
+                                    if (_localDeviceArray[nIndex].currentInventory.dtTagAll != null)
                                         _localDeviceArray[nIndex].currentInventory.dtTagAll.AcceptChanges();
-                                        if (_localDeviceArray[nIndex].currentInventory.dtTagPresent != null)
+                                    if (_localDeviceArray[nIndex].currentInventory.dtTagPresent != null)
                                         _localDeviceArray[nIndex].currentInventory.dtTagPresent.AcceptChanges();
-                                        if(_localDeviceArray[nIndex].currentInventory.dtTagAdded != null)
+                                    if (_localDeviceArray[nIndex].currentInventory.dtTagAdded != null)
                                         _localDeviceArray[nIndex].currentInventory.dtTagAdded.AcceptChanges();
-                                        if ( _localDeviceArray[nIndex].currentInventory.dtTagRemove !=  null)
+                                    if (_localDeviceArray[nIndex].currentInventory.dtTagRemove != null)
                                         _localDeviceArray[nIndex].currentInventory.dtTagRemove.AcceptChanges();
 
-                                        _localDeviceArray[nIndex].currentInventory.nbTagAll = _localDeviceArray[nIndex].currentInventory.listTagAll.Count;
-                                        _localDeviceArray[nIndex].currentInventory.nbTagPresent = _localDeviceArray[nIndex].currentInventory.listTagPresent.Count;
-                                        _localDeviceArray[nIndex].currentInventory.nbTagAdded = _localDeviceArray[nIndex].currentInventory.listTagAdded.Count;
-                                        _localDeviceArray[nIndex].currentInventory.nbTagRemoved = _localDeviceArray[nIndex].currentInventory.listTagRemoved.Count;
+                                    _localDeviceArray[nIndex].currentInventory.nbTagAll = _localDeviceArray[nIndex].currentInventory.listTagAll.Count;
+                                    _localDeviceArray[nIndex].currentInventory.nbTagPresent = _localDeviceArray[nIndex].currentInventory.listTagPresent.Count;
+                                    _localDeviceArray[nIndex].currentInventory.nbTagAdded = _localDeviceArray[nIndex].currentInventory.listTagAdded.Count;
+                                    _localDeviceArray[nIndex].currentInventory.nbTagRemoved = _localDeviceArray[nIndex].currentInventory.listTagRemoved.Count;
 
-                                        _localDeviceArray[nIndex].currentInventory.scanStatus = _localDeviceArray[nIndex].rfidDev.currentInventory.scanStatus;
+                                    _localDeviceArray[nIndex].currentInventory.scanStatus = _localDeviceArray[nIndex].rfidDev.currentInventory.scanStatus;
 
 
-                                        InventoryAndDbClass invCl = new InventoryAndDbClass(_localDeviceArray[nIndex].infoDev, _localDeviceArray[nIndex].currentInventory, _db, _bStoreTagEvent);
-                                        int idScanEvent = -1;
-                                        bool ret = StoreInventory(invCl, _bStoreTagEvent , out idScanEvent);
-                                        if (ret)
-                                        {
-                                            _localDeviceArray[nIndex].currentInventory.IdScanEvent = idScanEvent;
-                                            _localDeviceArray[nIndex].lastProcessInventoryGmtDate = truncateMs(_localDeviceArray[nIndex].currentInventory.eventDate.ToUniversalTime());
-                                            Invoke((MethodInvoker) delegate
-                                            {
-                                                if (tabControlInfo.SelectedIndex == 1)
-                                                    UpdateScanHistory(null);
-                                            });
-                                        }
-                                        _bFirstScanAccumulate = true;
-                                        _bWasInAccumulation = false;
-                                        if (nIndex == _selectedReader)
-                                        {
-                                            Invoke((MethodInvoker)delegate { _sip.Hide();  });
-                                            Thread.Sleep(50); Application.DoEvents(); Thread.Sleep(50); 
-                                            Invoke((MethodInvoker)delegate { new ScanFinish().Show(); });
-                                            Invoke((MethodInvoker)delegate { ProcessData(null); });
-                                        }
-                                        Invoke((MethodInvoker)delegate { RefreshInventory(); });
-                                        UpdateTreeView();
-                                    
+                                    InventoryAndDbClass invCl = new InventoryAndDbClass(_localDeviceArray[nIndex].infoDev, _localDeviceArray[nIndex].currentInventory, _db, _bStoreTagEvent);
+                                    int idScanEvent = -1;
+                                    bool ret = StoreInventory(invCl, _bStoreTagEvent, out idScanEvent);
+                                    if (ret)
+                                    {
+                                        _localDeviceArray[nIndex].currentInventory.IdScanEvent = idScanEvent;
+                                        _localDeviceArray[nIndex].lastProcessInventoryGmtDate = truncateMs(_localDeviceArray[nIndex].currentInventory.eventDate.ToUniversalTime());
+                                        Invoke((MethodInvoker)delegate
+                                       {
+                                           /*if (tabControlInfo.SelectedIndex == 1)
+                                               //UpdateScanHistory(null);*/
+                                       });
+                                    }
+                                    _bFirstScanAccumulate = true;
+                                    _bWasInAccumulation = false;
+                                    if (nIndex == _selectedReader)
+                                    {
+                                        Invoke((MethodInvoker)delegate { _sip.Hide(); });
+                                        Thread.Sleep(50); Application.DoEvents(); Thread.Sleep(50);
+                                        Invoke((MethodInvoker)delegate { new ScanFinish().Show(); });
+                                        //Invoke((MethodInvoker)delegate { ProcessData(null); });
+                                    }
+                                    Invoke((MethodInvoker)delegate { RefreshInventory(); });
+                                    UpdateTreeView();
+
                                 }
                                 else
-                                {                                    
+                                {
 
                                     bAllScanFinish = true;
                                     if (_localDeviceArray != null)
@@ -3645,16 +3569,16 @@ namespace smartTracker
                                         _bFirstScanAccumulate = true;
                                     }
                                     _localDeviceArray[nIndex].currentInventory = _localDeviceArray[nIndex].previousInventory;
-                                    
+
                                 }
                                 #region TcpNotification
                                 if (_bUseTcpNotification)
-                                {                                    
+                                {
                                     if (_tcpNotificationThreadInfo != null)
                                     {
                                         if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
                                         {
-                                            _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanCancelByHost, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1,0);
+                                            _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanCancelByHost, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1, 0);
                                             _tcpNotificationThreadInfo.ThreadTcpLoop();
 
                                         }
@@ -3664,8 +3588,8 @@ namespace smartTracker
                                 _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
                                 _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
                             }
-                        }                     
-                   
+                        }
+
                         for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
                             if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
@@ -3680,205 +3604,235 @@ namespace smartTracker
                         {
                             _tcpIpServer.requestScanFromServer = false;
                         }
-                     if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCancelled != null))
-                        _tcpIpServer.eventScanCancelled.Set();
-                    if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
-                        _tcpIpServer.eventScanCompleted.Set();
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCancelled != null))
+                            _tcpIpServer.eventScanCancelled.Set();
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
+                            _tcpIpServer.eventScanCompleted.Set();
 
-                    _bCancelHost = false;
-                    break;
-                #endregion
-                #region timeout/error scan
-                case rfidReaderArgs.ReaderNotify.RN_ReaderScanTimeout:
-                case rfidReaderArgs.ReaderNotify.RN_ErrorDuringScan:
-               
-                   
-                    ExceptionMessageBox.Show(ResStrings.str_Error_During_Scan, string.Format(ResStrings.str_Scan_return, args.RN_Value));
-                    
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                        _bCancelHost = false;
+                        break;
+                    #endregion
+                    #region timeout/error scan
+                    case rfidReaderArgs.ReaderNotify.RN_ReaderScanTimeout:
+                    case rfidReaderArgs.ReaderNotify.RN_ErrorDuringScan:
+
+
+                        ExceptionMessageBox.Show(ResStrings.str_Error_During_Scan, string.Format(ResStrings.str_Scan_return, args.RN_Value));
+
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
-                            _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
-                            _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
-                            _localDeviceArray[nIndex].bDataCompleted = true;
-                            _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = false;
-                            _localDeviceArray[nIndex].rfidDev.setLightvsState();
-                        }
-                        if (bScanforCSV)
-                            ReportCsvError("Error During Scan");
-                    }
-
-                    _bFirstScanAccumulate = true;
-                     bAllScanFinish = true;
-                    foreach (deviceClass dc in _localDeviceArray)
-                    {
-                        if (dc.rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
-                            bAllScanFinish = false;
-                    }
-
-                    if (bAllScanFinish)
-                    {
-                        Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
-                        Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-                    }
-                    
-                    UpdateTreeView();
-                    _bFirstScanAccumulate = true;
-                    if ((_tcpIpServer != null) && (_tcpIpServer.requestScanFromServer))
-                    {
-                        _tcpIpServer.requestScanFromServer = false;
-                    }
-                    if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
-                        _tcpIpServer.eventScanCompleted.Set();
-                    break;
-                
-                case rfidReaderArgs.ReaderNotify.RN_ReaderFailToStartScan:
-                    
-                     for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
-                        {
-                            string str;
-                            _localDeviceArray[nIndex].rfidDev.get_RFID_Device.getStatus(out str);
-                            if (str.Contains("Local Open"))
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
-                                _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_DoorOpen;
+                                _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
+                                _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
+                                _localDeviceArray[nIndex].bDataCompleted = true;
+                                _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = false;
+                                _localDeviceArray[nIndex].rfidDev.setLightvsState();
                             }
-                            _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
-                            _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
-                            _localDeviceArray[nIndex].bDataCompleted = true;
-                            _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = false;
-                            _localDeviceArray[nIndex].rfidDev.setLightvsState();
-
                             if (bScanforCSV)
-                                ReportCsvError("failed to start scan");
+                                ReportCsvError("Error During Scan");
                         }
 
-                    }
-
-                    _bFirstScanAccumulate = true;
-                     bAllScanFinish = true;
-                    foreach (deviceClass dc in _localDeviceArray)
-                    {
-                        if (dc.rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
-                            bAllScanFinish = false;
-                    }
-
-                    if (bAllScanFinish)
-                    {
-                        Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
-                        Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-                    }
-                    
-                    UpdateTreeView();
-                    _bFirstScanAccumulate = true;
-                    if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
-                        _tcpIpServer.eventScanCompleted.Set();
-                    break;
-                #endregion
-                #region tag added
-                case rfidReaderArgs.ReaderNotify.RN_TagAdded:
-
-                  
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                        _bFirstScanAccumulate = true;
+                        bAllScanFinish = true;
+                        foreach (deviceClass dc in _localDeviceArray)
                         {
-                            string escapedTagUid = args.Message.Replace("'", "''"); // escape ' for DataTable Select() filter
-                            DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID + "= '" + escapedTagUid + "'");
+                            if (dc.rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
+                                bAllScanFinish = false;
+                        }
 
-                            if (boxInfo.Length > 0)
+                        if (bAllScanFinish)
+                        {
+                            Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
+                            Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
+                        }
+
+                        UpdateTreeView();
+                        _bFirstScanAccumulate = true;
+                        if ((_tcpIpServer != null) && (_tcpIpServer.requestScanFromServer))
+                        {
+                            _tcpIpServer.requestScanFromServer = false;
+                        }
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
+                            _tcpIpServer.eventScanCompleted.Set();
+                        break;
+
+                    case rfidReaderArgs.ReaderNotify.RN_ReaderFailToStartScan:
+
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                        {
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
-                                _nbTagBox++;
-                                if (!_bWasInAccumulation)
+                                string str;
+                                _localDeviceArray[nIndex].rfidDev.get_RFID_Device.getStatus(out str);
+                                if (str.Contains("Local Open"))
                                 {
-                                    if (_nbTagBox == 1)
-                                    {
-                                        _bti = new BoxTagInfo();
+                                    _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_DoorOpen;
+                                }
+                                _localDeviceArray[nIndex].rfidDev.get_RFID_Device.UserActionPending = false;
+                                _localDeviceArray[nIndex].rfidDev.get_RFID_Device.TCPActionPending = false;
+                                _localDeviceArray[nIndex].bDataCompleted = true;
+                                _localDeviceArray[nIndex].rfidDev.bStopAccessDuringProcessData = false;
+                                _localDeviceArray[nIndex].rfidDev.setLightvsState();
 
-                                        _bti.TagBox = boxInfo[0].ItemArray[0] != DBNull.Value ? (string)boxInfo[0].ItemArray[0] : string.Empty;
-                                        _bti.BoxRef = boxInfo[0].ItemArray[1] != DBNull.Value ? (string)boxInfo[0].ItemArray[1] : string.Empty;
-                                        _bti.BoxDesc = boxInfo[0].ItemArray[2] != DBNull.Value ? (string)boxInfo[0].ItemArray[2] : string.Empty;
-                                        _bti.Criteria = boxInfo[0].ItemArray[3] != DBNull.Value ? (string)boxInfo[0].ItemArray[3] : string.Empty;
-                                        _bti.Criteria = _bti.Criteria.Replace("&quote", "'");
-                                        UpdateTabBox(_bti);
+                                if (bScanforCSV)
+                                    ReportCsvError("failed to start scan");
+                            }
+
+                        }
+
+                        _bFirstScanAccumulate = true;
+                        bAllScanFinish = true;
+                        foreach (deviceClass dc in _localDeviceArray)
+                        {
+                            if (dc.rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
+                                bAllScanFinish = false;
+                        }
+
+                        if (bAllScanFinish)
+                        {
+                            Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
+                            Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
+                        }
+
+                        UpdateTreeView();
+                        _bFirstScanAccumulate = true;
+                        if ((_tcpIpServer != null) && (_tcpIpServer.eventScanCompleted != null))
+                            _tcpIpServer.eventScanCompleted.Set();
+                        break;
+                    #endregion
+                    #region tag added
+                    case rfidReaderArgs.ReaderNotify.RN_TagAdded:
+
+
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                        {
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                            {
+                                string escapedTagUid = args.Message.Replace("'", "''"); // escape ' for DataTable Select() filter
+                                DataRow[] boxInfo = _dtGroup.Select(ResStrings.str_TagUID + "= '" + escapedTagUid + "'");
+
+                                if (boxInfo.Length > 0)
+                                {
+                                    _nbTagBox++;
+                                    if (!_bWasInAccumulation)
+                                    {
+                                        if (_nbTagBox == 1)
+                                        {
+                                            _bti = new BoxTagInfo();
+
+                                            _bti.TagBox = boxInfo[0].ItemArray[0] != DBNull.Value ? (string)boxInfo[0].ItemArray[0] : string.Empty;
+                                            _bti.BoxRef = boxInfo[0].ItemArray[1] != DBNull.Value ? (string)boxInfo[0].ItemArray[1] : string.Empty;
+                                            _bti.BoxDesc = boxInfo[0].ItemArray[2] != DBNull.Value ? (string)boxInfo[0].ItemArray[2] : string.Empty;
+                                            _bti.Criteria = boxInfo[0].ItemArray[3] != DBNull.Value ? (string)boxInfo[0].ItemArray[3] : string.Empty;
+                                            _bti.Criteria = _bti.Criteria.Replace("&quote", "'");
+                                            UpdateTabBox(_bti);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    _localDeviceArray[nIndex].cptOut = 1;
+                                    if (nIndex == _selectedReader)
+                                    {
+                                        listBoxTag.Invoke((MethodInvoker)delegate { if (!listBoxTag.Items.Contains(args.Message)) listBoxTag.Items.Add(args.Message); });
+                                        labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, listBoxTag.Items.Count); });
                                     }
                                 }
                             }
-                            else
-                            {
-                                _localDeviceArray[nIndex].cptOut = 1;
-                                if (nIndex == _selectedReader)
-                                {                                    
-                                       listBoxTag.Invoke((MethodInvoker)delegate { if (!listBoxTag.Items.Contains(args.Message)) listBoxTag.Items.Add(args.Message); });
-                                       labelInventoryTagCount.Invoke((MethodInvoker)delegate { labelInventoryTagCount.Text = string.Format(ResStrings.str_Tags, listBoxTag.Items.Count); });                                   
-                                }
-                            }
                         }
-                    }                 
-                    break;
+                        break;
 
-                #endregion
-                #region Power OFF
-                case rfidReaderArgs.ReaderNotify.RN_Power_OFF:
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                    #endregion
+                    #region Power OFF
+                    case rfidReaderArgs.ReaderNotify.RN_Power_OFF:
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
                         {
-                            _db.storeAlert(AlertType.AT_Power_Cut, _localDeviceArray[nIndex].infoDev, null, null);
-                            AlertMgtClass.treatAlert(AlertType.AT_Power_Cut, _localDeviceArray[nIndex].infoDev, null, null, null, BShowAlert);
-                        }
-                    }
-                    break;
-                #endregion
-                #region Door
-                case rfidReaderArgs.ReaderNotify.RN_DoorOpenTooLong:
-                    for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
-                    {
-                        if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
-                        {
-                            if (_bUseAlarm)
-                            {                                
-                                if (_alertDoors != null)
-                                {
-                                    UserClassTemplate tmpUtc = new UserClassTemplate();
-                                    tmpUtc.firstName = _firstName;
-                                    tmpUtc.lastName = _lastName;
-                                    _db.storeAlert(AlertType.AT_Door_Open_Too_Long, _localDeviceArray[nIndex].infoDev, tmpUtc, null);
-                                    AlertMgtClass.treatAlert(AlertType.AT_Door_Open_Too_Long, _localDeviceArray[nIndex].infoDev, tmpUtc, null, null, BShowAlert);
-                                }
-                            }
-                        }
-                    }                  
-
-                      
-                    break;
-                case rfidReaderArgs.ReaderNotify.RN_Locked_Before_Open:
-                    {
-                     
-                    }
-                    break;
-                case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
-                    {
-                        #region TcpNotification
-                        if (_bUseTcpNotification)
-                        {                           
-                            if (_tcpNotificationThreadInfo != null)
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
                             {
-                                if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
+                                _db.storeAlert(AlertType.AT_Power_Cut, _localDeviceArray[nIndex].infoDev, null, null);
+                                AlertMgtClass.treatAlert(AlertType.AT_Power_Cut, _localDeviceArray[nIndex].infoDev, null, null, null, BShowAlert);
+                            }
+                        }
+                        break;
+                    #endregion
+                    #region Door
+                    case rfidReaderArgs.ReaderNotify.RN_DoorOpenTooLong:
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                        {
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                            {
+                                if (_bUseAlarm)
                                 {
-                                    _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.DoorOpen, args.SerialNumber, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1,0);
-                                    _tcpNotificationThreadInfo.ThreadTcpLoop();
+                                    if (_alertDoors != null)
+                                    {
+                                        UserClassTemplate tmpUtc = new UserClassTemplate();
+                                        tmpUtc.firstName = _firstName;
+                                        tmpUtc.lastName = _lastName;
+                                        _db.storeAlert(AlertType.AT_Door_Open_Too_Long, _localDeviceArray[nIndex].infoDev, tmpUtc, null);
+                                        AlertMgtClass.treatAlert(AlertType.AT_Door_Open_Too_Long, _localDeviceArray[nIndex].infoDev, tmpUtc, null, null, BShowAlert);
+                                    }
                                 }
                             }
                         }
-                        #endregion
-                    }
-                    break;
-                #endregion
-                #region USB
-                case rfidReaderArgs.ReaderNotify.RN_UsbCableUnplug:
+
+
+                        break;
+                    case rfidReaderArgs.ReaderNotify.RN_Locked_Before_Open:
+                        {
+
+                        }
+                        break;
+                    case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
+                        {
+                            UpdateTreeView();
+                            #region TcpNotification
+                            if (_bUseTcpNotification)
+                            {
+                                if (_tcpNotificationThreadInfo != null)
+                                {
+                                    if (tcpUtils.PingAddress(_tcpNotificationThreadInfo.HostIp, 2000))
+                                    {
+                                        _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.DoorOpen, args.SerialNumber, _tcpIpServer.ServerIP, _tcpIpServer.Port, -1, 0);
+                                        _tcpNotificationThreadInfo.ThreadTcpLoop();
+                                    }
+                                }
+                            }
+                            #endregion
+                        }
+                        break;
+
+                    case rfidReaderArgs.ReaderNotify.RN_Door_Closed:
+
+                        for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                        {
+                            if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                            {
+                                if (DoDoorScan)
+                                {
+                                    if (bUseSynchonisation)
+                                    {
+
+                                        if (syncDevice != null)
+                                        {
+                                            _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                            UpdateTreeView();
+                                            syncDevice.CanStartScan();
+                                        }
+                                        _localDeviceArray[nIndex].rfidDev.CanStartScan.Set();
+                                    }                                
+                                }
+                                else
+                                {
+                                    _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_Ready;
+                                }
+                            } 
+                        }                       
+                        UpdateTreeView();
+                        break;
+                    #endregion
+                    #region USB
+                    case rfidReaderArgs.ReaderNotify.RN_UsbCableUnplug:
                     foreach (deviceClass t in _localDeviceArray)
                     {
                         if (t.infoDev.SerialRFID.Equals(args.SerialNumber))
@@ -4309,7 +4263,16 @@ namespace smartTracker
                                     listBadge2.Add(uct.user.BadgeReaderID);
                             }
                             dc.myMedicalCabinet.LoadBadges(listBadge2);
-                          
+
+                            if (bUseSynchonisation)
+                            {
+                                dc.rfidDev.bUseSynchronisation = true;
+                                dc.rfidDev.TimeoutInSec = TimeoutInSec;
+                            }
+                            else
+                               dc.rfidDev.bUseSynchronisation = false;
+
+                            dc.rfidDev.DoDoorScan = DoDoorScan;
 
                             break;
 
@@ -4454,6 +4417,313 @@ namespace smartTracker
             }
 
         }
+
+        private void JobConnect(deviceClass dc)
+        {
+            bool isLedLightingAvailable;
+
+            if (tcpUtils.PingAddress(dc.infoDev.IP_Server, 500))
+            {
+                TcpIpClient tcp = null;
+                if ((DeviceClientTcp != null) && (DeviceClientTcp.ContainsKey(dc.infoDev.IP_Server)))
+                    tcp = DeviceClientTcp[dc.infoDev.IP_Server] = new TcpIpClient();
+
+                if (tcp == null) return;
+                if (tcp.pingServer(dc.infoDev.IP_Server, dc.infoDev.Port_Server) ==
+                    TcpIpClient.RetCode.RC_Succeed)
+                {
+                    dc.netConnectionStatus = ConnectionStatus.CS_Connected;
+                    tcp.RequestIsSPCE2Available(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                        out isLedLightingAvailable);
+                    CanHandleLeds[dc] = isLedLightingAvailable;
+
+                    ProcessNotification(dc, tcp);
+                   
+                    // recover previous scan. 
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        ProcessScan(dc, tcp);
+                    });
+
+
+                    //Processuser
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        if ((dc.infoDev.deviceType == DeviceType.DT_SFR) ||
+                            (dc.infoDev.deviceType == DeviceType.DT_SBF))
+                        {
+
+                            ProcessTemp(dc, tcp);
+                        }
+                        Invoke((MethodInvoker) delegate { toolStripButtonScan.Enabled = true; });
+                        Invoke((MethodInvoker) delegate { toolStripButtonStopScan.Enabled = true; });
+                        if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsWindows)
+                        {
+                            ProcessUserWindows(dc, tcp);
+                        }
+                        if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsArm)
+                        {
+                            ProcessUserArm(dc, tcp);
+                        }
+                    });
+                }
+            }
+        }
+
+        private void ProcessNotification(deviceClass dc, TcpIpClient tcp)
+        {
+            // Check use tcp notification
+            dc.bUseTcpNotification = false;
+            _eventTestTcp.Reset();
+
+            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsWindows)
+            {
+                if (
+                    tcp.RequestIsUsingTcpNotification(dc.infoDev.IP_Server, dc.infoDev.Port_Server) ==
+                    TcpIpClient.RetCode.RC_Succeed)
+                {
+                    if (
+                        tcp.SetTcpServerNotificationInfo(dc.infoDev.IP_Server,
+                            dc.infoDev.Port_Server,
+                            true,
+                            _tcpIpServer.ServerIP, _tcpIpServer.Port + 1) ==
+                        TcpIpClient.RetCode.RC_Succeed)
+                    {
+
+
+                        bool result;
+                        string errorMsg;
+                        TcpIpClient tcptest = DeviceClientTcp[dc.infoDev.IP_Server];
+                        tcptest.TestTcpServerNotification(dc.infoDev.IP_Server,
+                            dc.infoDev.Port_Server,
+                            out result, out errorMsg);
+                        //dc.bUseTcpNotification = true;
+                        Thread.Sleep(1);
+
+                    }
+
+                }
+            }
+            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsArm)
+            {
+                tcp.DeviceEventTcp += tcp_DeviceEventTcp;
+                dc.bUseTcpNotification = true;
+            }
+        }
+
+        private void ProcessUserWindows(deviceClass dc, TcpIpClient tcp)
+        {
+            // remove all previous user before connect to refresh it.
+            if (dc.infoDev.deviceType != DeviceType.DT_SBR)
+            {
+                UserClassTemplate[] userInDevice = null;
+
+              /*  if (
+                    tcp.getUserList(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                        dc.infoDev.SerialRFID, out userInDevice) ==
+                    TcpIpClient.RetCode.RC_Succeed)
+                {
+                    foreach (UserClassTemplate utc in userInDevice)
+                    {
+                        tcp.deleteUser(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                            utc.firstName,
+                            utc.lastName, dc.infoDev.SerialRFID);
+                    }
+                }*/
+                tcp.deleteUserGrant(dc.infoDev.IP_Server, dc.infoDev.Port_Server, "ALL", "ALL", dc.infoDev.SerialRFID);
+                DeviceGrant[] userTemp = _db.RecoverAllowedUser(dc.infoDev.SerialRFID);
+
+                if (userTemp != null)
+                {
+                    foreach (DeviceGrant us in userTemp)
+                    {
+
+                        if (string.IsNullOrEmpty(us.user.BadgeReaderID))
+                            tcp.addUserFromTemplate(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                                us.user.firstName, us.user.lastName, us.user.template);
+                        else
+                            tcp.addUserFromTemplate(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                                us.user.firstName, us.user.lastName, us.user.template,
+                                us.user.BadgeReaderID);
+                        tcp.addUserGrant(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                            us.user.firstName, us.user.lastName, dc.infoDev.SerialRFID,
+                            us.userGrant);
+                    }
+                }
+            }
+        }
+        private void ProcessUserArm(deviceClass dc, TcpIpClient tcp)
+        {
+            // For ARM - Need To get User Active  and remove all permission.
+            List<DeviceGrant> lstusers = tcp._tcpArmDevice.GetUsersList();
+            foreach (DeviceGrant dg in lstusers)
+            {
+                if (dg.userGrant == UserGrant.UG_NONE)
+                    continue;
+                string login = dg.user.firstName + "_" + dg.user.lastName;
+                tcp._tcpArmDevice.UpdatePermission(login, UserGrant.UG_NONE);
+            }
+
+            // Get User for device
+            DeviceGrant[] userTemp = _db.RecoverAllowedUser(dc.infoDev.SerialRFID);
+
+
+            // Get User Inactive in device (all as all permission just removed
+            List<string> lstInactiveUser = tcp._tcpArmDevice.GetUnregisteredUsers();
+            lstusers = tcp._tcpArmDevice.GetUsersList(); //tous a NONE
+
+            if (userTemp != null)
+            {
+                foreach (DeviceGrant us in userTemp)
+                {
+                    string login = us.user.firstName + "_" + us.user.lastName;
+
+                    bool bExist = false;
+                    foreach (DeviceGrant tmpDg in lstusers)
+                    {
+                        string tmpLogin = tmpDg.user.firstName + "_" + tmpDg.user.lastName;
+                        if (tmpLogin == login)
+                        {
+                            bExist = true;
+                            break;
+                        }
+                    }
+
+                    if ((bExist) || (lstInactiveUser.Contains(login)))
+                    //update User - need update it and put permission
+                    {
+                        // Reactive it by udpate permission
+                        tcp._tcpArmDevice.UpdatePermission(login, us.userGrant);
+
+                        // Get device user
+                        DeviceGrant remoteUser = tcp._tcpArmDevice.GetUserByName(login);
+                        if (remoteUser == null) continue;
+
+                        if (remoteUser.user.template == us.user.template)
+                            //template equal - no need to update
+                            continue;
+
+                        // Need to get each finger template to pass to compare it.
+                        UserClass currentRemoteUser = new UserClass();
+                        BinaryFormatter bf1 = new BinaryFormatter();
+                        MemoryStream mem1 =
+                            new MemoryStream(Convert.FromBase64String(us.user.template));
+                        currentRemoteUser = (UserClass)bf1.Deserialize(mem1);
+                        FingerData currentRemoteFinger = new FingerData();
+                        currentRemoteFinger.CopyUserToFinger(currentRemoteUser);
+
+                        UserClass currentLocalUser = new UserClass();
+                        BinaryFormatter bf2 = new BinaryFormatter();
+                        MemoryStream mem2 =
+                            new MemoryStream(Convert.FromBase64String(us.user.template));
+                        currentLocalUser = (UserClass)bf2.Deserialize(mem2);
+                        FingerData currentLocalFinger = new FingerData();
+                        currentLocalFinger.CopyUserToFinger(currentLocalUser);
+
+                        for (int index = 0; index < 10; index++)
+                        {
+                            if (currentLocalFinger.Templates[index] !=
+                                currentRemoteFinger.Templates[index])
+                            {
+                                if (currentLocalFinger.Templates[index] == null)
+                                {
+                                    tcp._tcpArmDevice.RemoveFingerprint(login,
+                                        (FingerIndexValue)index);
+                                }
+                                else
+                                {
+                                    tcp._tcpArmDevice.EnrollFinger(login,
+                                        (FingerIndexValue)index,
+                                        currentLocalUser.strFingerprint[index]);
+                                }
+                            }
+                        }
+                    }
+                    else //Create User
+                    {
+                        tcp._tcpArmDevice.AddUser(us);
+                    }
+                }
+            }
+        }
+        private void ProcessTemp(deviceClass dc, TcpIpClient tcp)
+        {
+            if (tcp.CpuKindValue != TcpIpClient.CpuKind.Unknown)
+            {
+                tempInfo lastTemp = _db.GetLastFridgeTemp(dc.infoDev.SerialRFID);
+                tempInfo lastCurrentTemp = null;
+                tcp.getFridgeCurrentTemp(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                    dc.infoDev.SerialRFID, out lastCurrentTemp);
+                if (lastTemp != null)
+                {
+                    tempInfo[] tempArray = null;
+                    tcp.getFridgeTempFromDate(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                        dc.infoDev.SerialRFID, lastTemp.CreationDate.ToLocalTime(),
+                        out tempArray);
+
+                    if (tempArray != null)
+                    {
+                        foreach (tempInfo tmp in tempArray)
+                        {
+                            if ((tmp.CreationDate > lastTemp.CreationDate) &&
+                                (tmp.nbValueTemp == 60))
+                                _db.StoreTempFridge(dc.infoDev.SerialRFID, tmp);
+                        }
+                    }
+                }
+                else
+                {
+                    if ((lastCurrentTemp != null) && (lastCurrentTemp.nbValueTemp == 60))
+                    {
+                        _db.StoreTempFridge(dc.infoDev.SerialRFID, lastCurrentTemp);
+                    }
+                }
+            }
+
+
+            if (!_bClockFridgeAlreadyOn)
+            {
+                ClockFridge.Start();
+                _bClockFridgeAlreadyOn = true;
+            }
+        }
+        private void ProcessScan(deviceClass dc, TcpIpClient tcp)
+        {
+            InventoryData invtmp = null;
+            tcp.getLastScanID(dc.infoDev.IP_Server, dc.infoDev.Port_Server, dc.infoDev.SerialRFID,
+                out dc.netLastScanEventID);
+            if (dc.netLastScanEventID > 1)
+            {
+
+                tcp.requestGetScanFromIdEvent(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
+                    dc.infoDev.SerialRFID, dc.netLastScanEventID, out invtmp);
+                Thread.Sleep(10);
+            }
+
+            if (invtmp != null)
+            {
+                InventoryData[] inventoryArray = null;
+                TcpIpClient.RetCode ret = tcp.getScanFromDateWithDB(dc.infoDev.IP_Server,
+                    dc.infoDev.Port_Server, dc.infoDev.SerialRFID,
+                    invtmp.eventDate.ToUniversalTime(),
+                    out inventoryArray);
+                if (ret == TcpIpClient.RetCode.RC_Succeed)
+                {
+                    if (inventoryArray != null)
+                    {
+                        foreach (InventoryData inv in inventoryArray)
+                        {
+                            DateTime dtUtc = DateTime.SpecifyKind(inv.eventDate, DateTimeKind.Utc);
+                            inv.eventDate = dtUtc.ToLocalTime();
+                            StoreNetworkinventory(dc, inv);
+                        }
+                    }
+                }
+            }
+
+        }
+
+
         private void ConnectNetworkDevice()
         {
             try
@@ -4461,266 +4731,20 @@ namespace smartTracker
                 if (_bClosing) return;
                 if (_networkDeviceArray == null) return;
 
-                
-                foreach (deviceClass dc in _networkDeviceArray)
+                for (int loop = 0 ; loop < _networkDeviceArray.Count() ; loop++)
                 {
+               
                     if (_bClosing) return;
-                    if (!CheckIpAddr(dc.infoDev.IP_Server)) continue;
+                    if (!CheckIpAddr(_networkDeviceArray[loop].infoDev.IP_Server)) continue;
 
-                    if (dc.netConnectionStatus == ConnectionStatus.CS_Connected)
+                    if (_networkDeviceArray[loop].netConnectionStatus == ConnectionStatus.CS_Connected)
                     {
                         continue;
                     }
 
-                    bool isLedLightingAvailable;
-                   
-                
-
-                    if (tcpUtils.PingAddress(dc.infoDev.IP_Server, 500))
-                    {
-                        TcpIpClient tcp = null;
-                        if ((DeviceClientTcp != null) && (DeviceClientTcp.ContainsKey(dc.infoDev.IP_Server)))
-                            tcp = DeviceClientTcp[dc.infoDev.IP_Server] = new TcpIpClient();
-
-                        if (tcp == null) return;
-                        if (tcp.pingServer(dc.infoDev.IP_Server, dc.infoDev.Port_Server) == TcpIpClient.RetCode.RC_Succeed)
-                        {
-                            dc.netConnectionStatus = ConnectionStatus.CS_Connected;
-                            tcp.RequestIsSPCE2Available(dc.infoDev.IP_Server, dc.infoDev.Port_Server, out isLedLightingAvailable);
-                            CanHandleLeds[dc] = isLedLightingAvailable;
-
-                            // Check use tcp notification
-                            dc.bUseTcpNotification = false;
-                            _eventTestTcp.Reset();
-
-                            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsWindows)
-                            {
-                                if (tcp.RequestIsUsingTcpNotification(dc.infoDev.IP_Server, dc.infoDev.Port_Server) ==
-                                    TcpIpClient.RetCode.RC_Succeed)
-                                {
-                                    if (
-                                        tcp.SetTcpServerNotificationInfo(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                            true,
-                                            _tcpIpServer.ServerIP, _tcpIpServer.Port + 1) ==
-                                        TcpIpClient.RetCode.RC_Succeed)
-                                    {
-
-
-                                        bool result;
-                                        string errorMsg;
-                                        TcpIpClient tcptest = DeviceClientTcp[dc.infoDev.IP_Server];
-                                        tcptest.TestTcpServerNotification(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                            out result, out errorMsg);
-                                        //dc.bUseTcpNotification = true;
-                                        Thread.Sleep(1);
-
-                                    }
-
-                                }
-                            }
-                            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsArm)
-                            {
-                                tcp.DeviceEventTcp += tcp_DeviceEventTcp;
-                                dc.bUseTcpNotification = true;
-                            }
-
-                            //tcp.getLastScanID(dc.infoDev.IP_Server, dc.infoDev.Port_Server, dc.infoDev.SerialRFID, out dc.netLastScanEventID);
-                           /* if (dc.netLastScanEventID > 1)
-                            {
-                                InventoryData invtmp;
-                                tcp.requestGetScanFromIdEvent(dc.infoDev.IP_Server, dc.infoDev.Port_Server,dc.infoDev.SerialRFID, dc.netLastScanEventID, out invtmp);
-                                Thread.Sleep(10);
-                            }*/
-
-                            if ((dc.infoDev.deviceType == DeviceType.DT_SFR) || (dc.infoDev.deviceType == DeviceType.DT_SBF))
-                            {
-
-                                if (tcp.CpuKindValue != TcpIpClient.CpuKind.Unknown)
-                                {
-                                    tempInfo lastTemp = _db.GetLastFridgeTemp(dc.infoDev.SerialRFID);
-                                    tempInfo lastCurrentTemp = null;
-                                    tcp.getFridgeCurrentTemp(dc.infoDev.IP_Server, dc.infoDev.Port_Server, dc.infoDev.SerialRFID, out lastCurrentTemp);
-                                    if (lastTemp != null)
-                                    {
-                                        tempInfo[] tempArray = null;
-                                        tcp.getFridgeTempFromDate(dc.infoDev.IP_Server, dc.infoDev.Port_Server, dc.infoDev.SerialRFID, lastTemp.CreationDate.ToLocalTime(), out tempArray);
-
-                                        if (tempArray != null)
-                                        {
-                                            foreach (tempInfo tmp in tempArray)
-                                            {
-                                                if ((tmp.CreationDate > lastTemp.CreationDate) && (tmp.nbValueTemp == 60))
-                                                    _db.StoreTempFridge(dc.infoDev.SerialRFID, tmp);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if ((lastCurrentTemp != null) && (lastCurrentTemp.nbValueTemp == 60))
-                                        {
-                                            _db.StoreTempFridge(dc.infoDev.SerialRFID, lastCurrentTemp);
-                                        }
-                                    }
-                                }
-                               
-
-                                if (!_bClockFridgeAlreadyOn)
-                                {
-                                    ClockFridge.Start();
-                                    _bClockFridgeAlreadyOn = true;
-                                }
-                            }
-
-                            Invoke((MethodInvoker)delegate { toolStripButtonScan.Enabled = true; });
-                            Invoke((MethodInvoker)delegate { toolStripButtonStopScan.Enabled = true; });
-
-                            // recover previous scan.                             
-
-                            if (dc.currentInventory != null)
-                            {
-                                InventoryData[] inventoryArray = null;
-                                TcpIpClient.RetCode ret = tcp.getScanFromDateWithDB(dc.infoDev.IP_Server, dc.infoDev.Port_Server, dc.infoDev.SerialRFID, dc.currentInventory.eventDate.ToUniversalTime(), out inventoryArray);
-                                if (ret == TcpIpClient.RetCode.RC_Succeed)
-                                {
-                                    if (inventoryArray != null)
-                                    {
-                                        foreach (InventoryData inv in inventoryArray)
-                                        {
-                                            DateTime dtUtc = DateTime.SpecifyKind(inv.eventDate, DateTimeKind.Utc);
-                                            inv.eventDate = dtUtc.ToLocalTime();
-                                            StoreNetworkinventory(dc, inv);
-                                        }
-                                    }
-                                }
-                            }
-
-
-                            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsWindows)
-                            {
-                                // remove all previous user before connect to refresh it.
-                                if (dc.infoDev.deviceType != DeviceType.DT_SBR)
-                                {
-                                    UserClassTemplate[] userInDevice = null;
-
-                                    if (
-                                        tcp.getUserList(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                            dc.infoDev.SerialRFID, out userInDevice) == TcpIpClient.RetCode.RC_Succeed)
-                                    {
-                                        foreach (UserClassTemplate utc in userInDevice)
-                                        {
-                                            tcp.deleteUser(dc.infoDev.IP_Server, dc.infoDev.Port_Server, utc.firstName,
-                                                utc.lastName, dc.infoDev.SerialRFID);
-                                        }
-                                    }
-
-                                    DeviceGrant[] userTemp = _db.RecoverAllowedUser(dc.infoDev.SerialRFID);
-
-                                    if (userTemp != null)
-                                    {
-                                        foreach (DeviceGrant us in userTemp)
-                                        {
-
-                                            if (string.IsNullOrEmpty(us.user.BadgeReaderID))
-                                                tcp.addUserFromTemplate(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                                    us.user.firstName, us.user.lastName, us.user.template);
-                                            else
-                                                tcp.addUserFromTemplate(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                                    us.user.firstName, us.user.lastName, us.user.template,
-                                                    us.user.BadgeReaderID);
-                                            tcp.addUserGrant(dc.infoDev.IP_Server, dc.infoDev.Port_Server,
-                                                us.user.firstName, us.user.lastName, dc.infoDev.SerialRFID, us.userGrant);
-                                        }
-                                    }
-                                }
-                            }
-                            if (tcp.CpuKindValue == TcpIpClient.CpuKind.IsArm)
-                            {
-                                // For ARM - Need To get User Active  and remove all permission.
-                                List<DeviceGrant> lstusers = tcp._tcpArmDevice.GetUsersList();
-                                foreach (DeviceGrant dg in lstusers)
-                                {
-                                    if (dg.userGrant == UserGrant.UG_NONE)
-                                        continue;
-                                    string login = dg.user.firstName + "_" + dg.user.lastName;
-                                    tcp._tcpArmDevice.UpdatePermission(login, UserGrant.UG_NONE);
-                                }
-
-                                // Get User for device
-                                DeviceGrant[] userTemp = _db.RecoverAllowedUser(dc.infoDev.SerialRFID);
-                               
-
-                                // Get User Inactive in device (all as all permission just removed
-                                List<string> lstInactiveUser = tcp._tcpArmDevice.GetUnregisteredUsers();
-                                lstusers = tcp._tcpArmDevice.GetUsersList();  //tous a NONE
-
-                                if (userTemp != null)
-                                {
-                                    foreach (DeviceGrant us in userTemp)
-                                    {
-                                        string login = us.user.firstName + "_" + us.user.lastName;
-
-                                        bool bExist = false;
-                                        foreach (DeviceGrant tmpDg in  lstusers)
-                                        {
-                                            string tmpLogin = tmpDg.user.firstName + "_" + tmpDg.user.lastName;
-                                            if (tmpLogin == login)
-                                            {
-                                                bExist = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if ((bExist) || (lstInactiveUser.Contains(login))) //update User - need update it and put permission
-                                        {
-                                            // Reactive it by udpate permission
-                                            tcp._tcpArmDevice.UpdatePermission(login, us.userGrant);
-
-                                            // Get device user
-                                            DeviceGrant remoteUser = tcp._tcpArmDevice.GetUserByName(login);
-                                            if (remoteUser == null) continue;
-
-                                            if (remoteUser.user.template == us.user.template) //template equal - no need to update
-                                                continue;
-
-                                            // Need to get each finger template to pass to compare it.
-                                            UserClass currentRemoteUser = new UserClass();
-                                            BinaryFormatter bf1 = new BinaryFormatter();
-                                            MemoryStream mem1 = new MemoryStream(Convert.FromBase64String(us.user.template));
-                                            currentRemoteUser = (UserClass)bf1.Deserialize(mem1);
-                                            FingerData currentRemoteFinger = new FingerData();
-                                            currentRemoteFinger.CopyUserToFinger(currentRemoteUser);
-                                          
-                                            UserClass currentLocalUser = new UserClass();
-                                            BinaryFormatter bf2 = new BinaryFormatter();
-                                            MemoryStream mem2 = new MemoryStream(Convert.FromBase64String(us.user.template));
-                                            currentLocalUser = (UserClass)bf2.Deserialize(mem2);
-                                            FingerData currentLocalFinger = new FingerData();
-                                            currentLocalFinger.CopyUserToFinger(currentLocalUser);
-
-                                            for (int index = 0; index < 10; index++)
-                                            {
-                                                if (currentLocalFinger.Templates[index] != currentRemoteFinger.Templates[index])
-                                                {
-                                                    if (currentLocalFinger.Templates[index] == null)
-                                                    {
-                                                        tcp._tcpArmDevice.RemoveFingerprint(login, (FingerIndexValue)index);
-                                                    }
-                                                    else
-                                                    {
-                                                        tcp._tcpArmDevice.EnrollFinger(login, (FingerIndexValue)index, currentLocalUser.strFingerprint[index]);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else //Create User
-                                        {
-                                            tcp._tcpArmDevice.AddUser(us);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //deviceClass tmpDc =  (deviceClass)_networkDeviceArray[loop].Clone();
+                    //ThreadPool.QueueUserWorkItem(delegate { JobConnect(_networkDeviceArray[loop]); });
+                    JobConnect(_networkDeviceArray[loop]);
                 }
             }
             catch (Exception exp)
@@ -5393,6 +5417,7 @@ namespace smartTracker
             if ((!InConnection) && (!InScan))
             {
                 InConnection = true;
+                ThreadPool.SetMaxThreads(16, 16);
                 ThreadPool.QueueUserWorkItem(ConnectAll, this);
                 //ConnectAll(this);
                 timerNetworkRefreshScan.Enabled = true;
@@ -6908,8 +6933,8 @@ namespace smartTracker
                     dc.lastProcessInventoryGmtDate = truncateMs(dc.currentInventory.eventDate.ToUniversalTime());
                     Invoke((MethodInvoker)delegate
                     {
-                        if (tabControlInfo.SelectedIndex == 1)
-                            UpdateScanHistory(null);
+                        /*if (tabControlInfo.SelectedIndex == 1)
+                            UpdateScanHistory(null);*/
                     });
                 }
             }
@@ -9009,7 +9034,7 @@ namespace smartTracker
         }
         private void tabControlInfo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Invoke((MethodInvoker)(() => UpdateScanHistory(null)));
+            //Invoke((MethodInvoker)(() => UpdateScanHistory(null)));
             Debug.WriteLine("End update history :" + DateTime.Now.ToString("hh:mm:ss.fff"));
         }
 
