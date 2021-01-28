@@ -117,6 +117,8 @@ namespace DataClass
 
         [Description("Device waiting for scan")]
         DS_WaitForScan = 9,
+        [Description("Device waiting for Led")]
+        DS_WaitForLed = 10,
     }
     public enum FPStatus
     {

@@ -23,87 +23,268 @@ namespace TcpIP_class
             {
                 bool bFirstPass = true;
                 int bQuitValue = 0;
-                int bQuitCondition = 0;
-                if (string.IsNullOrEmpty(DeviceIpRight) && string.IsNullOrEmpty(DeviceIpLeft))
-                    return;
+                int bQuitCondition = 0;              
 
                 if (!string.IsNullOrEmpty(DeviceIpRight)) bQuitCondition++;
                 if (!string.IsNullOrEmpty(DeviceIpLeft)) bQuitCondition++;
                 TcpIpClient tcp = new TcpIP_class.TcpIpClient();
                 TcpIpClient.RetCode ret;
                 expiredTime = DateTime.Now.AddSeconds(TimeoutInSec); //time to quit in any case
+
+                Random rnd = new Random();
+                bool bNeedTreatDoorOpenOnLeft = false;
                 do
                 {
-                    TimeSpan ts = expiredTime - DateTime.Now;
+                    TimeSpan ts = expiredTime - DateTime.Now;                  
+
                     if (ts.TotalSeconds < 0)
-                        return;
-                    if (bFirstPass)
-                    {
-                        bFirstPass = false;
-                    }
-                    else
-                    {
-                        System.Threading.Thread.Sleep(2000);                        
-                    }
+                        return;                  
 
                     bQuitValue = 0;
                    
                     if (!string.IsNullOrEmpty(DeviceIpLeft)) // J'ai un device à gauche
                     {
-                        if (tcpUtils.PingAddress(DeviceIpLeft, 1000))
+                       // if (tcpUtils.PingAddress(DeviceIpLeft, 1000))
+                        //{
+                        ret = tcp.pingServer(DeviceIpLeft, DevicePortLeft);
+                        if (ret == TcpIpClient.RetCode.RC_Succeed)
                         {
-                            ret = tcp.pingServer(DeviceIpLeft, DevicePortLeft);
+                            DeviceStatus ds = DeviceStatus.DS_NotReady;
+                            string status;
+                            ret = tcp.getStatus(DeviceIpLeft, DevicePortLeft, null, out status);
                             if (ret == TcpIpClient.RetCode.RC_Succeed)
                             {
-                                DeviceStatus ds = DeviceStatus.DS_NotReady;
-                                string status;
-                                ret = tcp.getStatus(DeviceIpLeft, DevicePortLeft, null, out status);
-                                if (ret == TcpIpClient.RetCode.RC_Succeed)
+                                ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
+
+                                if (bFirstPass)
                                 {
-                                    ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
-                                    if (ds != DeviceStatus.DS_InScan)
+                                    if ((ds == DeviceStatus.DS_DoorOpen) || (ds == DeviceStatus.DS_WaitForScan))
+                                    {
+                                        if (!bNeedTreatDoorOpenOnLeft)
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = true;
+                                        }
+                                        else
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = false;
+                                            bQuitValue++;
+                                        }
+                                    }
+                                    else if (ds != DeviceStatus.DS_InScan)
+                                    {
+                                        bNeedTreatDoorOpenOnLeft = false;
                                         bQuitValue++;
+                                    }
                                 }
                                 else
-                                    bQuitValue++;
+                                {
+                                    if (ds == DeviceStatus.DS_DoorOpen) 
+                                    {
+                                        if (!bNeedTreatDoorOpenOnLeft)
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = true;
+                                        }
+                                        else
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = false;
+                                            bQuitValue++;
+                                        }
+                                    }
+                                    else if (ds != DeviceStatus.DS_InScan)
+                                    {
+                                        bNeedTreatDoorOpenOnLeft = false;
+                                        bQuitValue++;
+                                    }
+                                }                            
                             }
                             else
                                 bQuitValue++;
                         }
-                        else //pas de ping  
+                        else
                             bQuitValue++;
+                      //  }
+                       // else //pas de ping  
+                       //     bQuitValue++;
                     }
                     if (!string.IsNullOrEmpty(DeviceIpRight)) // J'ai un device à droite
                     {
-                        if (tcpUtils.PingAddress(DeviceIpRight, 1000))
+                        //if (tcpUtils.PingAddress(DeviceIpRight, 1000))
+                        //{
+                        ret = tcp.pingServer(DeviceIpRight, DevicePortRight);
+                        if (ret == TcpIpClient.RetCode.RC_Succeed)
                         {
-                            ret = tcp.pingServer(DeviceIpRight, DevicePortRight);
+                            DeviceStatus ds = DeviceStatus.DS_NotReady;
+                            string status;
+                            ret = tcp.getStatus(DeviceIpRight, DevicePortRight, null, out status);
                             if (ret == TcpIpClient.RetCode.RC_Succeed)
                             {
-                                DeviceStatus ds = DeviceStatus.DS_NotReady;
-                                string status;
-                                ret = tcp.getStatus(DeviceIpRight, DevicePortRight, null, out status);
-                                if (ret == TcpIpClient.RetCode.RC_Succeed)
-                                {
-                                    ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
-                                    if (ds != DeviceStatus.DS_InScan)
-                                        bQuitValue++;
-                                }
-                                else
+                                ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
+                                if (ds != DeviceStatus.DS_InScan)
                                     bQuitValue++;
                             }
                             else
                                 bQuitValue++;
                         }
-                        else //pas de ping  
+                        else
                             bQuitValue++;
+                        //}
+                        //else //pas de ping  
+                        //    bQuitValue++;
                     }
-                   
+                    if (bFirstPass)
+                    {
+                        bFirstPass = false;
+                        if (bNeedTreatDoorOpenOnLeft)
+                            System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+                    else
+                    {
+                        System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                    }
 
                 }
                 while (bQuitValue != bQuitCondition);
 
             }
         }
+
+        public void CanStartLed()
+        {
+            if (bUseSynchonisation)
+            {
+                bool bFirstPass = true;
+                int bQuitValue = 0;
+                int bQuitCondition = 0;
+
+                if (!string.IsNullOrEmpty(DeviceIpRight)) bQuitCondition++;
+                if (!string.IsNullOrEmpty(DeviceIpLeft)) bQuitCondition++;
+                TcpIpClient tcp = new TcpIP_class.TcpIpClient();
+                TcpIpClient.RetCode ret;
+                expiredTime = DateTime.Now.AddSeconds(TimeoutInSec); //time to quit in any case
+
+                Random rnd = new Random();
+                bool bNeedTreatDoorOpenOnLeft = false;
+                do
+                {
+                    TimeSpan ts = expiredTime - DateTime.Now;
+
+                    if (ts.TotalSeconds < 0)
+                        return;
+
+                    bQuitValue = 0;
+
+                    if (!string.IsNullOrEmpty(DeviceIpLeft)) // J'ai un device à gauche
+                    {
+                        // if (tcpUtils.PingAddress(DeviceIpLeft, 1000))
+                        //{
+                        ret = tcp.pingServer(DeviceIpLeft, DevicePortLeft);
+                        if (ret == TcpIpClient.RetCode.RC_Succeed)
+                        {
+                            DeviceStatus ds = DeviceStatus.DS_NotReady;
+                            string status;
+                            ret = tcp.getStatus(DeviceIpLeft, DevicePortLeft, null, out status);
+                            if (ret == TcpIpClient.RetCode.RC_Succeed)
+                            {
+                                ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
+                                if (bFirstPass)
+                                {
+                                    if ((ds == DeviceStatus.DS_DoorOpen) || (ds == DeviceStatus.DS_WaitForLed))
+                                    {
+                                        if (!bNeedTreatDoorOpenOnLeft)
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = true;
+                                        }
+                                        else
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = false;
+                                            bQuitValue++;
+                                        }
+                                    }
+                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    {
+                                        // need to wait 
+                                    }
+                                    else
+                                    {
+                                        bNeedTreatDoorOpenOnLeft = false;
+                                        bQuitValue++;
+                                    }
+                                }   
+                                else
+                                {
+                                    if (ds == DeviceStatus.DS_DoorOpen)
+                                    {
+                                        if (!bNeedTreatDoorOpenOnLeft)
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = true;
+                                        }
+                                        else
+                                        {
+                                            bNeedTreatDoorOpenOnLeft = false;
+                                            bQuitValue++;
+                                        }
+                                    }
+                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    {
+                                        //need to wait
+                                    }
+                                    else
+                                    {
+                                        bNeedTreatDoorOpenOnLeft = false;
+                                        bQuitValue++;
+                                    }
+                                }
+                            }
+                            else
+                                bQuitValue++;
+                        }
+                        else
+                            bQuitValue++;
+                        //  }
+                        // else //pas de ping  
+                        //     bQuitValue++;
+                    }
+                    if (!string.IsNullOrEmpty(DeviceIpRight)) // J'ai un device à droite
+                    {
+                        //if (tcpUtils.PingAddress(DeviceIpRight, 1000))
+                        //{
+                        ret = tcp.pingServer(DeviceIpRight, DevicePortRight);
+                        if (ret == TcpIpClient.RetCode.RC_Succeed)
+                        {
+                            DeviceStatus ds = DeviceStatus.DS_NotReady;
+                            string status;
+                            ret = tcp.getStatus(DeviceIpRight, DevicePortRight, null, out status);
+                            if (ret == TcpIpClient.RetCode.RC_Succeed)
+                            {
+                                ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
+                                if (ds != DeviceStatus.DS_InScan)
+                                    bQuitValue++;
+                            }
+                            else
+                                bQuitValue++;
+                        }
+                        else
+                            bQuitValue++;
+                        //}
+                        //else //pas de ping  
+                        //    bQuitValue++;
+                    }
+                    if (bFirstPass)
+                    {
+                        bFirstPass = false;
+                        if (bNeedTreatDoorOpenOnLeft)
+                            System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+                    else
+                    {
+                        System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+
+                }
+                while (bQuitValue != bQuitCondition);
+
+            }
+        }
+
     }
 }

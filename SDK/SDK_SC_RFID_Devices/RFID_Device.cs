@@ -1879,8 +1879,7 @@ namespace SDK_SC_RFID_Devices
             }
             bWasInLedDoorOpen = false;
             deviceStatus = DeviceStatus.DS_Ready;
-        }
-
+        }     
 
         /// <summary>
         /// Turn on the LED of each tag present in tagList, and launches a threaded anonym function that will 
@@ -1890,66 +1889,81 @@ namespace SDK_SC_RFID_Devices
         /// <returns>True if all tags in the list has been turned On. False otherwise.</returns>
         public bool TestLighting(List<string> tagList)
         {
-            
-            if (listTagWithChannel == null) return false;
+           
 
-            int nbAxisOnDevice = GetCurrentNumberOfAxis();
-            List<int> axisNotEmpty = new List<int>();
+               if (listTagWithChannel == null) return false;
+               
+               bWasInLedDoorOpen = true;
+               deviceStatus = DeviceStatus.DS_LedOn;
 
-            // Fill the list of used axis (= axis upon which scan has detected tags)
-            foreach (DictionaryEntry entry in listTagWithChannel)
-                if (tagList.Contains((string) entry.Key)) // only if the tag is concerned by our tagList
-                    if (!axisNotEmpty.Contains((byte) entry.Value)) // only if we didn't already add the axis to our axisNotEmpty list
-                        axisNotEmpty.Add((byte) entry.Value); // axis has to be used : add it to our list
+               int nbAxisOnDevice = GetCurrentNumberOfAxis();
+               List<int> axisNotEmpty = new List<int>();
+               List<string> tagToSearch = new List<string>();
 
-            int tagsLeft;
-            SetLight(0);  // Led OFF
-            // unlock all axis
-            if (nbAxisOnDevice == 1)
-            {
-                myDevice.ConfirmAndLightWithKD(axisNotEmpty[0], tagList);
-                myDevice.StopField();
-                tagsLeft = tagList.Count;
-            }
-            else
-            {
-                for (int i = 1; i < nbAxisOnDevice + 1; ++i)
-                    myDevice.StartLedOn(i);
+               // Fill the list of used axis (= axis upon which scan has detected tags)
+               foreach (DictionaryEntry entry in listTagWithChannel)
+                   if (tagList.Contains((string)entry.Key)) // only if the tag is concerned by our tagList
+                   {
+                       if (!axisNotEmpty.Contains((byte)entry.Value)) // only if we didn't already add the axis to our axisNotEmpty list
+                           axisNotEmpty.Add((byte)entry.Value); // axis has to be used : add it to our list               
+                   }
+                   else  //remove tag not there taht will be for sure not lighted.
+                       tagList.Remove((string)entry.Key);
 
-                // confirms presence of tags & turn their light on, on each axis
-                foreach (int currentAxis in axisNotEmpty)
-                {
-                    myDevice.ConfirmAndLight(currentAxis, tagList);
+               int nbTagAtStartToLight = tagList.Count;
+               int tagsLeft;
+               SetLight(0);  // Led OFF
+                             // unlock all axis
+               if (nbAxisOnDevice == 1)
+               {
+                    myDevice.ConfirmAndLightWithKD(axisNotEmpty[0], tagList);                 
                     myDevice.StopField();
-                }
+                    tagsLeft = tagList.Count;
+               }
+               else
+               {
+                   for (int i = 1; i < nbAxisOnDevice + 1; ++i)
+                       myDevice.StartLedOn(i);
 
-                // ConfirmAndLight has been called "axisNotEmpty.Count" times but may have not lighted all Tags
-                // Check if tags left can be found on other axis
-                tagsLeft = tagList.Count;
-                if (tagsLeft > 0) // if tags left to be found
-                {
-                    for (int i = 1; i < nbAxisOnDevice + 1; ++i)
-                    {
-                        if (axisNotEmpty.Contains(i)) continue;
-                        myDevice.ConfirmAndLight(i, tagList); // tagList is passed to ConfirmAndLight again, but on a new axis
+                   // confirms presence of tags & turn their light on, on each axis
+                   foreach (int currentAxis in axisNotEmpty)
+                   {
+                       myDevice.ConfirmAndLight(currentAxis, tagList);                                        
+                       myDevice.StopField();
+                   }
 
-                        if (tagsLeft > tagList.Count) // tag(s) removed from tagList by ConfirmAndList : 1 or more tags have been found on this new axis
-                            axisNotEmpty.Add(i); // add the axis to our axisNotEmpty list
+                   // ConfirmAndLight has been called "axisNotEmpty.Count" times but may have not lighted all Tags
+                   // Check if tags left can be found on other axis
+                   tagsLeft = tagList.Count;
+                   if (tagsLeft > 0) // if tags left to be found
+                   {
+                       for (int i = 1; i < nbAxisOnDevice + 1; ++i)
+                       {
+                           if (axisNotEmpty.Contains(i)) continue;
+                           myDevice.ConfirmAndLight(i, tagList); // tagList is passed to ConfirmAndLight again, but on a new axis
 
-                        if (tagList.Count == 0) break;
-                    }
-                }
-            }
-            
+                           if (tagsLeft > tagList.Count) // tag(s) removed from tagList by ConfirmAndList : 1 or more tags have been found on this new axis
+                               axisNotEmpty.Add(i); // add the axis to our axisNotEmpty list
 
-            // Enable lighting on all axis NOT EMPTY in a thread
-            axisNotEmpty.Sort(); // sort axis numbers to light them from the smallest to the biggest and avoiding useless click-click-click (and lighting from top to bottom in Fridges) :)
-            _currentLightingThread = new Thread(() => LightAllAxisThreaded(axisNotEmpty, 1));
-            _currentLightingThread.Start();
-            bWasInLedDoorOpen = true;
-            deviceStatus = DeviceStatus.DS_LedOn;
+                           if (tagList.Count == 0) break;
+                       }
+                   }
+               }
 
-            return (tagList.Count == tagsLeft);
+
+               if (nbTagAtStartToLight != tagList.Count) //au moins 1 enleve on blinke
+               {
+                   // Enable lighting on all axis NOT EMPTY in a thread
+                   axisNotEmpty.Sort(); // sort axis numbers to light them from the smallest to the biggest and avoiding useless click-click-click (and lighting from top to bottom in Fridges) :)
+                   _currentLightingThread = new Thread(() => LightAllAxisThreaded(axisNotEmpty, 1));
+                   _currentLightingThread.Start();
+               }
+               else //no tag found 
+               {
+                   deviceStatus = DeviceStatus.DS_Ready;
+               }
+               return (tagList.Count == tagsLeft);
+           
             /*LedOnAll();
             return true;*/
         }
@@ -2706,6 +2720,7 @@ namespace SDK_SC_RFID_Devices
             }
         }
 
+       
 
         /// <summary>
         /// Used by server to answer client's request (IS_SPEC2AVAIlABLE)

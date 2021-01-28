@@ -1,42 +1,35 @@
-﻿using System;
+﻿using BrightIdeasSoftware;
+using DataClass;
+using DB_Class_SQLite;
+using DBClass;
+using DBClass_SQLServer;
+using ErrorMessage;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using SDK_SC_AccessControl;
+using SDK_SC_Fingerprint;
+using SDK_SC_MedicalCabinet;
+using SDK_SC_RFID_Devices;
+using SDK_SC_RfidReader;
+using smartTracker.LIB;
+using smartTracker.Properties;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Security.AccessControl;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading;
-using System.Collections;
-using System.Configuration;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Net.Sockets;
 using System.Linq;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms.DataVisualization.Charting;
-using DBClass_SQLServer;
-using DB_Class_SQLite;
-using DBClass;
-using DataClass;
-using ErrorMessage;
-using OfficeOpenXml.Style;
-using SDK_SC_AccessControl;
-using SDK_SC_Fingerprint;
-using SDK_SC_RfidReader;
-using SDK_SC_Rfid_And_Scale;
-using SDK_SC_RFID_Devices;
-using SDK_SC_MedicalCabinet;
-
-using OfficeOpenXml;
-using smartTracker.LIB;
-using smartTracker.Properties;
+using System.Threading;
+using System.Windows.Forms;
 using TcpIP_class;
-
-
-
-using BrightIdeasSoftware;
 using Cursor = System.Windows.Forms.Cursor;
 using Timer = System.Timers.Timer;
 
@@ -7311,7 +7304,18 @@ namespace smartTracker
                 if ((currentDevice.ConnectionStatus == ConnectionStatus.CS_Connected) &&
                     (currentDevice.DeviceStatus == DeviceStatus.DS_Ready))
                 {
+
+                    if (syncDevice != null)
+                    {
+                        currentDevice.DeviceStatus = DeviceStatus.DS_WaitForLed;
+                        UpdateTreeView();
+                        syncDevice.CanStartLed();  
+                    }
+                    currentDevice.DeviceStatus = DeviceStatus.DS_LedOn;
+                    UpdateTreeView();
+
                     currentDevice.get_RFID_Device.DeviceBoard.setBridgeState(false,167,167);
+
                     currentDevice.TestLighting(selectedTags);
                     string message = string.Empty;
 

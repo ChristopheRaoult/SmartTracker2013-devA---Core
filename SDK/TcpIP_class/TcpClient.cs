@@ -36,8 +36,8 @@ namespace TcpIP_class
             IsArm = 0x01,
             IsWindows = 0x02,
         }
-        private CpuKind _cpuKind = CpuKind.Unknown;
-
+        // private CpuKind _cpuKind = CpuKind.Unknown;
+        private CpuKind _cpuKind = CpuKind.IsWindows;
         public CpuKind CpuKindValue
         {
             get { return _cpuKind; }
@@ -46,7 +46,7 @@ namespace TcpIP_class
 
         public TcpArmDevice _tcpArmDevice;
         private DeviceStatus _tcpArmDeviceStatus = DeviceStatus.DS_NotReady;
-        private  CpuKind GetDeviceKind(string ip,int port)
+        private  CpuKind GetDeviceKind(string ip,int port , int timeoutInSec = 2)
         {
             if (_cpuKind == CpuKind.Unknown)
             {
@@ -56,16 +56,23 @@ namespace TcpIP_class
             {
                 try
                 {
+
                     TcpClient tcpclnt = new TcpClient();
+                    tcpclnt.SendTimeout = timeoutInSec * 1000;
                     string Data = null;
                     try
                     {
-                        tcpclnt.Connect(ip, port);
+                        //tcpclnt.Connect(strIP, port);
+                        var result = tcpclnt.BeginConnect(ip, port, null, null);
+                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(timeoutInSec));
+                      
                     }
                     catch
                     {
                        
-                    }
+                    }              
+                  
+                   
 
                     string cmd = "PING?";
                     try
@@ -450,51 +457,60 @@ namespace TcpIP_class
 
             return ret;
         }
-        public RetCode pingServer(string strIP, int port)
+        public RetCode pingServer(string strIP, int port , int timeoutInSec = 2)
         {
             Console.WriteLine("Ping server " + strIP);
             RetCode ret = RetCode.RC_UnknownError;
             if (_cpuKind == CpuKind.Unknown)
             {
-                GetDeviceKind(strIP, port);
+                GetDeviceKind(strIP, port );
             }
             #region Windows
             if (_cpuKind == CpuKind.IsWindows)
             {
                 TcpClient tcpclnt = new TcpClient();
+                tcpclnt.SendTimeout = timeoutInSec * 1000;
                 string Data = null;
                 try
                 {
-                    tcpclnt.Connect(strIP, port);
+                    //tcpclnt.Connect(strIP, port);
+                    var result = tcpclnt.BeginConnect(strIP, port, null, null);
+                    var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(timeoutInSec));
+                    if (!success)
+                        return RetCode.RC_FailedToConnect;
                 }
                 catch
                 {
                     return RetCode.RC_FailedToConnect;
                 }
-
-                string cmd = "PING?";
-                try
+                if (tcpclnt.Connected)
                 {
-                    SendData(tcpclnt, cmd);
 
-                    if (GetData(tcpclnt, out Data) == 1)
+                    string cmd = "PING?";
+                    try
                     {
-                        retCodeStr = Data;
-                        if (Data.Equals(ReturnType.pingServerOk))
-                            ret = RetCode.RC_Succeed;
-                        else
-                            ret = RetCode.RC_Failed;
-                    }
+                        SendData(tcpclnt, cmd);
 
+                        if (GetData(tcpclnt, out Data) == 1)
+                        {
+                            retCodeStr = Data;
+                            if (Data.Equals(ReturnType.pingServerOk))
+                                ret = RetCode.RC_Succeed;
+                            else
+                                ret = RetCode.RC_Failed;
+                        }
+
+                    }
+                    catch
+                    {
+                        ret = RetCode.RC_UnknownError;
+                    }
+                    finally
+                    {
+                        tcpclnt.Close();
+                    }
                 }
-                catch
-                {
-                    ret = RetCode.RC_UnknownError;
-                }
-                finally
-                {
-                    tcpclnt.Close();
-                }
+                else return RetCode.RC_FailedToConnect;
             } 
             #endregion
             #region ARM

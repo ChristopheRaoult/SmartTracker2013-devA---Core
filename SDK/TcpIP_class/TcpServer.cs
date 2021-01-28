@@ -3956,20 +3956,28 @@ namespace TcpIP_class
                                             else if (command.Length > 1)
                                                 // command + tag ID(s) to light : at least 2 args
                                             {
+
+
+                                                if (syncDevice != null)
+                                                {
+                                                    currentDevice.DeviceStatus = DeviceStatus.DS_WaitForLed;
+                                                    syncDevice.CanStartLed();  //loop to wait concurent device not in scan
+                                                }
+
                                                 List<String> tagsToLight = new List<String>();
 
-                                                for (int i = 1; i < command.Length; ++i)
-                                                    tagsToLight.Add(command[i]);
+                                                    for (int i = 1; i < command.Length; ++i)
+                                                        tagsToLight.Add(command[i]);
 
-                                                currentDevice.TestLighting(tagsToLight);
+                                                    currentDevice.TestLighting(tagsToLight);
 
-                                                StringBuilder spce2Response =
-                                                    new StringBuilder(ReturnType.SPCE2StartLighting);
-                                                foreach (string tagId in tagsToLight)
-                                                    spce2Response.Append(tcpUtils.TCPDelimiter).Append(tagId);
-                                                        // tag ID(s) left in list are missing, return them to Client.
+                                                    StringBuilder spce2Response =
+                                                        new StringBuilder(ReturnType.SPCE2StartLighting);
+                                                    foreach (string tagId in tagsToLight)
+                                                        spce2Response.Append(tcpUtils.TCPDelimiter).Append(tagId);
+                                                            // tag ID(s) left in list are missing, return them to Client.
 
-                                                SendReturnCode(mySocket, myClient, spce2Response.ToString(), false);
+                                                    SendReturnCode(mySocket, myClient, spce2Response.ToString(), false);
                                             }
 
                                             else
@@ -4000,7 +4008,7 @@ namespace TcpIP_class
                                         SendReturnCode(mySocket, myClient, ReturnType.readerNotReady, false);
 
                                     if (currentDevice.DeviceStatus != DeviceStatus.DS_InScan)
-                                        currentDevice.SetLight(150);
+                                        currentDevice.SetLight(300);
                                 }    
                                 break;
                             #endregion
