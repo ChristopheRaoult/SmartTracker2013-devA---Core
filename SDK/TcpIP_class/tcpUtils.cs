@@ -22,12 +22,26 @@ using System.Xml.Serialization;
 using DataClass;
 
 using System.Collections.Specialized;
+using System.Windows.Threading;
 
 namespace TcpIP_class
 {
     static public class tcpUtils
     {
         public static char TCPDelimiter = (char) 0x1C;
+        public static void NonBlockingSleep(int timeInMilliseconds)
+        {
+            DispatcherFrame df = new DispatcherFrame();
+
+            new Thread((ThreadStart)(() =>
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(timeInMilliseconds));
+                df.Continue = false;
+
+            })).Start();
+
+            Dispatcher.PushFrame(df);
+        }
 
         static public string DecodeString(string str)
         {

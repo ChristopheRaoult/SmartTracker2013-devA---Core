@@ -16,6 +16,7 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\Error
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Copie\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.CoreCompileInputs.cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\bin\Debug\ErrorMessage.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\bin\Debug\ErrorMessage.pdb
+Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csprojAssemblyReference.cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.ExceptionMessageBox.resources
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.Properties.Resources.resources
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.GenerateResource.cache

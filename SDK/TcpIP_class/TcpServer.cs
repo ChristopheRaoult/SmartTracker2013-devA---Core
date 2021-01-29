@@ -1794,17 +1794,30 @@ namespace TcpIP_class
                                 {
                                     if (nbArg == 1) // unique reader assume in index  0 of local array
                                     {
+                                    // LED ON
+                                    if ((localDeviceArray[0].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) && (localDeviceArray[0].rfidDev.DeviceStatus == DeviceStatus.DS_LedOn))
+                                    {
+                                        localDeviceArray[0].rfidDev.StopLightingLeds();
+                                    }
+                                   
 
-                                        if ((localDeviceArray[0].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
+                                    if ((localDeviceArray[0].rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
                                        (localDeviceArray[0].rfidDev.DeviceStatus == DeviceStatus.DS_Ready) && (localDeviceArray[0].rfidDev.get_RFID_Device.UserActionPending == false))
                                         {
-                                            requestScanFromServer = true;
+                                            requestScanFromServer = true;                                        
 
-                                        if (syncDevice != null)
-                                        {
-                                            localDeviceArray[0].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
-                                            syncDevice.CanStartScan();  //loop to wait concurent device not in scan
-                                        }
+                                            if (syncDevice != null)
+                                            {
+                                                localDeviceArray[0].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
+                                                syncDevice.bIsWaitingScan = true;
+                                                Thread thScan= new Thread(() => syncDevice.CanStartScan());
+                                                thScan.IsBackground = true;
+                                                thScan.Start();
+                                                while (syncDevice.bIsWaitingScan)
+                                                {
+                                                    tcpUtils.NonBlockingSleep(1000);
+                                                }
+                                            }
 
                                             eventScanStart.Reset();
                                             eventScanCancelled.Reset();
@@ -1862,15 +1875,29 @@ namespace TcpIP_class
                                             {
                                                 bFind = true;
                                                 serialRFID = command[1];
-                                                if ((dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
+
+                                                if ((dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) && (dc.rfidDev.DeviceStatus == DeviceStatus.DS_LedOn))
+                                                {
+                                                    dc.rfidDev.StopLightingLeds();
+                                                }
+
+
+                                            if ((dc.rfidDev.ConnectionStatus == ConnectionStatus.CS_Connected) &&
                                                   (dc.rfidDev.DeviceStatus == DeviceStatus.DS_Ready) && (dc.rfidDev.get_RFID_Device.UserActionPending == false))
                                                 {
-                                                    requestScanFromServer = true;
+                                                    requestScanFromServer = true;    
 
                                                     if (syncDevice != null)
                                                     {
                                                         dc.rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
-                                                        syncDevice.CanStartScan();  //loop to wait concurent device not in scan
+                                                        syncDevice.bIsWaitingScan = true;
+                                                        Thread thScan = new Thread(() => syncDevice.CanStartScan());
+                                                        thScan.IsBackground = true;
+                                                        thScan.Start();
+                                                        while (syncDevice.bIsWaitingScan)
+                                                        {
+                                                            tcpUtils.NonBlockingSleep(1000);
+                                                        }
                                                     }
 
                                                     eventScanStart.Reset();
@@ -3955,16 +3982,24 @@ namespace TcpIP_class
                                             }
                                             else if (command.Length > 1)
                                                 // command + tag ID(s) to light : at least 2 args
-                                            {
-
+                                            {                                               
 
                                                 if (syncDevice != null)
                                                 {
                                                     currentDevice.DeviceStatus = DeviceStatus.DS_WaitForLed;
-                                                    syncDevice.CanStartLed();  //loop to wait concurent device not in scan
+                                                    
+                                                    syncDevice.bIsWaitingLed = true;
+                                                    Thread thLed = new Thread(() => syncDevice.CanStartLed());
+                                                    thLed.IsBackground = true;
+                                                    thLed.Start();
+                                                    while (syncDevice.bIsWaitingLed)
+                                                    {
+                                                       tcpUtils.NonBlockingSleep(1000);
+                                                    }
                                                 }
 
-                                                List<String> tagsToLight = new List<String>();
+
+                                            List<String> tagsToLight = new List<String>();
 
                                                     for (int i = 1; i < command.Length; ++i)
                                                         tagsToLight.Add(command[i]);

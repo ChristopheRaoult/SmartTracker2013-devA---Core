@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace TcpIP_class
 {
@@ -17,14 +19,20 @@ namespace TcpIP_class
 
         private DateTime expiredTime;
 
+       
+        public volatile bool bIsWaitingScan = false;
         public void CanStartScan()
-        {           
+        {
+            bIsWaitingScan = true;
             if (bUseSynchonisation)
             {
                 bool bFirstPass = true;
                 int bQuitValue = 0;
-                int bQuitCondition = 0;              
+                int bQuitCondition = 0;
 
+                int waitRight = 0;
+                int waitLeft = 0;
+                int doorOpen = 0;
                 if (!string.IsNullOrEmpty(DeviceIpRight)) bQuitCondition++;
                 if (!string.IsNullOrEmpty(DeviceIpLeft)) bQuitCondition++;
                 TcpIpClient tcp = new TcpIP_class.TcpIpClient();
@@ -32,13 +40,16 @@ namespace TcpIP_class
                 expiredTime = DateTime.Now.AddSeconds(TimeoutInSec); //time to quit in any case
 
                 Random rnd = new Random();
-                bool bNeedTreatDoorOpenOnLeft = false;
+               
                 do
                 {
                     TimeSpan ts = expiredTime - DateTime.Now;                  
 
                     if (ts.TotalSeconds < 0)
-                        return;                  
+                    {
+                        bIsWaitingScan = false;
+                        return;
+                    }                                   
 
                     bQuitValue = 0;
                    
@@ -55,24 +66,24 @@ namespace TcpIP_class
                             if (ret == TcpIpClient.RetCode.RC_Succeed)
                             {
                                 ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
+                                if ((ds == DeviceStatus.DS_WaitForScan) || (ds == DeviceStatus.DS_WaitForLed))  waitLeft++;
+                                else waitLeft = 0;
 
                                 if (bFirstPass)
-                                {
-                                    if ((ds == DeviceStatus.DS_DoorOpen) || (ds == DeviceStatus.DS_WaitForScan))
+                                {                                   
+                                    if (ds == DeviceStatus.DS_DoorOpen)
                                     {
-                                        if (!bNeedTreatDoorOpenOnLeft)
-                                        {
-                                            bNeedTreatDoorOpenOnLeft = true;
-                                        }
-                                        else
-                                        {
-                                            bNeedTreatDoorOpenOnLeft = false;
-                                            bQuitValue++;
-                                        }
+                                        doorOpen++;
+                                        if (doorOpen > 2) bQuitValue++;
                                     }
-                                    else if (ds != DeviceStatus.DS_InScan)
+                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn) || (ds == DeviceStatus.DS_WaitForScan) || (ds == DeviceStatus.DS_WaitForLed))
                                     {
-                                        bNeedTreatDoorOpenOnLeft = false;
+                                        // need to wait 
+                                        if (waitLeft > 4) //gauche  en wait depuis long temps on lance
+                                            bQuitValue++;
+                                    }
+                                    else
+                                    {                                       
                                         bQuitValue++;
                                     }
                                 }
@@ -80,21 +91,20 @@ namespace TcpIP_class
                                 {
                                     if (ds == DeviceStatus.DS_DoorOpen) 
                                     {
-                                        if (!bNeedTreatDoorOpenOnLeft)
-                                        {
-                                            bNeedTreatDoorOpenOnLeft = true;
-                                        }
-                                        else
-                                        {
-                                            bNeedTreatDoorOpenOnLeft = false;
-                                            bQuitValue++;
-                                        }
+                                        doorOpen++;
+                                        if (doorOpen > 2) bQuitValue++;
                                     }
-                                    else if (ds != DeviceStatus.DS_InScan)
+                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn) || (ds == DeviceStatus.DS_WaitForScan) || (ds == DeviceStatus.DS_WaitForLed))
                                     {
-                                        bNeedTreatDoorOpenOnLeft = false;
+                                        // need to wait 
+                                        if (waitLeft > 4) //gauche  en wait depuis long temps on lance
+                                            bQuitValue++;
+                                    }
+                                    else
+                                    {                                       
                                         bQuitValue++;
                                     }
+
                                 }                            
                             }
                             else
@@ -119,8 +129,20 @@ namespace TcpIP_class
                             if (ret == TcpIpClient.RetCode.RC_Succeed)
                             {
                                 ds = (DeviceStatus)Enum.Parse(typeof(DeviceStatus), status);
-                                if (ds != DeviceStatus.DS_InScan)
+                                if ((ds == DeviceStatus.DS_WaitForScan) || (ds == DeviceStatus.DS_WaitForLed)) waitRight++;
+                                else waitRight = 0;
+                                if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn) || (ds == DeviceStatus.DS_WaitForScan) || (ds == DeviceStatus.DS_WaitForLed))
+                                {
+                                    // need to wait 
+                                    if (waitRight > 2) //droite en wait depuis long temps on lance
+                                        bQuitValue++;
+                                }
+                                else
+                                {
+                                  
                                     bQuitValue++;
+                                }
+
                             }
                             else
                                 bQuitValue++;
@@ -131,25 +153,28 @@ namespace TcpIP_class
                         //else //pas de ping  
                         //    bQuitValue++;
                     }
+
                     if (bFirstPass)
                     {
-                        bFirstPass = false;
-                        if (bNeedTreatDoorOpenOnLeft)
-                            System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                        bFirstPass = false;                       
                     }
                     else
                     {
-                        System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                        tcpUtils.NonBlockingSleep(rnd.Next(1000, 3000));
                     }
 
                 }
                 while (bQuitValue != bQuitCondition);
 
             }
+            bIsWaitingScan = false;
+
         }
 
+        public volatile bool bIsWaitingLed = false;
         public void CanStartLed()
         {
+            bIsWaitingLed = true;
             if (bUseSynchonisation)
             {
                 bool bFirstPass = true;
@@ -169,7 +194,11 @@ namespace TcpIP_class
                     TimeSpan ts = expiredTime - DateTime.Now;
 
                     if (ts.TotalSeconds < 0)
+                    {
+                        bIsWaitingLed = false;
                         return;
+                    }
+                       
 
                     bQuitValue = 0;
 
@@ -273,18 +302,18 @@ namespace TcpIP_class
                     {
                         bFirstPass = false;
                         if (bNeedTreatDoorOpenOnLeft)
-                            System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                            tcpUtils.NonBlockingSleep(rnd.Next(1000, 3000));
                     }
                     else
                     {
-                        System.Threading.Thread.Sleep(rnd.Next(1000, 3000));
+                        tcpUtils.NonBlockingSleep(rnd.Next(1000, 3000));
                     }
 
                 }
                 while (bQuitValue != bQuitCondition);
 
             }
+            bIsWaitingLed = false;
         }
-
     }
 }

@@ -475,12 +475,19 @@ namespace smartTracker
                             else
                             {
                                 if (bUseSynchonisation)
-                                {
+                                {   
                                     if (syncDevice != null)
                                     {
                                         _localDeviceArray[treeNodeSelected].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
                                         UpdateTreeView();
-                                        syncDevice.CanStartScan();
+                                        syncDevice.bIsWaitingScan = true;
+                                        Thread thScan = new Thread(() => syncDevice.CanStartScan());
+                                        thScan.IsBackground = true;
+                                        thScan.Start();
+                                        while (syncDevice.bIsWaitingScan)
+                                        {
+                                            tcpUtils.NonBlockingSleep(1000);
+                                        }
                                     }
                                 }
                                 _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice();

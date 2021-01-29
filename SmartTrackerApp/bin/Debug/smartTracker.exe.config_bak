@@ -6,6 +6,7 @@
   <system.windows.forms />
   <appSettings>
     <add key="Desc_serverPort" value="Integer value for server TCP port - default : 6901" />
+    <add key="serverPort" value="6901" />
     <add key="Desc_NbRecordToKeep" value="Integer of amount of full scan stored" />
     <add key="NbRecordToKeep" value="150" />
     <add key="Desc_bStoreEventTag" value="Boolean to enable of storing tag history" />
@@ -13,7 +14,7 @@
     <add key="Desc_TimeZoneOffset" value="Double value to set the offset hour from GMT" />
     <add key="TimeZoneOffset" value="1.0" />
     <add key="Desc_bShowServer" value="Boolean to enable server mode at startup" />
-    <add key="bShowServer" value="True" />
+    <add key="bShowServer" value="False" />
     <add key="Desc_bCompareOnLotID" value="Boolean to enable the server window at startup" />
     <add key="bCompareOnLotID" value="True" />
     <add key="Desc_bScreenSaver" value="Boolean to enable the screen saver" />
@@ -54,20 +55,19 @@
     <add key="Desc_Template" value="Name of the template for Blood" />
     <add key="Template" value="Not configured" />
     <add key="Desc_bSynchonizedDevice" value="Bool to synchronized device" />
-    <add key="bSynchonizedDevice" value="False" />
+    <add key="bSynchonizedDevice" value="True" />
     <add key="Desc_DeviceIpRight" value="Ip of device at Right" />
-    <add key="DeviceIpRight" value="192.168.1.25" />
+    <add key="DeviceIpRight" value="192.168.1.8" />
     <add key="Desc_DevicePortRight" value="Port of device at Right" />
-    <add key="DevicePortRight" value="6902" />
+    <add key="DevicePortRight" value="6901" />
     <add key="Desc_DeviceIpLeft" value="Ip of device at Left" />
-    <add key="DeviceIpLeft" value="192.138.1.26" />
+    <add key="DeviceIpLeft" value="" />
     <add key="Desc_DevicePortLeft" value="Port of device at Left" />
-    <add key="DevicePortLeft" value="6903" />
+    <add key="DevicePortLeft" value="6901" />
     <add key="Desc_TimeoutInSec" value="Timeout in Second to run scan " />
-    <add key="TimeoutInSec" value="10" />
+    <add key="TimeoutInSec" value="120" />
     <add key="Desc_DoDoorScan" value="Perform scan when door is closed" />
     <add key="DoDoorScan" value="True" />
-    <add key="serverPort" value="6901" />
   </appSettings>
   <system.web>
     <anonymousIdentification />

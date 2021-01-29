@@ -7659,3 +7659,38 @@ Stack Traces:
 
 _______________________________________________________________
 
+Application:       smartTracker 2014
+Version:           2021.1.20.1698
+Date:              29/01/2021 12:09:18
+Computer name:     DEV004X64
+User name:         Christophe
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1600, Height=900}
+System up time:    1.13:57:24.3280000
+App up time:       00:03:54.0366664
+Total memory:      12182Mb
+Available memory:  3389Mb
+
+Exception classes:   
+   System.ArgumentOutOfRangeException
+Exception messages: 
+   L'index était hors limites. Il ne doit pas être négatif et doit être inférieur à la taille de la collection.
+Nom du paramètre : index
+Stack Traces:
+   à System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   à System.ThrowHelper.ThrowArgumentOutOfRangeException()
+   à System.Collections.Generic.List`1.get_Item(Int32 index)
+   à SDK_SC_RFID_Devices.RFID_Device.TestLighting(List`1 tagList) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\RFID_Device.cs:ligne 1932
+   à TcpIP_class.TcpIpServer.EcouteClient() dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\TcpIP_class\TcpServer.cs:ligne 3972
+/r/n/r/n *************************/r/nL'index était hors limites. Il ne doit pas être négatif et doit être inférieur à la taille de la collection.
+Nom du paramètre : index
+(in mscorlib at Void ThrowArgumentOutOfRangeException(System.ExceptionArgument, System.ExceptionResource))
+   à System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   à System.ThrowHelper.ThrowArgumentOutOfRangeException()
+   à System.Collections.Generic.List`1.get_Item(Int32 index)
+   à SDK_SC_RFID_Devices.RFID_Device.TestLighting(List`1 tagList) dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\RFID_Device.cs:ligne 1932
+   à TcpIP_class.TcpIpServer.EcouteClient() dans Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\TcpIP_class\TcpServer.cs:ligne 3972
+
+_______________________________________________________________
+

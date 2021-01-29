@@ -29,6 +29,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using TcpIP_class;
 using Cursor = System.Windows.Forms.Cursor;
 using Timer = System.Timers.Timer;
@@ -513,12 +514,19 @@ namespace smartTracker
                             else
                             {
                                 if (bUseSynchonisation)
-                                {
+                                {                                  
                                     if (syncDevice != null)
                                     {
                                         _localDeviceArray[treeNodeSelected].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
                                         UpdateTreeView();
-                                        syncDevice.CanStartScan();
+                                        syncDevice.bIsWaitingScan = true;
+                                        Thread thScan = new Thread(() => syncDevice.CanStartScan());
+                                        thScan.IsBackground = true;
+                                        thScan.Start();
+                                        while (syncDevice.bIsWaitingScan)
+                                        {
+                                            tcpUtils.NonBlockingSleep(1000);
+                                        }
                                     }
                                 }
                                 _localDeviceArray[treeNodeSelected].rfidDev.ScanDevice();
@@ -3804,13 +3812,19 @@ namespace smartTracker
                                 if (DoDoorScan)
                                 {
                                     if (bUseSynchonisation)
-                                    {
-
+                                    {                                        
                                         if (syncDevice != null)
                                         {
                                             _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_WaitForScan;
                                             UpdateTreeView();
-                                            syncDevice.CanStartScan();
+                                            syncDevice.bIsWaitingScan = true;
+                                            Thread thScan = new Thread(() => syncDevice.CanStartScan());
+                                            thScan.IsBackground = true;
+                                            thScan.Start();
+                                            while (syncDevice.bIsWaitingScan)
+                                            {
+                                                tcpUtils.NonBlockingSleep(1000);
+                                            }
                                         }
                                         _localDeviceArray[nIndex].rfidDev.CanStartScan.Set();
                                     }                                
@@ -7277,6 +7291,25 @@ namespace smartTracker
             }
             UpdateTreeView();
         }
+        private static ManualResetEvent resetEvent = new ManualResetEvent(false);
+        public static void DoWorkForLed(RFID_Device currentDevice , List<string> selectedTags)
+        {
+            currentDevice.TestLighting(selectedTags);
+        }
+
+        public static void NonBlockingSleep(int timeInMilliseconds)
+        {
+            DispatcherFrame df = new DispatcherFrame();
+
+            new Thread((ThreadStart)(() =>
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(timeInMilliseconds));
+                df.Continue = false;
+
+            })).Start();
+
+            Dispatcher.PushFrame(df);
+        }
 
         private void allAtOnceToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -7309,14 +7342,30 @@ namespace smartTracker
                     {
                         currentDevice.DeviceStatus = DeviceStatus.DS_WaitForLed;
                         UpdateTreeView();
-                        syncDevice.CanStartLed();  
+                        syncDevice.bIsWaitingLed = true;
+                        Thread thLed = new Thread(() => syncDevice.CanStartLed());
+                        thLed.IsBackground = true;
+                        thLed.Start();
+                        while (syncDevice.bIsWaitingLed)
+                        {
+                            NonBlockingSleep(1000);
+                        }                       
                     }
+
                     currentDevice.DeviceStatus = DeviceStatus.DS_LedOn;
                     UpdateTreeView();
 
                     currentDevice.get_RFID_Device.DeviceBoard.setBridgeState(false,167,167);
+                    currentDevice.isInSearchTag = true;
+                    Thread th = new Thread(() => currentDevice.TestLighting(selectedTags));
+                    th.IsBackground = true;
+                    th.Start();
+                    while (currentDevice.isInSearchTag)
+                    {
+                        NonBlockingSleep(1000);
+                    }
+                   
 
-                    currentDevice.TestLighting(selectedTags);
                     string message = string.Empty;
 
                     if ((nbTagToLight == 1) && ((nbTagToLight - selectedTags.Count) == 1))

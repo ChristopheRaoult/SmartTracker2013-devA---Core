@@ -2167,118 +2167,122 @@ namespace SDK_SC_RfidReader
         private DateTime lastLedOn;
         private int timeLedNotOn = 2000;
         public void ConfirmAndLightWithKD(int axis, List<string> tagList)
-        {
-            ushort rcor;
-            _status = 0;
-           
-            DeviceBoard.setAntenna(true);
-            if (HardwareVersion.StartsWith("11"))
-                Thread.Sleep(50);
-            else
-                Thread.Sleep(1);
-            
-            DeviceBoard.sendSyncPulse();
-            if (HardwareVersion.StartsWith("11"))
-                Thread.Sleep(50);
-            else
-                Thread.Sleep(1);
-            ushort Rcor;
-            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
-            if (HardwareVersion.StartsWith("11"))
-                Thread.Sleep(50);
-            else
-                Thread.Sleep(1);
-            List<string> tagFound = new List<string>();
+        {          
 
-            lastLedOn = DateTime.Now;
+                /******/
+                ushort rcor;
+                _status = 0;
 
-            foreach (string tagId in tagList)
-            {
+                DeviceBoard.setAntenna(true);
+                if (HardwareVersion.StartsWith("11"))
+                    Thread.Sleep(50);
+                else
+                    Thread.Sleep(1);
 
                 DeviceBoard.sendSyncPulse();
                 if (HardwareVersion.StartsWith("11"))
                     Thread.Sleep(50);
                 else
                     Thread.Sleep(1);
-
-                _status = 0;
-                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out rcor);
-                _eventConfirmation.WaitOne(500);
+                ushort Rcor;
+                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KD, out Rcor);
                 if (HardwareVersion.StartsWith("11"))
                     Thread.Sleep(50);
                 else
                     Thread.Sleep(1);
-                if (_status == 1)
+                List<string> tagFound = new List<string>();
+
+                lastLedOn = DateTime.Now;
+
+                foreach (string tagId in tagList)
                 {
-                    _confirmationStatut = 0;
-                    //string alphaUID = tagId + "§0000000000";
-                    string tagUID = getTagUidOct((string)tagId);
-                    if (string.IsNullOrEmpty(tagUID))
-                        tagUID = SerialRFID.ConvertAlphaNumToOct((string)tagId, TagType.TT_SPCE2_RO);
-                    if (string.IsNullOrEmpty(tagUID)) continue;
 
-                    if (tagUID.Length > 20)
-                    {
-                        if (ConfirmTagUIDFullMem(tagUID, 42))
-                        {
-                            _status = 0;
-                            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
-                            _eventConfirmation.WaitOne(500);
-                            if (HardwareVersion.StartsWith("11"))
-                                Thread.Sleep(50);
-                            else
-                                Thread.Sleep(1);
-                            if (_status == 1)
-                            {
-                                ts = DateTime.Now - lastLedOn;
-                                //Led Off in process
-                                TestLed();
-                                // Led On in process
-                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
-                                if (HardwareVersion.StartsWith("11"))
-                                    Thread.Sleep(50);
-                                else
-                                    Thread.Sleep(1);
-                                tagFound.Add(tagId);
-                            }
-                        }
-                    }
+                    DeviceBoard.sendSyncPulse();
+                    if (HardwareVersion.StartsWith("11"))
+                        Thread.Sleep(50);
                     else
+                        Thread.Sleep(1);
+
+                    _status = 0;
+                    DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KZ_SPCE2, out rcor);
+                    _eventConfirmation.WaitOne(500);
+                    if (HardwareVersion.StartsWith("11"))
+                        Thread.Sleep(50);
+                    else
+                        Thread.Sleep(1);
+                    if (_status == 1)
                     {
-                        LoadUIDForConfirmation(tagUID);
-                        DeviceBoard.confirmLoadedUID(24);
-                        _eventConfirmation.WaitOne(500);
-                        if (HardwareVersion.StartsWith("11"))
-                            Thread.Sleep(50);
-                        if (_confirmationStatut == 1)
+                        _confirmationStatut = 0;
+                        //string alphaUID = tagId + "§0000000000";
+                        string tagUID = getTagUidOct((string)tagId);
+                        if (string.IsNullOrEmpty(tagUID))
+                            tagUID = SerialRFID.ConvertAlphaNumToOct((string)tagId, TagType.TT_SPCE2_RO);
+                        if (string.IsNullOrEmpty(tagUID)) continue;
+
+                        if (tagUID.Length > 20)
                         {
-                            _status = 0;
-                            DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
-                            _eventConfirmation.WaitOne(500);
-                            if (HardwareVersion.StartsWith("11"))
-                                Thread.Sleep(50);
-                            else
-                                Thread.Sleep(1);
-                            if (_status == 1)
+                            if (ConfirmTagUIDFullMem(tagUID, 42))
                             {
-                                ts = DateTime.Now - lastLedOn;
-                                //Led Off in process
-                                TestLed();
-                                // Led On in process
-                                //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                _status = 0;
+                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
+                                _eventConfirmation.WaitOne(500);
                                 if (HardwareVersion.StartsWith("11"))
                                     Thread.Sleep(50);
                                 else
                                     Thread.Sleep(1);
-                                tagFound.Add(tagId);
+                                if (_status == 1)
+                                {
+                                    ts = DateTime.Now - lastLedOn;
+                                    //Led Off in process
+                                    TestLed();
+                                    // Led On in process
+                                    //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                    if (HardwareVersion.StartsWith("11"))
+                                        Thread.Sleep(50);
+                                    else
+                                        Thread.Sleep(1);
+                                    tagFound.Add(tagId);
+                                }
                             }
                         }
-                    }
-                   
-                }
-            }
+                        else
+                        {
+                            LoadUIDForConfirmation(tagUID);
+                            DeviceBoard.confirmLoadedUID(24);
+                            _eventConfirmation.WaitOne(500);
+                            if (HardwareVersion.StartsWith("11"))
+                                Thread.Sleep(50);
+                            if (_confirmationStatut == 1)
+                            {
+                                _status = 0;
+                                DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KB, out rcor);
+                                _eventConfirmation.WaitOne(500);
+                                if (HardwareVersion.StartsWith("11"))
+                                    Thread.Sleep(50);
+                                else
+                                    Thread.Sleep(1);
+                                if (_status == 1)
+                                {
+                                    ts = DateTime.Now - lastLedOn;
+                                    //Led Off in process
+                                    TestLed();
+                                    // Led On in process
+                                    //DeviceBoard.sendCommand((byte)LowlevelBasicOrder.KL, out Rcor);
+                                    if (HardwareVersion.StartsWith("11"))
+                                        Thread.Sleep(50);
+                                    else
+                                        Thread.Sleep(1);
+                                    tagFound.Add(tagId);
+                                }
+                            }
+                        }
 
-            foreach (string tagId in tagFound) tagList.Remove(tagId);
+                    }
+                }
+
+                foreach (string tagId in tagFound) tagList.Remove(tagId);
+                /******/               
+           
         }
         public int[] WriteBlock(byte nbBlock, string[] dataHexa, string tagToWrite, int axis)
         {

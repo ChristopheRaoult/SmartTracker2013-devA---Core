@@ -31,8 +31,8 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2021.1.20.1698")]
-[assembly: AssemblyFileVersion("2021.1.20.1698")]
+[assembly: AssemblyVersion("2021.1.29.1699")]
+[assembly: AssemblyFileVersion("2021.1.29.1699")]
 //1696 - bug tag to drawer ARM get inventories
 //1694 - Run one scan after connect for LED 
 //1684 - badge reader remote on SMC
