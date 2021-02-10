@@ -38,3 +38,17 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.csproj.CopyComplete
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.csprojAssemblyReference.cache
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.csproj.CoreCompileInputs.cache
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_MedicalCabinet.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_MedicalCabinet.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\DataClass.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\ErrorMessage.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_RfidReader.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\DataClass.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\ErrorMessage.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_RfidReader.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_RfidReader.xml
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.csproj.CopyComplete

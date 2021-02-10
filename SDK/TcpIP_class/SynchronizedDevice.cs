@@ -43,7 +43,9 @@ namespace TcpIP_class
                
                 do
                 {
-                    TimeSpan ts = expiredTime - DateTime.Now;                  
+                    TimeSpan ts = expiredTime - DateTime.Now;
+
+                    if (!bIsWaitingScan) return;  //quit if requested
 
                     if (ts.TotalSeconds < 0)
                     {

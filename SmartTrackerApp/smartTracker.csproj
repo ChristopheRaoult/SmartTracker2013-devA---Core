@@ -162,8 +162,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\lib\SQLite\System.Data.SQLite.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\Lib\lib\x64\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -501,6 +500,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LiveDataForm.resx">
       <DependentUpon>LiveDataForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalDeviceForm.resx">
       <DependentUpon>LocalDeviceForm.cs</DependentUpon>

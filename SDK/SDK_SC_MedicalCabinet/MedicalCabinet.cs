@@ -190,14 +190,17 @@ namespace SDK_SC_MedicalCabinet
                 BadgeEvent.WaitOne();
                 if (CancelOps) return;
                 Clock.Stop();
+                WaitDoor = true;            
 
-                WaitDoor = true;
                 OpenDoor();
                 Clock.Start();
                 CptDoor = 10;
                 DoorEventNormal.Reset();
-
-                if (DoorEventNormal.WaitOne(20000, false)) continue; // next loop iteration as the process will continue to classic door event
+                if (DoorEventNormal.WaitOne(10000, false))
+                {
+                    CloseDoor();
+                    continue; // next loop iteration as the process will continue to classic door event
+                }
                 if (LedThread != null)
                 {
                     LedThread.Abort();

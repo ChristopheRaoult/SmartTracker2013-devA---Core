@@ -1430,7 +1430,10 @@ namespace SDK_SC_RFID_Devices
                     
 
                 case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
-                   
+
+                    deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
+                    setLightvsState();
+                    Thread.Sleep(500);
 
                     if (LedThread != null)
                     {
@@ -1438,10 +1441,15 @@ namespace SDK_SC_RFID_Devices
                         LedThread.Join(1000);
                         LedThread = null;
                     }
-                    
-                    deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
-                    setLightvsState();
-                    Thread.Sleep(500);
+                   
+                    if (DeviceStatus == DeviceStatus.DS_InScan)
+                    {
+                        myDevice.RequestEndScan();
+                        deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
+                    }                
+
+                   
+
                     /*if ((deviceType == DeviceType.DT_SAS) || (deviceType == DeviceType.DT_MSR))
                     {
                         myDevice.CloseDoorMaster();
@@ -1499,7 +1507,8 @@ namespace SDK_SC_RFID_Devices
                     
                    
                     if (DoDoorScan)
-                    {
+                    {                       
+
                         if (bUseSynchronisation)
                         {
                             CanStartScan.WaitOne(TimeoutInSec * 1000, false);

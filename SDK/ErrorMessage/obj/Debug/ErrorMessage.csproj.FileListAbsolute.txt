@@ -23,3 +23,12 @@ Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorM
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.CoreCompileInputs.cache
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.dll
 Z:\DEV SOFT\REPO_CSHARP\SmartTracker2013\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\bin\Debug\ErrorMessage.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\bin\Debug\ErrorMessage.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.ExceptionMessageBox.resources
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.Properties.Resources.resources
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.GenerateResource.cache
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.CoreCompileInputs.cache
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.pdb
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csprojAssemblyReference.cache

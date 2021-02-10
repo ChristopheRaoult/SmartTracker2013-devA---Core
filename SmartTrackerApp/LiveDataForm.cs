@@ -3799,6 +3799,28 @@ namespace smartTracker
                                     }
                                 }
                             }
+                            for (int nIndex = 0; nIndex < _localDeviceArray.Length; nIndex++)
+                            {
+                                if (_localDeviceArray[nIndex].infoDev.SerialRFID.Equals(args.SerialNumber))
+                                {
+                                    if (bUseSynchonisation)
+                                    {
+                                        if (_localDeviceArray[nIndex].rfidDev.DeviceStatus == DeviceStatus.DS_WaitForScan)
+                                        {
+                                            if (syncDevice != null)                                            
+                                                syncDevice.bIsWaitingScan = false;
+                                            
+                                            _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_DoorOpen;
+                                            _localDeviceArray[nIndex].rfidDev.CanStartScan.Set();
+                                        }
+                                    }
+                                    else if (_localDeviceArray[nIndex].rfidDev.DeviceStatus == DeviceStatus.DS_InScan)
+                                    {
+                                        _localDeviceArray[nIndex].rfidDev.StopScan();
+                                        _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_DoorOpen;
+                                    }
+                                }
+                            }
                             #endregion
                         }
                         break;
