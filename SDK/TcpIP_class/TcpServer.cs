@@ -22,6 +22,7 @@ using SDK_SC_RFID_Devices;
 using SDK_SC_Fingerprint;
 using SDK_SC_MedicalCabinet;
 using Newtonsoft.Json;
+using ErrorMessage;
 
 namespace TcpIP_class
 {
@@ -226,10 +227,12 @@ namespace TcpIP_class
             }
                 
                 try
-                {             
-                    
+                {   
 
                     strReceive = ReadData(mySocket);
+
+                    LogToFile.LogMessageToFile("Server : " + strReceive);
+
                     if (localDeviceArray == null)
                     {
                         SendReturnCode(mySocket, myClient, ReturnType.readerNotReady+ "\r\n", false);
@@ -608,8 +611,8 @@ namespace TcpIP_class
                             #endregion
                             #region CMD PING
                             case "PING?":
-                                {
-                                    SendReturnCode(mySocket, myClient, ReturnType.pingServerOk, false);
+                                {                               
+                                SendReturnCode(mySocket, myClient, ReturnType.pingServerOk, false);
                                     break;
                                 }
                             #endregion
@@ -1228,10 +1231,12 @@ namespace TcpIP_class
 
                                     if (nbArg == 1) // unique reader assume in index  0 of local array
                                     {
-                                        if (localDeviceArray[0].bDataCompleted)
-                                            SendReturnCode(mySocket, myClient, localDeviceArray[0].rfidDev.DeviceStatus.ToString(), false);
-                                        else
+                                        if (localDeviceArray[0].bDataCompleted)                                        
+                                            SendReturnCode(mySocket, myClient, localDeviceArray[0].rfidDev.DeviceStatus.ToString(), false); 
+                                        else                                        
                                             SendReturnCode(mySocket, myClient, DeviceStatus.DS_InScan.ToString(), false);
+                                            
+                                        
                                     }
                                     else // several reader ; search it
                                     {
@@ -1242,13 +1247,17 @@ namespace TcpIP_class
                                             if (dc.infoDev.SerialRFID.Equals(serialRFID))
                                             {
                                                 bFind = true;
-                                                if (dc.bDataCompleted)
-                                                    SendReturnCode(mySocket, myClient, dc.rfidDev.DeviceStatus.ToString(), false);
-                                                else
-                                                    SendReturnCode(mySocket, myClient, DeviceStatus.DS_InScan.ToString(), false);
+                                                if (dc.bDataCompleted)                                                
+                                                    SendReturnCode(mySocket, myClient, dc.rfidDev.DeviceStatus.ToString(), false);  
+                                                else                                                
+                                                    SendReturnCode(mySocket, myClient, DeviceStatus.DS_InScan.ToString(), false); 
+                                                
                                             }
                                         }
-                                        if (!bFind) SendReturnCode(mySocket, myClient, ReturnType.readerNotExist, false);
+                                    if (!bFind)
+                                    {
+                                        SendReturnCode(mySocket, myClient, ReturnType.readerNotExist, false);
+                                    }
                                     }
                                     break;
                                 }
@@ -4195,6 +4204,12 @@ namespace TcpIP_class
         {
             try
             {
+                if (str.Length > 270)
+                    LogToFile.LogMessageToFile("Server return: " + str.Substring(0,269));
+                else
+                    LogToFile.LogMessageToFile("Server return: " + str);
+
+
                 if (NotifyLog != null && str.Length < 128)
                 {
                     NotifyLog("Sent :" + str);

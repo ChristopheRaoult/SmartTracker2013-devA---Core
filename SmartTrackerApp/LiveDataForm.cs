@@ -3007,6 +3007,7 @@ namespace smartTracker
 
 
                                         InventoryAndDbClass invCl = new InventoryAndDbClass(_localDeviceArray[nIndex].infoDev, _localDeviceArray[nIndex].currentInventory, _db, _bStoreTagEvent);
+                                        LogToFile.LogMessageToFile("------Store Scan ------");
 
                                         bool ret = StoreInventory(invCl, _bStoreTagEvent, out idscanEvent);
 
@@ -3014,12 +3015,21 @@ namespace smartTracker
                                         {
                                             _localDeviceArray[nIndex].currentInventory.IdScanEvent = idscanEvent;
                                             _localDeviceArray[nIndex].lastProcessInventoryGmtDate = truncateMs(_localDeviceArray[nIndex].currentInventory.eventDate.ToUniversalTime());
+
+                                            string infoLog = string.Format("Scan Saved with Id  {0}", idscanEvent);
+                                            LogToFile.LogMessageToFile(infoLog);
                                             Invoke((MethodInvoker)delegate
                                            {
                                                /*if (tabControlInfo.SelectedIndex == 1)
                                                   UpdateScanHistory(null);*/
                                            });
                                         }
+                                        else
+                                        {
+                                            string infoLog = string.Format("Scan Store failed");
+                                            LogToFile.LogMessageToFile(infoLog);
+                                        }
+                                        LogToFile.LogMessageToFile("------End Store Scan ------");
 
                                         _bFirstScanAccumulate = !_bKeepLastScan;
                                         _bWasInAccumulation = false;
@@ -3237,6 +3247,9 @@ namespace smartTracker
                                             {
                                                 _tcpNotificationThreadInfo.SetParam(TcpThreadHandle.TcpNotificationType.ScanCompleted, _localDeviceArray[nIndex].infoDev.SerialRFID, _tcpIpServer.ServerIP, _tcpIpServer.Port, idscanEvent, 0);
                                                 _tcpNotificationThreadInfo.ThreadTcpLoop();
+
+                                                string infoLog = string.Format("Notify Scan completed  with ID : {0}", idscanEvent);
+                                                LogToFile.LogMessageToFile(infoLog);
                                             }
                                         }
                                     }
@@ -3509,10 +3522,15 @@ namespace smartTracker
 
 
                                     InventoryAndDbClass invCl = new InventoryAndDbClass(_localDeviceArray[nIndex].infoDev, _localDeviceArray[nIndex].currentInventory, _db, _bStoreTagEvent);
+
+                                    LogToFile.LogMessageToFile("------Store Scan ------");
+
                                     int idScanEvent = -1;
                                     bool ret = StoreInventory(invCl, _bStoreTagEvent, out idScanEvent);
                                     if (ret)
                                     {
+                                        string infoLog = string.Format("Scan Saved with Id  {0}", idScanEvent);
+                                        LogToFile.LogMessageToFile(infoLog);
                                         _localDeviceArray[nIndex].currentInventory.IdScanEvent = idScanEvent;
                                         _localDeviceArray[nIndex].lastProcessInventoryGmtDate = truncateMs(_localDeviceArray[nIndex].currentInventory.eventDate.ToUniversalTime());
                                         Invoke((MethodInvoker)delegate
@@ -3521,6 +3539,12 @@ namespace smartTracker
                                                //UpdateScanHistory(null);*/
                                        });
                                     }
+                                    else
+                                    {
+                                        string infoLog = string.Format("Scan Store failed");
+                                        LogToFile.LogMessageToFile(infoLog);
+                                    }
+                                    LogToFile.LogMessageToFile("------End Store Scan ------");
                                     _bFirstScanAccumulate = true;
                                     _bWasInAccumulation = false;
                                     if (nIndex == _selectedReader)
@@ -3786,6 +3810,7 @@ namespace smartTracker
                         break;
                     case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
                         {
+                            LogToFile.LogMessageToFile("door Open Live data");
                             UpdateTreeView();
                             #region TcpNotification
                             if (_bUseTcpNotification)
@@ -3809,7 +3834,7 @@ namespace smartTracker
                                         {
                                             if (syncDevice != null)                                            
                                                 syncDevice.bIsWaitingScan = false;
-                                            
+                                            _localDeviceArray[nIndex].rfidDev.waitScanStopped = true;
                                             _localDeviceArray[nIndex].rfidDev.DeviceStatus = DeviceStatus.DS_DoorOpen;
                                             _localDeviceArray[nIndex].rfidDev.CanStartScan.Set();
                                         }
@@ -6749,19 +6774,29 @@ namespace smartTracker
                 ExceptionMessageBox.Show(exp);
             }
             
-        }
-       
+        }       
+
+
         private bool StoreInventory(object obj, bool bStoreTagEvent , out int idScanEvent)
         {
+            string infoLog;
             idScanEvent = -1;
             bool ret = false;
             lock (_locker)
             {
+                infoLog = string.Format("Enter Locker");
+                LogToFile.LogMessageToFile(infoLog);
+
                 InventoryAndDbClass clToProcess = (InventoryAndDbClass)obj;
                 InventoryData invTmp = _db.GetLastScan(clToProcess.Device.SerialRFID);
 
+                infoLog = string.Format("Get Last Scan");
+                LogToFile.LogMessageToFile(infoLog);
+
                 if ((invTmp != null) && (clToProcess.Data.eventDate > invTmp.eventDate.ToUniversalTime()))              
                 {
+                    infoLog = string.Format("Previous scan OK ; Time OK");
+                    LogToFile.LogMessageToFile(infoLog);
 
                     int nbTostore = clToProcess.Data.nbTagAdded + clToProcess.Data.nbTagPresent + clToProcess.Data.nbTagRemoved;
                     int checkNbToStore = clToProcess.Data.dtTagAdded.Rows.Count + clToProcess.Data.dtTagPresent.Rows.Count + clToProcess.Data.dtTagRemove.Rows.Count;
@@ -6783,6 +6818,10 @@ namespace smartTracker
                         }*/
                         string info = string.Format(ResStrings.str_errorserialization, clToProcess.Data.nbTagAdded, clToProcess.Data.dtTagAdded.Rows.Count, clToProcess.Data.nbTagPresent, clToProcess.Data.dtTagPresent.Rows.Count, clToProcess.Data.nbTagRemoved, clToProcess.Data.dtTagRemove.Rows.Count);
                         ExceptionMessageBox.Show(ResStrings.str_errorDataStoreInventory + info, ResStrings.str_Info_on_store_inventory);
+
+                        infoLog = string.Format("Error For saving : {0}" , info);
+                        LogToFile.LogMessageToFile(infoLog);
+
                     }
                     else
                     {
@@ -6790,10 +6829,15 @@ namespace smartTracker
                         if (!clToProcess.Db.StoreInventory(clToProcess.Data))
                         {
                             ExceptionMessageBox.Show(ResStrings.str_Unable_to_store_inventory_Data_will_be_loose, ResStrings.str_Info_on_store_inventory);
+
+                            infoLog = string.Format("Error in store inventory");
+                            LogToFile.LogMessageToFile(infoLog);
                         }
                         else
                         {
                             idScanEvent = clToProcess.Db.getRowInsertIndex();
+                            infoLog = string.Format("Get ScanId :{0}" , idScanEvent);
+                            LogToFile.LogMessageToFile(infoLog);
 
                             if (bStoreTagEvent)
                             {                               
@@ -6807,6 +6851,9 @@ namespace smartTracker
                 {
                     if (invTmp == null)
                     {
+                        infoLog = string.Format("Previous scan null ");
+                        LogToFile.LogMessageToFile(infoLog);
+
                         int nbTostore = clToProcess.Data.nbTagAdded + clToProcess.Data.nbTagPresent + clToProcess.Data.nbTagRemoved;
                         int checkNbToStore = clToProcess.Data.dtTagAdded.Rows.Count + clToProcess.Data.dtTagPresent.Rows.Count + clToProcess.Data.dtTagRemove.Rows.Count;
 
@@ -6827,7 +6874,10 @@ namespace smartTracker
 
                             string info = string.Format(ResStrings.str_errorserialization, clToProcess.Data.nbTagAdded, clToProcess.Data.dtTagAdded.Rows.Count, clToProcess.Data.nbTagPresent, clToProcess.Data.dtTagPresent.Rows.Count, clToProcess.Data.nbTagRemoved, clToProcess.Data.dtTagRemove.Rows.Count);
                             ExceptionMessageBox.Show(ResStrings.str_errorDataStoreInventory + info, ResStrings.str_Info_on_store_inventory);
-                            
+
+                            infoLog = string.Format("Error For saving : {0}", info);
+                            LogToFile.LogMessageToFile(infoLog);
+
                         }
                         else
                         {
@@ -6835,10 +6885,14 @@ namespace smartTracker
                             if (!clToProcess.Db.StoreInventory(clToProcess.Data))
                             {
                                 ExceptionMessageBox.Show(ResStrings.str_Unable_to_store_inventory_Data_will_be_loose, ResStrings.str_Info_on_store_inventory);
+                                infoLog = string.Format("Error in store inventory");
+                                LogToFile.LogMessageToFile(infoLog);
                             }
                             else                               
                             {
                                 idScanEvent = clToProcess.Db.getRowInsertIndex();
+                                infoLog = string.Format("Get ScanId :{0}", idScanEvent);
+                                LogToFile.LogMessageToFile(infoLog);
                                 if (bStoreTagEvent)
                                 {                                   
                                     clToProcess.Db.storeTagEvent(clToProcess.Data, idScanEvent);
@@ -6848,8 +6902,15 @@ namespace smartTracker
                             }
                         }
                     }
+                    else
+                    {
+                        infoLog = string.Format("Previous scan  time {0} : current scan Time {1}", invTmp.eventDate.ToUniversalTime(), clToProcess.Data.eventDate);
+                        LogToFile.LogMessageToFile(infoLog);
+                    }
                 }
             }
+            infoLog = string.Format("end store inventory  : {0}", ret );
+            LogToFile.LogMessageToFile(infoLog);
             return ret;
         }
         private void StoreNetworkinventory(deviceClass dc, InventoryData invData)

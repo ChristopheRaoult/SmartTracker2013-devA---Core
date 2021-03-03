@@ -86,8 +86,8 @@ namespace ErrorMessage
 
 			// on crée une ErrorMessageBox et on l'affiche
             ExceptionMessageBox f = new ExceptionMessageBox(text, details, title);
-			f.ShowDialog();
-            //f.Show();
+			//f.ShowDialog();
+            f.Show();
             
 		}
 

@@ -52,3 +52,5 @@ D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalC
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_RfidReader.pdb
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\SDK_SC_RfidReader.xml
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\obj\Debug\SDK_SC_MedicalCabinet.csproj.CopyComplete
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\WindowsBase.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_MedicalCabinet\bin\Debug\fr\WindowsBase.resources.dll

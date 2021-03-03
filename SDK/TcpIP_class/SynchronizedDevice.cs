@@ -43,15 +43,16 @@ namespace TcpIP_class
                
                 do
                 {
-                    TimeSpan ts = expiredTime - DateTime.Now;
-
+                   
                     if (!bIsWaitingScan) return;  //quit if requested
-
+                    //remove for LED
+                    /*
+                    TimeSpan ts = expiredTime - DateTime.Now;
                     if (ts.TotalSeconds < 0)
                     {
                         bIsWaitingScan = false;
                         return;
-                    }                                   
+                    } */                                 
 
                     bQuitValue = 0;
                    
@@ -164,7 +165,6 @@ namespace TcpIP_class
                     {
                         tcpUtils.NonBlockingSleep(rnd.Next(1000, 3000));
                     }
-
                 }
                 while (bQuitValue != bQuitCondition);
 
@@ -193,13 +193,13 @@ namespace TcpIP_class
                 bool bNeedTreatDoorOpenOnLeft = false;
                 do
                 {
-                    TimeSpan ts = expiredTime - DateTime.Now;
-
+                    //remove for LED
+                    /*TimeSpan ts = expiredTime - DateTime.Now;
                     if (ts.TotalSeconds < 0)
                     {
                         bIsWaitingLed = false;
                         return;
-                    }
+                    }*/
                        
 
                     bQuitValue = 0;
@@ -231,7 +231,8 @@ namespace TcpIP_class
                                             bQuitValue++;
                                         }
                                     }
-                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    //else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    else if (ds == DeviceStatus.DS_InScan)
                                     {
                                         // need to wait 
                                     }
@@ -255,7 +256,8 @@ namespace TcpIP_class
                                             bQuitValue++;
                                         }
                                     }
-                                    else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    // else if ((ds == DeviceStatus.DS_InScan) || (ds == DeviceStatus.DS_LedOn))
+                                    else if (ds == DeviceStatus.DS_InScan)
                                     {
                                         //need to wait
                                     }

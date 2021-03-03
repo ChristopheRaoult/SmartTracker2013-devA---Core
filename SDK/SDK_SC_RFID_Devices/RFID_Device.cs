@@ -10,6 +10,7 @@ using SDK_SC_RfidReader;
 using SDK_SC_Fingerprint;
 using SDK_SC_MedicalCabinet;
 using SDK_SC_AccessControl;
+using ErrorMessage;
 
 namespace SDK_SC_RFID_Devices
 {
@@ -1213,7 +1214,7 @@ namespace SDK_SC_RFID_Devices
             }
         }
 
-
+        public volatile bool waitScanStopped = false;
         private void myDevice_NotifyEvent(object sender, SDK_SC_RfidReader.rfidReaderArgs args)
         {
             if (myDevice == null) return;
@@ -1431,12 +1432,14 @@ namespace SDK_SC_RFID_Devices
 
                 case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
 
-                    deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
+                    LogToFile.LogMessageToFile("Door Open in Rfid Device");
+                    LogToFile.LogMessageToFile("Status : " + DeviceStatus.ToString());
+
                     setLightvsState();
                     Thread.Sleep(500);
-
                     if (LedThread != null)
                     {
+                        LogToFile.LogMessageToFile("Thread led  - stop it in rfid device");
                         LedThread.Abort();
                         LedThread.Join(1000);
                         LedThread = null;
@@ -1444,11 +1447,14 @@ namespace SDK_SC_RFID_Devices
                    
                     if (DeviceStatus == DeviceStatus.DS_InScan)
                     {
+                        LogToFile.LogMessageToFile("Device in scan - stop it in rfid device");
                         myDevice.RequestEndScan();
                         deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
-                    }                
+                    }
+                    else 
+                        deviceStatus = DataClass.DeviceStatus.DS_DoorOpen;
 
-                   
+
 
                     /*if ((deviceType == DeviceType.DT_SAS) || (deviceType == DeviceType.DT_MSR))
                     {
@@ -1482,6 +1488,7 @@ namespace SDK_SC_RFID_Devices
                         }
                         else
                         {
+                            LogToFile.LogMessageToFile("Close door in Rfid Device");
                             myDevice.CloseDoor();
                         }
                        
@@ -1502,18 +1509,23 @@ namespace SDK_SC_RFID_Devices
                     doorOpenTooLongTimer.Stop();
                     Thread.Sleep(500);
                     // Semaphore ????
+                    waitScanStopped = false;
                     CanStartScan.Reset();
-                    if (NotifyRFIDEvent != null) NotifyRFIDEvent(this, args);                
-                    
+                    if (NotifyRFIDEvent != null) NotifyRFIDEvent(this, args); 
                    
                     if (DoDoorScan)
-                    {                       
+                    {
 
                         if (bUseSynchronisation)
                         {
                             CanStartScan.WaitOne(TimeoutInSec * 1000, false);
+                            if (!waitScanStopped)
+                                ScanDevice();
                         }
-                        ScanDevice();
+                        else
+                        {
+                            ScanDevice();
+                        }
                     }
                     else
                     {
@@ -2743,8 +2755,10 @@ namespace SDK_SC_RFID_Devices
 
         }
 
+        private int timeoutLEDinMins = 5 ;  //5 minutes
         private void LightAllAxisThreaded(List<int> axisNotEmpty, int timeout)
         {
+            DateTime expiredTime = DateTime.Now.AddMinutes(timeoutLEDinMins); //time to quit in any case
             while (Thread.CurrentThread.IsAlive)
             {
                 if ((myDevice != null) && (myDevice.IsInScan)) break;
@@ -2752,8 +2766,21 @@ namespace SDK_SC_RFID_Devices
                 if (deviceStatus == DeviceStatus.DS_WaitForScan) break;
                 if (deviceStatus == DeviceStatus.DS_DoorClose) break;
 
-                //still in led - put status again to put in led if door open and thread not stopped
-                deviceStatus = DeviceStatus.DS_LedOn;
+                TimeSpan ts = expiredTime - DateTime.Now;
+                if (ts.TotalSeconds < 0)
+                {
+                    if (myDevice != null)
+                        myDevice.StopField();
+                    deviceStatus = DeviceStatus.DS_Ready;
+                    return;
+                }
+                else
+                    //still in led - put status again to put in led if door open and thread not stopped
+                    deviceStatus = DeviceStatus.DS_LedOn;
+
+
+
+
                 bool changeChannel = (axisNotEmpty.Count > 1); // if only one axis, do not change channel while LedOnAll. Otherwise, change.
 
                 if (!myDevice.HardwareVersion.StartsWith("2")) // Pas une JSC

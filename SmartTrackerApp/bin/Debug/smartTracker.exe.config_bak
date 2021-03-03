@@ -57,11 +57,11 @@
     <add key="Desc_bSynchonizedDevice" value="Bool to synchronized device" />
     <add key="bSynchonizedDevice" value="True" />
     <add key="Desc_DeviceIpRight" value="Ip of device at Right" />
-    <add key="DeviceIpRight" value="192.168.1.8" />
+    <add key="DeviceIpRight" value="192.168.1.5" />
     <add key="Desc_DevicePortRight" value="Port of device at Right" />
     <add key="DevicePortRight" value="6901" />
     <add key="Desc_DeviceIpLeft" value="Ip of device at Left" />
-    <add key="DeviceIpLeft" value="" />
+    <add key="DeviceIpLeft" value="192.168.1.2" />
     <add key="Desc_DevicePortLeft" value="Port of device at Left" />
     <add key="DevicePortLeft" value="6901" />
     <add key="Desc_TimeoutInSec" value="Timeout in Second to run scan " />

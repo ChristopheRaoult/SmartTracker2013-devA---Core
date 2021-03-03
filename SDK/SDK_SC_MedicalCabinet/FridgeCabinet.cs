@@ -4,6 +4,7 @@ using System.Threading;
 
 using SDK_SC_RfidReader;
 using DataClass;
+using ErrorMessage;
 
 namespace SDK_SC_MedicalCabinet
 {
@@ -218,6 +219,7 @@ namespace SDK_SC_MedicalCabinet
             {
                 if (CheckBadge(StrBadgeRead))
                 {
+                   
                     OnBadgeReader(StrBadgeRead);
                     if (BadgeEvent != null)
                         BadgeEvent.Set();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-
+using ErrorMessage;
 using SDK_SC_RfidReader;
 
 namespace SDK_SC_MedicalCabinet
@@ -93,6 +93,8 @@ namespace SDK_SC_MedicalCabinet
                 {
                     CurrenRfidReader.UserActionPending = true;
                     DisplayBadge = true;
+                    string str = string.Format("------Badge Received : {0} ------", StrBadgeRead);
+                    LogToFile.LogMessageToFile(str);
                 }
             }
         }

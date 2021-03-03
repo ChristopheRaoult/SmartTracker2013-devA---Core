@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Collections;
 using SDK_SC_RfidReader;
-
+using ErrorMessage;
+using System.Windows.Threading;
 
 namespace SDK_SC_MedicalCabinet
 {
@@ -109,8 +110,8 @@ namespace SDK_SC_MedicalCabinet
                     }
                     if ((myPT100Probe != null) && (myPT100Probe.isOnline()))
                     {
-                       ambiantTemp = myPT100Probe.get_currentValue();
-                      
+                        ambiantTemp = myPT100Probe.get_currentValue();
+
                     }
                 }
 
@@ -118,88 +119,138 @@ namespace SDK_SC_MedicalCabinet
                 {
                     WriteLCDLine(1, " - WAIT FOR USER -");
                     WriteLCDLine(2, " " + GetTime() + " - " + ambiantTemp.ToString("00.0") + "C");
-                 
+
                 }
                 else
                 {
                     WriteLCDLine(1, " - WAIT FOR USER -");
-                   WriteLCDLine(2, "      "  + GetTime());
+                    WriteLCDLine(2, "      " + GetTime());
                 }
-              
+
                 return;
-            }
-
-            Clock.Stop();
-            DisplayBadge = false;
-            WriteLCDLine(1, "       BADGE :");
-            WriteLCDLine(2, "     " + StrBadgeRead);
-            Thread.Sleep(100);
-            if (!CurrenRfidReader.TCPActionPending)
-            {
-
-                if (CheckBadge(StrBadgeRead))
-                {
-                    OnBadgeReader(StrBadgeRead);
-                    if (BadgeEvent != null)
-                        BadgeEvent.Set();
-                    /*
-                    if (LedThread == null)
-                    {
-                        MyThreadHandleForLed threadHandle = new MyThreadHandleForLed(CurrenRfidReader, 500);
-                        LedThread = new Thread(new ThreadStart(threadHandle.ThreadLoop));
-                        LedThread.Start();
-                    }*/
-                }
-
-                else
-                {
-                    WriteLCDLine(1, "       BADGE :");
-                    WriteLCDLine(2, " BADGE NOT GRANTED!");
-                    Clock.Start();
-                    //Enable TCP Scan
-                    CurrenRfidReader.UserActionPending = false;
-
-                }
             }
             else
             {
-                WriteLCDLine(1, "       INFO  :");
-                WriteLCDLine(2, " NETWORK QUERY");
-                Clock.Start();
-                //Enable TCP Scan
-                CurrenRfidReader.UserActionPending = false;
+
+                Clock.Stop();
+                DisplayBadge = false;
+                WriteLCDLine(1, "       BADGE :");
+                WriteLCDLine(2, "     " + StrBadgeRead);
+                Thread.Sleep(100);
+                if (!CurrenRfidReader.TCPActionPending)
+                {
+                    LogToFile.LogMessageToFile("Before check badge");
+                    if (CheckBadge(StrBadgeRead))
+                    {
+                        LogToFile.LogMessageToFile("Badge Checked in medical");
+                        OnBadgeReader(StrBadgeRead);
+                       
+                        badgeset = true;
+                        LogToFile.LogMessageToFile("Open door prior bagde set");
+                        OpenDoor();
+                        if (BadgeEvent != null)
+                        {
+                            BadgeEvent.Set();
+                            LogToFile.LogMessageToFile("Badge event set in medical");
+                        }
+
+                    }
+
+                    else
+                    {
+                        LogToFile.LogMessageToFile("badge not granted");
+                        WriteLCDLine(1, "       BADGE :");
+                        WriteLCDLine(2, " BADGE NOT GRANTED!");
+                        Clock.Start();
+                        //Enable TCP Scan
+                        CurrenRfidReader.UserActionPending = false;
+
+                    }
+                }
+                else
+                {
+                    LogToFile.LogMessageToFile("TCP action pending");
+                    WriteLCDLine(1, "       INFO  :");
+                    WriteLCDLine(2, " NETWORK QUERY");
+                    Clock.Start();
+                    //Enable TCP Scan
+                    CurrenRfidReader.UserActionPending = false;
+                }
             }
         }
 
+        public void StopScan()
+        {
+            if (CurrenRfidReader.IsInScan)
+            {
+                LogToFile.LogMessageToFile("InScan - Stop it");
+                CurrenRfidReader.RequestEndScan();
+            }
+              
+        }
+
+
         public void OpenDoor()
         {
+            LogToFile.LogMessageToFile("Open door medical");
             CurrenRfidReader.OpenDoorMaster();
         }
 
 
         public void CloseDoor()
         {
+            LogToFile.LogMessageToFile("Close door medical");
             CurrenRfidReader.CloseDoorMaster();
         }
 
+        public static void NonBlockingSleep(int timeInMilliseconds)
+        {
+            DispatcherFrame df = new DispatcherFrame();
 
+            new Thread((ThreadStart)(() =>
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(timeInMilliseconds));
+                df.Continue = false;
+
+            })).Start();
+
+            Dispatcher.PushFrame(df);
+        }
+        private volatile bool badgeset = false;
         private void EventThreadProc()
         {
-            while (!StoppingThread)
+           while (!StoppingThread)
             {
-                BadgeEvent.WaitOne();
-                if (CancelOps) return;
-                Clock.Stop();
-                WaitDoor = true;            
+                LogToFile.LogMessageToFile("------Wait Badge Infinite ------");
+                badgeset = false;
+                while (!badgeset)
+                {
+                    if (CancelOps) return; 
+                    NonBlockingSleep(1000);
+                }
 
+                //BadgeEvent.WaitOne();
+               // if (CancelOps) return;
+                LogToFile.LogMessageToFile("Event Badge received");
+                Clock.Stop();
+                WaitDoor = true;
+                LogToFile.LogMessageToFile("------ Stop Scan if needed ------");
+                StopScan();
+                LogToFile.LogMessageToFile("------Open door  Cabinet ------");
                 OpenDoor();
                 Clock.Start();
                 CptDoor = 10;
                 DoorEventNormal.Reset();
+                LogToFile.LogMessageToFile("------Wait Door Close ------");
                 if (DoorEventNormal.WaitOne(10000, false))
                 {
+                    LogToFile.LogMessageToFile("------Door Close event ----");
                     CloseDoor();
                     continue; // next loop iteration as the process will continue to classic door event
+                }
+                else
+                {
+                    LogToFile.LogMessageToFile("------Door Close timeout  ----");
                 }
                 if (LedThread != null)
                 {
@@ -207,6 +258,7 @@ namespace SDK_SC_MedicalCabinet
                     LedThread.Join(1000);
                     LedThread = null;
                 }
+                
                 Thread.Sleep(500);
 
                 WaitDoor = false;
@@ -214,6 +266,7 @@ namespace SDK_SC_MedicalCabinet
                 //if ((CurrenRfidReader != null) && (CurrenRfidReader.IsConnected)) CurrenRfidReader.SetLightPower(300);
                 CloseDoor();
                 if (CurrenRfidReader != null) CurrenRfidReader.NotifyRelock();
+
                 Clock.Start();
             }
             if (ThreadEvent != null)
@@ -228,7 +281,7 @@ namespace SDK_SC_MedicalCabinet
                     bDoorJustClosed = false;
                     _channelInScan = 1;
                    // _listTagWithChannel = new Hashtable();
-                    Clock.Stop();
+                   // Clock.Stop();
                     WriteLCDLine(1, " - IDENTIFICATION - ");
                     WriteLCDLine(2, " ");
                     break;
@@ -251,20 +304,24 @@ namespace SDK_SC_MedicalCabinet
                     break;
 
                 case rfidReaderArgs.ReaderNotify.RN_Door_Closed:
+                    LogToFile.LogMessageToFile("door Close Medical cabinet");
                     if (DoorEventNormal != null)
                      DoorEventNormal.Set();
                     break;
 
                 case rfidReaderArgs.ReaderNotify.RN_Door_Opened:
 
+                    LogToFile.LogMessageToFile("door Open Medical cabinet");
                     if (LedThread != null)
                     {
+                        LogToFile.LogMessageToFile("Thred led - stop it in medical");
                         LedThread.Abort();
                         LedThread.Join(1000);
                         LedThread = null;
                     }
                     Thread.Sleep(3000);
                     //if ((CurrenRfidReader != null) && (CurrenRfidReader.IsConnected)) CurrenRfidReader.SetLightPower(300);
+                    LogToFile.LogMessageToFile("Close door in medical");
                     CloseDoor();
                       WriteLCDLine(1, "  - INFORMATION - ");
                       WriteLCDLine(2, " WAIT DOOR CLOSING");

@@ -31,4 +31,3 @@ D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\ob
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csproj.CoreCompileInputs.cache
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.dll
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.pdb
-D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\ErrorMessage\obj\Debug\ErrorMessage.csprojAssemblyReference.cache

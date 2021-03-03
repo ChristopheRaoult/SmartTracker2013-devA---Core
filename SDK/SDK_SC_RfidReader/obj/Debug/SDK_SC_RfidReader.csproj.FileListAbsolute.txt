@@ -51,4 +51,3 @@ D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidRead
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csproj.CoreCompileInputs.cache
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.dll
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.pdb
-D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RfidReader\obj\Debug\SDK_SC_RfidReader.csprojAssemblyReference.cache

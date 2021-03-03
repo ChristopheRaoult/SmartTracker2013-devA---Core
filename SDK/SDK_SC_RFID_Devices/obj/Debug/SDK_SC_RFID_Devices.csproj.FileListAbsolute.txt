@@ -105,3 +105,5 @@ D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Dev
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\obj\Debug\SDK_SC_RFID_Devices.pdb
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\bin\Debug\System.Data.SQLite.dll
 D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\bin\Debug\DPFPVerNET.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\bin\Debug\WindowsBase.dll
+D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SDK\SDK_SC_RFID_Devices\bin\Debug\fr\WindowsBase.resources.dll
