@@ -139,26 +139,26 @@ namespace SDK_SC_MedicalCabinet
                 Thread.Sleep(100);
                 if (!CurrenRfidReader.TCPActionPending)
                 {
-                    LogToFile.LogMessageToFile("Before check badge");
+                    LogToFile.LogMessageToFile("Before check badge in timer");
                     if (CheckBadge(StrBadgeRead))
                     {
-                        LogToFile.LogMessageToFile("Badge Checked in medical");
+                        LogToFile.LogMessageToFile("Badge Checked in timer");
                         OnBadgeReader(StrBadgeRead);
                        
                         badgeset = true;
-                        LogToFile.LogMessageToFile("Open door prior bagde set");
+                        LogToFile.LogMessageToFile("Unlock DOOR event in timer");
                         OpenDoor();
                         if (BadgeEvent != null)
                         {
                             BadgeEvent.Set();
-                            LogToFile.LogMessageToFile("Badge event set in medical");
+                            LogToFile.LogMessageToFile("Badge event SET in timer");
                         }
 
                     }
 
                     else
                     {
-                        LogToFile.LogMessageToFile("badge not granted");
+                        LogToFile.LogMessageToFile("Badge not granted");
                         WriteLCDLine(1, "       BADGE :");
                         WriteLCDLine(2, " BADGE NOT GRANTED!");
                         Clock.Start();
@@ -192,14 +192,14 @@ namespace SDK_SC_MedicalCabinet
 
         public void OpenDoor()
         {
-            LogToFile.LogMessageToFile("Open door medical");
+            LogToFile.LogMessageToFile("Unlock cmd sent");
             CurrenRfidReader.OpenDoorMaster();
         }
 
 
         public void CloseDoor()
         {
-            LogToFile.LogMessageToFile("Close door medical");
+            LogToFile.LogMessageToFile("lock cmd sent");
             CurrenRfidReader.CloseDoorMaster();
         }
 
@@ -221,7 +221,7 @@ namespace SDK_SC_MedicalCabinet
         {
            while (!StoppingThread)
             {
-                LogToFile.LogMessageToFile("------Wait Badge Infinite ------");
+                LogToFile.LogMessageToFile("------Wait Badge ------");
                 badgeset = false;
                 while (!badgeset)
                 {
@@ -231,12 +231,11 @@ namespace SDK_SC_MedicalCabinet
 
                 //BadgeEvent.WaitOne();
                // if (CancelOps) return;
-                LogToFile.LogMessageToFile("Event Badge received");
+                LogToFile.LogMessageToFile("Event Badge received in thread");
                 Clock.Stop();
-                WaitDoor = true;
-                LogToFile.LogMessageToFile("------ Stop Scan if needed ------");
+                WaitDoor = true;               
                 StopScan();
-                LogToFile.LogMessageToFile("------Open door  Cabinet ------");
+                LogToFile.LogMessageToFile("Unlock door  in thread");
                 OpenDoor();
                 Clock.Start();
                 CptDoor = 10;

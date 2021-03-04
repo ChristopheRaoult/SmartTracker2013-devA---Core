@@ -1,4 +1,5 @@
 ﻿using DataClass;
+using ErrorMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace TcpIP_class
             bIsWaitingScan = true;
             if (bUseSynchonisation)
             {
+                LogToFile.LogMessageToFile("------ Sync Scan  ------");
                 bool bFirstPass = true;
                 int bQuitValue = 0;
                 int bQuitCondition = 0;
@@ -170,6 +172,7 @@ namespace TcpIP_class
 
             }
             bIsWaitingScan = false;
+            LogToFile.LogMessageToFile("------ End Sync Scan  ------");
 
         }
 
@@ -179,6 +182,7 @@ namespace TcpIP_class
             bIsWaitingLed = true;
             if (bUseSynchonisation)
             {
+                LogToFile.LogMessageToFile("------ Sync LED  ------");
                 bool bFirstPass = true;
                 int bQuitValue = 0;
                 int bQuitCondition = 0;
@@ -318,6 +322,7 @@ namespace TcpIP_class
 
             }
             bIsWaitingLed = false;
+            LogToFile.LogMessageToFile("------ End Sync LED  ------");
         }
     }
 }

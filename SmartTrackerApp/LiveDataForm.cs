@@ -2564,7 +2564,7 @@ namespace smartTracker
                     #region ScanStarted
                     case rfidReaderArgs.ReaderNotify.RN_ScanStarted:
 
-
+                        LogToFile.LogMessageToFile("------Scan Started ------");
                         if (_tcpIpServer.requestScanFromServer)
                         {
                             _bFirstScanAccumulate = true;

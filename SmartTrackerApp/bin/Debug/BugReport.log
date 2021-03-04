@@ -7694,3 +7694,30 @@ Nom du paramètre : index
 
 _______________________________________________________________
 
+Application:       smartTracker 2014
+Version:           2021.1.29.1699
+Date:              04/03/2021 08:54:15
+Computer name:     LAPTOP-N6S0AVUB
+User name:         Dev002
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1920, Height=1080}
+System up time:    1.23:58:01.2660000
+App up time:       00:00:05.3713019
+Total memory:      16226Mb
+Available memory:  7466Mb
+
+Exception classes:   
+   System.NullReferenceException
+Exception messages: 
+   La référence d'objet n'est pas définie à une instance d'un objet.
+Stack Traces:
+   à smartTracker.ServerMngtForm..ctor(MainForm frm1) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\ServerMngtForm.cs:ligne 15
+   à smartTracker.MainForm.MainForm_Load(Object sender, EventArgs e) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\MainForm.cs:ligne 326
+/r/n/r/n *************************/r/nLa référence d'objet n'est pas définie à une instance d'un objet.
+(in smartTracker at Void .ctor(smartTracker.MainForm))
+   à smartTracker.ServerMngtForm..ctor(MainForm frm1) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\ServerMngtForm.cs:ligne 15
+   à smartTracker.MainForm.MainForm_Load(Object sender, EventArgs e) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\MainForm.cs:ligne 326
+
+_______________________________________________________________
+
