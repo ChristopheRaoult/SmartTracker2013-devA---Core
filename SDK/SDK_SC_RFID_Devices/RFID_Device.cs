@@ -1658,36 +1658,64 @@ namespace SDK_SC_RFID_Devices
             if (myDevice == null) return;
             if ((deviceType == DeviceType.DT_SBR) || (deviceType == DeviceType.DT_STR) || (deviceType == DeviceType.DT_SFR) || (deviceType == DeviceType.DT_SBF))
                 return;
-            if (bWasInLedDoorOpen)
+
+
+            if ((deviceType == DeviceType.DT_SMC) || (deviceType == DeviceType.DT_DSB))
             {
-                if (myDevice.IsConnected)
-                    myDevice.SetLightPower(0);
-                return;
+                switch (myDevice.Door_Status)
+                {
+                    case Door_Status.Door_Open:
+                        if (DeviceStatus != DeviceStatus.DS_LedOn)
+                        {
+                            if (myDevice.IsConnected)
+                                myDevice.SetLightPower(300);
+                        }
+                        else
+                        {
+                            if (myDevice.IsConnected)
+                                myDevice.SetLightPower(0);
+                        }
+                        break;
+                    default:
+                        if (myDevice.IsConnected)
+                            myDevice.SetLightPower(0);
+                        break;
+                }
             }
-            
-
-            switch (deviceStatus)
+            else
             {
-                case DataClass.DeviceStatus.DS_Ready:
-                    if (myDevice.IsConnected)
-                        myDevice.SetLightPower(lightInIdle);
-                    break;
 
-                case DataClass.DeviceStatus.DS_InScan:
-                case DataClass.DeviceStatus.DS_DoorClose:
+                if (bWasInLedDoorOpen)
+                {
                     if (myDevice.IsConnected)
-                         myDevice.SetLightPower(lightInScan);
-                    break;
+                        myDevice.SetLightPower(0);
+                    return;
+                }
 
-                case DataClass.DeviceStatus.DS_DoorOpen:
+
+                switch (deviceStatus)
+                {
+                    case DataClass.DeviceStatus.DS_Ready:
+                        if (myDevice.IsConnected)
+                            myDevice.SetLightPower(lightInIdle);
+                        break;
+
+                    case DataClass.DeviceStatus.DS_InScan:
+                    case DataClass.DeviceStatus.DS_DoorClose:
+                        if (myDevice.IsConnected)
+                            myDevice.SetLightPower(lightInScan);
+                        break;
+
+                    case DataClass.DeviceStatus.DS_DoorOpen:
                         if (myDevice.IsConnected)
                             myDevice.SetLightPower(lightDoorOpen);
 
-                    break;
+                        break;
                     case DeviceStatus.DS_LedOn:
-                     if (myDevice.IsConnected)
-                      myDevice.SetLightPower(0);
-                    break;
+                        if (myDevice.IsConnected)
+                            myDevice.SetLightPower(0);
+                        break;
+                }
             }
         }
         /// <summary>

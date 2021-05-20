@@ -7721,3 +7721,36 @@ Stack Traces:
 
 _______________________________________________________________
 
+Application:       smartTracker 2014
+Version:           2021.1.29.1699
+Date:              19/05/2021 14:39:52
+Computer name:     LAPTOP-N6S0AVUB
+User name:         Dev002
+OS:                Microsoft Windows NT 6.2.9200.0
+Culture:           fr-FR
+Resolution:        {Width=1920, Height=1080}
+System up time:    1.05:44:09.3750000
+App up time:       00:00:17.8265346
+Total memory:      16226Mb
+Available memory:  8209Mb
+
+Exception classes:   
+   System.InvalidOperationException
+Exception messages: 
+   Impossible d'appeler Invoke ou BeginInvoke sur un contrôle tant que le handle de fenêtre n'a pas été créé.
+Stack Traces:
+   à System.Windows.Forms.Control.WaitForWaitHandle(WaitHandle waitHandle)
+   à System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   à System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   à System.Windows.Forms.Control.Invoke(Delegate method)
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 0
+/r/n/r/n *************************/r/nImpossible d'appeler Invoke ou BeginInvoke sur un contrôle tant que le handle de fenêtre n'a pas été créé.
+(in System.Windows.Forms at Void WaitForWaitHandle(System.Threading.WaitHandle))
+   à System.Windows.Forms.Control.WaitForWaitHandle(WaitHandle waitHandle)
+   à System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   à System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   à System.Windows.Forms.Control.Invoke(Delegate method)
+   à smartTracker.LiveDataForm.rfidDev_NotifyRFIDEvent(Object sender, rfidReaderArgs args) dans D:\DATA\Dev CSharp\SmartTracker\SmartTracker2013-devA - Core\SmartTrackerApp\LiveDataForm.cs:ligne 0
+
+_______________________________________________________________
+
